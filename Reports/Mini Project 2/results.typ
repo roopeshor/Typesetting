@@ -9,14 +9,14 @@ Initially direct connection between transmitter and receiver was tested, which w
   image("images/4 nodes.jpg", width: 12cm),
   caption: [Communication with 4 nodes]
 )<4-node>
-The output from all nodes were logged through Serial port and are displayed in the console using *_Minicom_* @minicom. 
+The output from all nodes were logged through Serial port and are displayed in the console using *_Minicom_* @minicom, as shown in @minicom-op. 
 
+
+Later on we tested with all 4 nodes and formed the network which we originally intended to. During operation, on most case the packet travels through both repeaters and reaches the destination at almost the same time. However the radio library we used picks up only one of these packets and the program logs its signature. Hence when the other packet reaches the node, it simply discards it. In similar way, repeater nodes might obtain packets from other repeaters. But the nodes are programmed to detect and discard these duplicate packets, preventing the network from collapsing due to looping.
 #figure(
   image("images/serial-outputs.png"),
   caption: [Serial output from Transmitter, Receiver and Repeater nodes (left to right)]
-)
-
-Later on we tested with all 4 nodes and formed the network which we originally intended to. During operation, on most case the packet travels through both repeaters and reaches the destination at almost the same time. However the radio library we used picks up only one of these packets and the program logs its signature. Hence when the other packet reaches the node, it simply discards it. In similar way, repeater nodes might obtain packets from other repeaters. But the nodes are programmed to detect and discard these duplicate packets, preventing the network from collapsing due to looping.
+)<minicom-op>
 
 During the testing we found there was some packet, possibly due to the way the RF module itself works. The details are mentioned in @limitations
 

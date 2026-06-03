@@ -1,4 +1,4 @@
-#import "settings.typ": addToPDFBookmark
+#import "settings.typ": addToPDFBookmark, author, regNo
 
 #set text(size: 13.5pt)
 #set par(spacing: .9em)
@@ -16,13 +16,7 @@
   _Submitted by_
   #v(13pt)
 
-  *ROOPESH O R (20323085)*
-
-  *SIDHARTH T P (20323093)*
-
-  *SUMAYYA PUNNOTH (20323100)*
-
-  *WASEEM ANWAR (20323108)*
+  #text(weight: "bold")[#upper[#author] (#regNo)] 
 
   #v(13pt)
 

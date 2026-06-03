@@ -75,6 +75,7 @@ The nRF24L01 was chosen considering the drawbacks of other alternatives.
 
 == Hardware
 The nRF module is interfaced to STM board via #acr("SPI") through hardware #acr("SPI") peripheral of STM32. An indicator LED used to indicate the status of transmission is attached to `PB11` pin of STM. Built-in LED in the development board -- which is accessed by `PC13` is used to indicate reception of radio packet reducing the need for additional LED and current limiting resistor.
+For visual feedback green and blue LEDs (`D1`) where used along with a 1k$Omega$ resistor (`R1`) for current limiting. For initiating the transmission of SOS signal, a push button (`SW1`) is used which is connected to ground via 1k$Omega$ resistor (`R2`). Choice of 1k$Omega$ is well-satisfies maximum I/O source/sink current capability of STM32 which is 25mA @stm-datasheet
 
 #figure(
   grid(
@@ -87,7 +88,6 @@ The nRF module is interfaced to STM board via #acr("SPI") through hardware #acr(
   gap: 25pt,
   caption: [Transmitter and Receiver circuit diagrams],
 )
-For visual feedback green and blue LEDs (`D1`) where used along with a 1k$Omega$ resistor (`R1`) for current limiting. For initiating the transmission of SOS signal, a push button (`SW1`) is used which is connected to ground via 1k$Omega$ resistor (`R2`). Choice of 1k$Omega$ is well-satisfies maximum I/O source/sink current capability of STM32 which is 25mA @stm-datasheet
 
 While creating finalized prototype, we soldered female berg strip onto prototype board. For transmitter, we were experimenting various configurations hence it was not soldered in a prototype board.
 
@@ -129,17 +129,17 @@ This section outlines software part of the project including the custom algorith
   caption: [ST Link V2],
 )<stv2>]
 #let body = [
-  As discussed previously in @stm-board, the program for STM had to be written in Arduino C++ language and was compiled and uploaded via ST-link/V2 @stm-flasing. The wiring scheme is shown in @fig:stm-connection which was taken from @stm-connection. However other variant like ST-link V2 (@stv2) can be used and works in similar way
+  As discussed previously in @stm-board, the program for STM had to be written in Arduino C++ language and was compiled and uploaded via ST-link/V2 @stm-flasing. The wiring scheme is shown in @fig:stm-connection which was taken from @stm-connection. However other variant like ST-link V2 (@stv2) can be used and works in similar way.
 ]
 #wrap-content(fig, body, align: top + right)
 
+
+While setting up the Arduino IDE for development few flash settings had to be adjusted as shown in @fig:stm-settings
+The USART support should be set to "Enabled" and USB support option should be set to "CDC" in order for the device to be listed as a serial device and hence can be communicated via programs like Minicom
 #figure(
   image("images/stm-to-stlink.png", height: 5cm),
   caption: [Connecting STM32 with ST-Link/V2.],
 )<fig:stm-connection>
-
-While setting up the Arduino IDE for development few flash settings had to be adjusted as shown in @fig:stm-settings
-The USART support should be set to "Enabled" and USB support option should be set to "CDC" in order for the device to be listed as a serial device and hence can be communicated via programs like Minicom
 
 Each nodes has its own node ID. During the prototyping stage these IDs are hard coded in the program. Hence while flashing the program, this ID was changed for each node. However this can be simplified by adding a #acr("DIP") switch to each node,and setting the address on the fly.
 

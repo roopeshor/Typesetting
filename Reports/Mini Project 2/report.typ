@@ -5,6 +5,7 @@
 #showFooter("none")
 #include "title.typ"
 #include "certificate.typ"
+#set page(margin: (left: 1.3in, right: 1.2in, top: 1.2in, bottom: 1.2in))
 #include "acknowledgment.typ"
 #include "abstract.typ"
 
@@ -16,7 +17,7 @@
 #counter(page).update(1)
 #set page(
   numbering: "1",
-  margin: (x: 1in, y: 1.5in),
+  margin: (left: 1.2in, right: 1in, y: 1.5in),
 )
 #showFooter("doe-number")
 #include "introduction.typ"
@@ -32,7 +33,7 @@
   pagebreak(weak: true)
   block[
     #v(0.5cm)
-    #text(size: 18pt, weight: "bold")[#it.body]
+    #text(size: fontsizes.chap, weight: "bold")[#it.body]
     #v(1cm)
   ]
 }

@@ -9,6 +9,25 @@
 #let showHeaderState = state("showHeaderState", true)
 #let showFooter(type) = showFooterState.update(type)
 #let showHeader(bool) = showHeaderState.update(bool)
+// #let author = "SIDHARTH T P"
+// #let regNo = "20323093"
+#let author = "Roopesh O R"
+#let regNo = "20323085"
+
+// #let author = "SUMAYYA PUNNOTH"
+// #let regNo = "20323100"
+
+// #let author = "WASEEM ANWAR"
+// #let regNo = "20323108"
+
+#let fontsizes = (
+  chap: 17pt,
+  heading1: 15pt,
+  heading2: 13pt,
+  heading3: 12pt,
+  headfoot: 11pt,
+)
+
 
 #let addToPDFBookmark(entry, outlined: false) = {
   show heading: none
@@ -17,7 +36,7 @@
 
 #let project(body) = {
   set par(justify: true, first-line-indent: 1em, leading: .75em)
-  set text(font: "Nimbus Roman", size: 12pt)
+  set text(font: "Nimbus Roman", size: 11pt)
   set heading(numbering: "1.")
   set list(indent: 1em)
   set enum(indent: 1em)
@@ -28,7 +47,7 @@
   set page(
     footer: context {
       if showFooterState.get() == "doe-number" {
-        text(size: 11pt)[
+        text(size: fontsizes.headfoot)[
           _Division of Electronics Engg, SOE, CUSAT_
           #h(1fr)
           #counter(page).display()
@@ -65,15 +84,15 @@
   show heading.where(level: 1): it => {
     set align(center + top)
     if it.numbering == none [
-      #text(size: 20pt, weight: "bold")[#it.body]
+      #text(size: fontsizes.heading1, weight: "bold")[#it.body]
       #it.has("unnumbered")
     ] else [
       #pagebreak(weak: true)
       #block[
-        #text(size: 16pt, weight: "bold")[
+        #text(size: fontsizes.chap, weight: "bold")[
           Chapter #counter(heading).get().first():
         ]\
-        #text(size: 14pt, weight: "bold")[#it.body]
+        #text(size: fontsizes.heading1, weight: "bold")[#it.body]
         #counter(figure.where(kind: image)).update(0)
         #counter(figure.where(kind: table)).update(0)
         #v(1cm)
@@ -83,15 +102,20 @@
   show heading.where(level: 2): it => {
     block[
       #v(10pt)
-      #text(size: 12pt, weight: "bold")[#counter(heading).display().trim(".") #it.body]
+      #text(size: fontsizes.heading2, weight: "bold")[
+        #counter(heading).display().trim(".") #it.body
+      ]
       #v(7pt)
     ]
   }
 
   show heading.where(level: 3): it => {
     block[
-      #text(size: 12pt, weight: "bold")[#counter(heading).display().trim(".") #it.body]
-      #v(5pt)
+      #v(3pt)
+      #text(size: fontsizes.heading3, weight: "bold")[
+        #counter(heading).display().trim(".") #it.body
+      ]
+      #v(2pt)
     ]
   }
 

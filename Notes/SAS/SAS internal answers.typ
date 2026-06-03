@@ -45,6 +45,8 @@
   #text(size: 24pt)[Signals and system]
 
   #text(size: 14pt)[Answers to some of the internal questions]
+
+  #text(size: 12pt)[#link("https://github.com/roopeshor/Typesetting/tree/main/Notes/SAS")[#text(fill: rgb("#0074d9"),)[#underline[Typst Source]]]]
 ]
 
 #qn([Plot the spectrum of the following signals:
@@ -298,8 +300,8 @@ $
     fill: #rgb("#00f"), 2/5exp(j (3pi)/4n) + 1/5j exp(j (3pi)/4n)
     + 2/5exp(-j (3pi)/4n) - 1/5j exp(-j (3pi)/4n)
   ) \
-  & = 2/5 underbrace([exp(j (3pi)/4n) + exp(-j (3pi)/4n)], inline(2cos((3pi)/4n))) + 1/5 underbrace(j[exp(j (3pi)/4n) - exp(-j (3pi)/4n)], inline(2sin((3pi) / 4n))) \
-  & = 4/5 cos(3/4 pi n) + 2/5 sin(3/4 pi n)
+  & = 2/5 underbrace([exp(j (3pi)/4n) + exp(-j (3pi)/4n)], inline(2cos((3pi)/4n))) + 1/5 underbrace(j[exp(j (3pi)/4n) - exp(-j (3pi)/4n)], inline(-2sin((3pi) / 4n))) \
+  & = 4/5 cos(3/4 pi n) - 2/5 sin(3/4 pi n)
 $
 
 Substituting this in $y(n)$ gives:

@@ -1,10 +1,10 @@
-#import "settings.typ": addToPDFBookmark
+#import "settings.typ": addToPDFBookmark, fontsizes
 #import "@preview/acrostiche:0.7.0": *
 // Table Of Contents, List Of Figures and Tables
 
 #init-acronyms((
   "IoT": "Internet of Things",
-  "M2M": "machine-to-machine",
+  "M2M": "Machine-to-Machine",
   "COTS": "Commercial off-the-shelf",
   "UAV": "Unmanned Aerial Vehicle",
   "WSN": "Wireless Sensor Netwok",
@@ -37,7 +37,7 @@
 
 #addToPDFBookmark("Table of contents")
 #outline(
-  title: text(size: 18pt)[Table of contents],
+  title: text(size: fontsizes.heading1)[Table of contents],
   target: heading,
 )
 
@@ -45,14 +45,14 @@
 
 #addToPDFBookmark("List of Figures", outlined: true)
 #outline(
-  title: text(size: 18pt)[List of Figures],
+  title: text(size: fontsizes.heading1)[List of Figures],
   target: figure.where(kind: image),
 )
 #v(1cm)
 #pagebreak()
 #addToPDFBookmark("List of Tables", outlined: true)
 #outline(
-  title: text(size: 18pt)[List of Tables],
+  title: text(size: fontsizes.heading1)[List of Tables],
   target: figure.where(kind: table),
 )
 #v(1cm)
@@ -60,7 +60,7 @@
 
 #addToPDFBookmark("List of Abbreviations", outlined: true)
 #print-index(
-  title: [List of Abbreviations],
+  title: text(size: fontsizes.heading1)[List of Abbreviations],
   row-gutter: 10pt,
   sorted: "up",
 	column-ratio: .2

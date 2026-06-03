@@ -7,7 +7,7 @@ Historically, network systems have been studied for wide area communication @his
 	grid(
 		align: horizon,
 		columns: 2,
-		column-gutter: 50pt,
+		column-gutter: 40pt,
 		image("images/star-e.svg", height: 6cm),
 		image("images/bus-e.svg", height: 6cm),
 		text([(a) Star Topology]),

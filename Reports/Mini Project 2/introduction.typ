@@ -14,14 +14,14 @@ The core objective of this prototype is to validate the feasibility of decentral
 - Two _*Relay Nodes*_: Acting as repeaters. Because these nodes are battery-powered, forest guards could place these modules in different parts of forest to instantly establish a network.
 
 The computation of each node is handled by an STM32 series microcontroller, which handles interfacing of nRF24L01 RF module. These four nodes are expected to be organized in a manner shown in @mesh-impl.
+
+The system assumes that each node is already geolocated. The Based on the information in the packet the receiving station can determine which node was nearest to the transmitter and hence can obtain a approximate location of the transmitter.
+A #acs("GNSS") module can be attached to each node to locate its position on the fly, reducing manual labor of tagging each node. However the addition of a GNSS module can increase the cost of whole system several times. Also once the nodes are placed int various locations, their position is fixed, hence GNSS module will become redundant.
 #figure(
 	image("images/mesh-impl.svg", height: 6cm),
  gap: 0pt,
 	caption: [Intended organization of nodes]
 )<mesh-impl>
-
-The system assumes that each node is already geolocated. The Based on the information in the packet the receiving station can determine which node was nearest to the transmitter and hence can obtain a approximate location of the transmitter.
-A #acs("GNSS") module can be attached to each node to locate its position on the fly, reducing manual labor of tagging each node. However the addition of a GNSS module can increase the cost of whole system several times. Also once the nodes are placed int various locations, their position is fixed, hence GNSS module will become redundant.
 
 == Protocol Design
 
