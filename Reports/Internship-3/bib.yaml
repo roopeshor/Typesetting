@@ -1,0 +1,73 @@
+wsn-reliable:
+  type: Article
+  title: The Reliability of Wireless Sensor Network on Pipeline Monitoring System.
+  author:
+    - Hafizh Prihtiadi
+    - Mitra Djamal
+controlled-flooding:
+  type: Article
+  title: Controlled Flooding in Wireless Ad-hoc Networks
+  author:
+    - A. Rahman
+    - W. Olesinski
+    - P. Gburzynski
+  url: https://web.archive.org/web/20170210205207/http://www.senserf.com/pg/PAPERS/tarp1.pdf
+routing:
+  type: Article
+  title: A distributed routing algorithm for mobile wireless networks
+  author:
+    - M. Scott Corson
+    - Anthony Ephremides
+meshtastic:
+  type: Web
+  title: Build Long-Range IoT Applications Fast With Meshtastic
+  author: Stephen Cass
+  url: https://spectrum.ieee.org/build-iot-apps-with-meshtastic
+energy-evaluation:
+  type: Article
+  author:
+    - S. Santha Meena
+    - J. Manikandan
+  title: Study and evaluation of different topologies in wireless sensor network
+history:
+  type: Article
+  title: Computer network development to achieve resource sharing
+  author:
+    - Lawrence G. Roberts
+    - Barry D. Wessler
+wsn:
+  title: "Wireless Sensor Network as a Mesh: Vision and Challenges"
+  author:
+    - Zhanserik Nurlan
+    - et al.
+  type: Article
+dapf:
+  type: Article
+  title: An efficient flooding algorithm for Mobile Ad-hoc networks
+  author:
+    - Fatemeh Nourazar
+    - Masoud Sabaei
+nRF-datasheet:
+  title: nRF24L01 Single Chip 2.4GHz Transceiver
+  type: Article
+  author: Nordic Semiconductor
+  url: https://cdn.sparkfun.com/datasheets/Wireless/Nordic/nRF24L01_Product_Specification_v2_0.pdf 
+stm-datasheet:
+  title: Low-density performance line, ARM-based 32-bit MCU with 16 or 32 KB Flash, USB, CAN, 6 timers, 2 ADCs, 6 com. interfaces
+  type: Article
+  author: ST Microelectronics
+  url: https://www.st.com/resource/en/datasheet/stm32f103c6.pdf
+stm-flasing:
+  type: Web
+  title: How to program and debug the STM32 using the Arduino IDE
+  author: B.Montanari
+  url: https://community.st.com/t5/stm32-mcus/how-to-program-and-debug-the-stm32-using-the-arduino-ide/ta-p/608514
+minicom:
+  type: Web
+  title: minicom(1) - Linux man page
+  url: https://linux.die.net/man/1/minicom
+stm-connection:
+  type: Web
+  author: Barnaby Walters
+  title: Programming a Blue/Black Pill STM32 Board with a ST-Link v2
+  url: https://waterpigs.co.uk/articles/black-blue-pill-stm32-st-link-connection/
