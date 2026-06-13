@@ -1,4 +1,7 @@
 #import "settings.typ": *
+// #import "@preview/scaffolder:0.2.1": scaffolding
+// #set page(background: scaffolding())
+
 #show: report
 
 ///////// Title, Preamble

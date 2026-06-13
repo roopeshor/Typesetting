@@ -12,8 +12,21 @@
 
 #let author = "Roopesh O R"
 #let regNo = "20323085"
+#let report-title = "Implementation of FFT"
 
 #let hf(a, b) = $frac(#a, #b, style: "horizontal")$
+
+#let fit-to-page(content) = context {
+  let content-size = measure(content)
+  layout(size => {
+  if content-size.width > size.width {
+    let ratio = (size.width / content-size.width) * 100%
+    scale(x: ratio, y: ratio, reflow: true, content)
+  } else {
+    content
+  }
+	})
+}
 
 #let fontsizes = (
   chap: 19pt,
@@ -63,7 +76,7 @@
         let has-heading = query(heading.where(level: 1)).any(it => it.location().page() == current-page)
         if counter(heading).get().first() > 0 and not has-heading [
           // Display header from 1st numbered heading
-          #text(size: 11pt)[_Distributed Communication Network_]
+          #text(size: 11pt, style: "italic")[#report-title]
         ]
       }
     },
