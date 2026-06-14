@@ -21,37 +21,37 @@
   ]
 }
 
-#addToPDFBookmark("Table of contents", outlined: false)
-#outline(
-  title: text(size: fontsizes.heading1)[Table of contents],
-  target: heading,
-)
+// #addToPDFBookmark("Table of contents", outlined: false)
+// #outline(
+//   title: text(size: fontsizes.heading1)[Table of contents],
+//   target: heading,
+// )
 
-#pagebreak()
+// #pagebreak()
 
-#addToPDFBookmark("List of Figures", outlined: true)
-#outline(
-  title: text(size: fontsizes.heading1)[List of Figures],
-  target: figure.where(kind: image),
-)
+// #addToPDFBookmark("List of Figures", outlined: true)
+// #outline(
+//   title: text(size: fontsizes.heading1)[List of Figures],
+//   target: figure.where(kind: image),
+// )
 
 
-#pagebreak()
+// #pagebreak()
 
-#addToPDFBookmark("List of Tables", outlined: true)
-#outline(
-  title: text(size: fontsizes.heading1)[List of Tables],
-  target: figure.where(kind: table),
-)
+// #addToPDFBookmark("List of Tables", outlined: true)
+// #outline(
+//   title: text(size: fontsizes.heading1)[List of Tables],
+//   target: figure.where(kind: table),
+// )
 
-#pagebreak()
+// #pagebreak()
 
-#addToPDFBookmark("List of Abbreviations", outlined: true)
-#print-index(
-  title: text(size: fontsizes.heading1)[List of Abbreviations],
-  row-gutter: 10pt,
-  sorted: "up",
-	column-ratio: .2
-)
+// #addToPDFBookmark("List of Abbreviations", outlined: true)
+// #print-index(
+//   title: text(size: fontsizes.heading1)[List of Abbreviations],
+//   row-gutter: 10pt,
+//   sorted: "up",
+// 	column-ratio: .2
+// )
 
-#pagebreak()
+// #pagebreak()

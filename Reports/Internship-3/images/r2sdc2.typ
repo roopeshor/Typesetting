@@ -149,7 +149,18 @@
 }
 
 
-#let R2SDC_Stage(x, y, stage, mmcell-values: (), mmcwidth: 1, mmc2width: 1.4, mux2-out: "", tw-out: "", mmcell2-values: ()) = {
+#let R2SDC_Stage(
+  x,
+  y,
+  stage,
+  mmcell-values: (),
+  mmcwidth: 1,
+  mmc2width: 1.4,
+  mux2-out: "",
+  tw-out: "",
+  mmcell2-values: (),
+  muxsw: false,
+) = {
   let p1
   let p2
   let p3
@@ -167,7 +178,7 @@
       // fill-color: green.transparentize(90%),
     )
     shr.draw
-    let bf = bf_skel(shr._p2.x + .2, shr._p2.y, v-space: .6, h-space: .7)
+    let bf = bf_skel(shr._p2.x + .4, shr._p2.y, v-space: .6, h-space: .7, x-off: 0)
     bf.draw
 
 
@@ -176,17 +187,50 @@
     line(shr.p2, bf.p1)
     p2 = (shr._p1.x - .2, bf._p2.y)
     line(bf.p2, p2)
-    joint(bf.p1)
+    let bfj1 = (shr._p2.x + .2, bf._p1.y)
+    let bfj2 = (shr._p2.x + .2, bf._p2.y)
 
-    let mux1 = mux(..bf.p3, inps: (`1`, `0`), inp-pos-reverse: true, h-size: .8, y-offset: .25)
+    let mux1 = mux(
+      bf._p3.x + .2,
+      bf._p3.y,
+      inps: (`1`, `0`),
+      inp-pos-reverse: true,
+      h-size: .8,
+      y-offset: .25,
+    )
+    let mux2 = mux(
+      bf._p4.x + .2,
+      bf._p4.y,
+      inps: (`0`, `1`),
+      h-size: .8,
+      y-offset: .25,
+    )
+
     mux1.draw
-    let mux2 = mux(..bf.p4, inps: (`0`, `1`), h-size: .8, y-offset: .25)
     mux2.draw
+
     let shr-r-p1 = (mux1._out.x - .1, shr._p2.y - .7)
 
-    zigzagv(shr-r-p1, mux2.out, ratio: 5)
+    zigzagv(shr-r-p1, mux2.out, ratio: 3)
     zigzagv(shr.p1, shr-r-p1, ratio: -.1)
 
+    let muxconn1 = (dash: "dashed", thickness: .5pt, paint: gray)
+    let muxconn2 = (paint: black)
+    if (muxsw) {
+      muxconn2 = (dash: "dashed", thickness: .5pt, paint: gray)
+      muxconn1 = (paint: black)
+      // mux1 is bottom connection to bf
+      // mux2 zigzag connection to pre-bf
+      joint(bfj2, r: 1.2pt)
+    } else {
+      joint(bfj1, r: 1.2pt)
+    }
+    zigzagv(bfj2, (mux2.x, mux2.inp_pos.at(1)), ratio: 0, stroke: muxconn1)
+    line(bf.p3, (mux1.x, mux1.inp_pos.at(0)), stroke: muxconn1)
+    // stroke with low contrast
+
+    line(bf.p4, (mux2.x, mux2.inp_pos.at(0)), stroke: muxconn2)
+    zigzagv(bfj1, (mux1.x, mux1.inp_pos.at(1)), ratio: 0, stroke: muxconn2)
 
     /// mux2-out
     content((shr._p1.x + .7, shr._p2.y - .7), mux2-out, anchor: "south-west", padding: .1)
@@ -207,8 +251,6 @@
 
     content((tw._p4.x - .3, p3.at(1) + .1), tw-out, anchor: "north-west", padding: .1)
 
-    zigzagv(bf.p1, (mux1.x, mux1.inp_pos.at(1)), ratio: 0)
-    zigzagv(bf.p2, (mux2.x, mux2.inp_pos.at(1)), ratio: 0)
 
     if (N > 1) {
       let shr2 = memcell(
@@ -248,6 +290,7 @@
       mmcell2-values: stagedat.a.mmc2,
       mux2-out: stagedat.a.mux2-out,
       tw-out: stagedat.a.tw-out,
+      muxsw: stagedat.a.muxsw,
     )
     s1.draw
     content((s1._p2.x - .3, s1._p2.y), stagedat.in-txt, anchor: "east")
@@ -260,6 +303,7 @@
       mmcell-values: stagedat.b.mmc,
       mux2-out: stagedat.b.mux2-out,
       tw-out: stagedat.b.tw-out,
+      muxsw: stagedat.b.muxsw,
     )
     s2.draw
 
@@ -281,48 +325,54 @@
     let y = 0
     let stagedat = (
       (
-        in-txt: $#d #h(2pt) #c #h(2pt) #b #h(10pt) #a$,
+        in-txt: $#d #h(2pt) #c #h(2pt) #b #h(2pt) #a$,
         out-txt: $$,
         a: (
           mmc: ($$, $$),
           mmc2: ($$, $$),
           mux2-out: $#a$,
           tw-out: $$,
+          muxsw: true,
         ),
         b: (
           mmc: (),
           mux2-out: $$,
           tw-out: $$,
+          muxsw: true,
         ),
       ),
       (
-        in-txt: $#d #h(2pt) #c #h(10pt) #b$,
+        in-txt: $#d #h(2pt) #c #h(2pt) #b$,
         out-txt: $$,
         a: (
-          mmc: ($$, $#a$),
+          mmc: ($#a$, $$),
           mmc2: ($$, $#a$),
           mux2-out: $#b$,
           tw-out: $$,
+          muxsw: true,
         ),
         b: (
           mmc: (),
           mux2-out: $$,
           tw-out: $$,
+          muxsw: true,
         ),
       ),
       (
-        in-txt: $#d #h(10pt) #c$,
+        in-txt: $#d #h(2pt) #c$,
         out-txt: $$,
         a: (
-          mmc: ($#a$, $#b$),
+          mmc: ($#b$, $#a$),
           mmc2: ($$,),
           mux2-out: $#a - #c$,
           tw-out: $#a + #c$,
+          muxsw: false,
         ),
         b: (
           mmc: (),
           mux2-out: $$,
           tw-out: $$,
+          muxsw: true,
         ),
       ),
       (
@@ -332,12 +382,14 @@
           mmc: ($#a - #c$, $#b$),
           mmc2: ($#a + #c$,),
           tw-out: $#b + #d$,
+          muxsw: false,
           mux2-out: $#b - #d$,
         ),
         b: (
           mmc: (),
           mux2-out: $#a + #c$,
           tw-out: $$,
+          muxsw: true,
         ),
       ),
       (
@@ -346,13 +398,15 @@
         a: (
           mux2-out: $$,
           mmc: ($#b - #d$, $#a - #c$),
-          tw-out: $#a - #c$,
+          tw-out: $(#a - #c)1$,
+          muxsw: false,
           mmc2: ($#b + #d$,),
         ),
         b: (
           mmc: ($#a + #c$,),
           mux2-out: $(#a + #c) - (#b + #d)$,
           tw-out: $$,
+          muxsw: false,
         ),
       ),
       (
@@ -360,14 +414,16 @@
         out-txt: $(#a + #c) - (#b + #d)$,
         a: (
           mux2-out: $$,
-          mmc: ($$, $#b - #d$, ),
+          mmc: ($$, $#b - #d$),
           tw-out: $(#b - #d)j$,
+          muxsw: false,
           mmc2: ($#a - #c$,),
         ),
         b: (
           mmc: ($#a#c \- #b#d$,),
           mux2-out: $#a - #c$,
           tw-out: $$,
+          muxsw: false,
         ),
       ),
       (
@@ -377,12 +433,14 @@
           mux2-out: $$,
           mmc: ($$, $$),
           tw-out: $$,
+          muxsw: false,
           mmc2: ($(#b - #d)j$,),
         ),
         b: (
           mmc: ($#a - #c$,),
           mux2-out: $(#a - #c)- (#b - #d)j$,
           tw-out: $$,
+          muxsw: false,
         ),
       ),
       (
@@ -392,12 +450,14 @@
           mux2-out: $$,
           mmc: ($$, $$),
           tw-out: $$,
+          muxsw: false,
           mmc2: ($$,),
         ),
         b: (
           mmc: ($#a#c\-#b#d$,),
           mux2-out: $$,
           tw-out: $$,
+          muxsw: false,
         ),
       ),
     )

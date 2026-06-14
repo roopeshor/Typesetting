@@ -14,7 +14,7 @@
   center-align: false,
   name: "",
   name-anchor: "south",
-	fill-color: white
+  fill-color: white,
 ) = {
   let p1x = x
   let p2x = x + size * cell-width
@@ -30,7 +30,7 @@
       let y1 = y - cell-height / 2
       let x2 = x + cell-width * i
       let y2 = y + cell-height / 2
-      rect((x1, y1), (x2, y2), stroke: stroke-color, fill:fill-color)
+      rect((x1, y1), (x2, y2), stroke: stroke-color, fill: fill-color)
       if (contents.len() == size) {
         let mx = (x1 + x2) / 2
         let my = (y1 + y2) / 2
@@ -191,10 +191,10 @@
   if (invert) {
     ystart = -h-size / 2
     yend = +h-size / 2
-		a = ystart
-		b = yend
-		c = b - h-size / 2 * skewness
-		d = a + h-size / 2 * skewness
+    a = ystart
+    b = yend
+    c = b - h-size / 2 * skewness
+    d = a + h-size / 2 * skewness
     drawn = {
       translate(x: tx, y: ty)
       if (inp-pos-reverse) { scale(y: -1) }
@@ -248,7 +248,7 @@
   return (
     draw: drawn,
     inp_pos: inp_pos,
-		x: x,
+    x: x,
     sw1: (sw1.x, sw1.y),
     _sw1: sw1,
     sw2: (sw2.x, sw2.y),
@@ -275,7 +275,7 @@
     content(
       "ln.90%",
       anchor: "north",
-      padding: 5pt,
+      padding: 2pt,
       text($-1$, size: 7pt),
     )
   }
@@ -283,7 +283,7 @@
 }
 
 #let bf_skel(x, y, h-space: 1, v-space: 1, x-off: .2) = {
-  let bf = bf_skel_old(x, y, h-space, v-space)
+  let bf = bf_skel_old(x, y, h-space, v-space, x-off: x-off)
   return (
     draw: bf.at(0),
     p1: (bf.at(1), bf.at(2)),
@@ -569,14 +569,17 @@
   )
 }
 
-#let zigzagv_get_corner(a, b, ratio: .5) = {
+#let zigzagv_get_corner(a, b, ratio: .5, stroke: "") = {
   let dx = (b.at(0) - a.at(0)) * ratio
 
   let c1 = (a.at(0) + dx, a.at(1))
   let c2 = (a.at(0) + dx, b.at(1))
   let dr = {
-    import cetz.draw: line
-    line(a, c1, c2, b)
+		if (stroke != ""){
+			cetz.draw.line(a, c1, c2, b, stroke:stroke)
+		} else {
+			cetz.draw.line(a, c1, c2, b)
+		}
   }
   return (
     draw: dr,
@@ -603,8 +606,8 @@
   )
 }
 
-#let zigzagv(a, b, ratio: .5) = {
-  let zwc = zigzagv_get_corner(a, b, ratio: ratio)
+#let zigzagv(a, b, ratio: .5, stroke: "") = {
+  let zwc = zigzagv_get_corner(a, b, ratio: ratio, stroke: stroke)
   return zwc.draw
 }
 

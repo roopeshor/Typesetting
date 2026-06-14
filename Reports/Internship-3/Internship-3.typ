@@ -31,7 +31,7 @@
 
 
 #showFooter("doe-number")
-#include "introduction.typ"
+// #include "introduction.typ"
 //    |-- Objective
 //    |-- background work
 // |-- Methods
@@ -39,6 +39,7 @@
 // 	 |-- piplelined DIF r2 
 // 
 #include "methods.typ"
+#include "summary.typ"
 // Disable chapter numbering
 // #show heading.where(level: 1): it => {
 //   set align(center + top)
