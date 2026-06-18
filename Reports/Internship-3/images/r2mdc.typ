@@ -38,7 +38,6 @@
         (id: "in_valid", name: `in_valid`),
       ),
       east: (
-        // (id: "s"),
         (id: "out_valid", name: `out_valid`),
         (id: "out0", name: `out0`),
         (id: "out1", name: `out1`),

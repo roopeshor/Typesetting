@@ -1,10 +1,11 @@
 #import "@preview/cetz:0.5.2"
 #import "colors.typ": *
-#import "shapes.typ": *
+#import "@local/circucetz:0.1.0"
 
 #let ckt-r2sdc-stage = {
   cetz.canvas({
     import cetz.draw: *
+    import circucetz: *
     scale(y: -1)
     let x = 0
     let y = 0
@@ -19,33 +20,34 @@
     let cnt = counter(4, x, y, name: `counter`)
     cnt.draw
     let tw = block(
-      cnt._p2.x + 3,
-      cnt._p2.y,
-      text(size: 9pt)[`Twiddle`],
+      cnt.ports._p2.x + 3,
+      cnt.ports._p2.y,
+      name: text(size: 9pt)[*`Twiddle`*],
+      name-anchor: "south",
+      name-padding: .9,
       w: 1.5,
       h: 1.5,
-      mpy: 0.3,
       ports: (
-        left: (
+        west: (
           (id: "state", name: `state`),
           (id: "k", name: `k`),
         ),
-        right: (
+        east: (
           (id: "W", name: `W`),
         ),
       ),
+      origin-port: "k",
     )
 
     tw.draw
-    zigzagv(cnt.p2, tw.ports.k, ratio: 0)
-    zigzagv(cnt.p2, tw.ports.state, ratio: 0)
-    content((cnt._p2.x, tw.ports._state.y), `state`, anchor: "south-west", padding: .1)
+    line(cnt.ports.p2, tw.ports.k)
+    content(cnt.ports.p1, `state`, anchor: "north-west", padding: .1)
 
 
     //// DF, Muxers, Shiftr reg
-    x = cnt._p2.x
-    y = cnt._p1.y - 3
-    let bf = bf_skel(x, y, v-space: 1.2, h-space: 1.5)
+    x = cnt.ports._p2.x
+    y = cnt.ports._p1.y - 3
+    let bf = bf_skel(x, y, h: 1.2, w: 1.5)
     bf.draw
 
     let data_shr = memcell(
@@ -57,7 +59,7 @@
     )
     data_shr.draw
     blocky1 = data_shr._p1.y - 1
-    zigzagv(data_shr.p1, bf.p1, ratio: -2)
+    zigzagv(data_shr.p1, bf.p1, ratio: -2).draw
 
     let mux1 = mux(..bf.p3, inps: (`1`, `0`), inp-pos-reverse: true)
     mux1.draw
@@ -65,79 +67,95 @@
     mux2.draw
 
 
-    let din = wedge(inpx, bf._p2.y, txt: `din`)
+    let din = io-pin(inpx, bf._p2.y, name: `din`)
     din.draw
     wire(din.p2, bf.p2)
 
-    let wcm = zigzagv_get_corner(
-      (cnt._p2.x + 1, cnt._p2.y - .15),
-      mux2.sw1,
-      ratio: 1,
+    let wcm = L-wire(
+      cnt.ports.p2,
+      mux2.ports.sw1,
     )
     wcm.draw
-    line(mux1.sw1, mux2.sw2)
-    let w1 = zigzagv_get_corner(bf.p1, (bf._p3.x, mux1.inp_pos.at(1)), ratio: -.1)
-    w1.draw
-    joint(wcm.c1)
-    zigzagv(mux2.out, data_shr.p2, ratio: -3)
+    joint(wcm.c1).draw
+    zigzagv_corner(cnt.ports.p1, tw.ports.state, wcm.c1).draw
 
+
+    line(mux1.ports.sw1, mux2.ports.sw2)
+    let w1 = zigzagv(bf.p1, mux1.ports.p1, ratio: -.1)
+    let w2 = zigzagv(bf.p2, mux2.ports.p1, ratio: -.1)
+    joint(w1.c1).draw
+    joint(w2.c1).draw
+    zigzagv(mux2.ports.out, data_shr.p2, ratio: -3).draw
+    w1.draw
+    w2.draw
 
     ///// input validators
-    let valid_sr = memcell(8, cnt._p1.x, cnt._p1.y + 2.2, name: `valid_sr`, name-anchor: "north")
+    let valid_sr = memcell(8, cnt.ports._p1.x, cnt.ports._p1.y + 2.2, name: `valid_sr`, name-anchor: "north")
 
     valid_sr.draw
-    let in_valid = wedge(inpx, valid_sr._p1.y, txt: `in_valid`)
+    let in_valid = io-pin(inpx, valid_sr._p1.y, name: `in_valid`)
     in_valid.draw
     line(in_valid.p1, valid_sr.p1)
 
     let or1 = or-gate(valid_sr._p2.x + 1, valid_sr._p2.y - .7, w: .7, h: .3)
     or1.draw
-    let w1 = zigzagv_get_corner(in_valid.p2, or1.p1, ratio: .1)
+    let w1 = zigzagv(in_valid.p2, or1.p1, ratio: .1)
     w1.draw
-    joint(w1.c1)
-    w1 = zigzagv_get_corner(valid_sr.p2, or1.p2)
+    joint(w1.c1).draw
+    w1 = zigzagv(valid_sr.p2, or1.p2)
     w1.draw
-    joint(w1.c1)
+    joint(w1.c1).draw
 
     let ppl = pipelined_multiplier(
-      mux1._out.x + 3,
-      mux1._out.y,
+      mux1.ports._out.x + 3,
+      mux1.ports._out.y,
     )
     ppl.draw
-    wire(mux1.out, ppl.p1)
-    zigzagv(tw.ports.W, ppl.p2, ratio: 1)
+    wire(mux1.ports.out, ppl.p1)
+    zigzagv(tw.ports.W, ppl.p2, ratio: 1).draw
 
     //// last stage
-    let pre_stage_en = Dff(ppl._clk.x, or1._p3.y, name: `pre_stage_en`)
+    let pre_stage_en = Dff(
+      ppl._clk.x,
+      or1._p3.y,
+      name: `pre_stage_en`,
+      name-anchor: "south",
+    )
     pre_stage_en.draw
-    wire(or1.p3, pre_stage_en.p1)
+    wire(or1.p3, pre_stage_en.ports.D)
     content(or1.p3, `stage_en`, anchor: "south-west", padding: .1)
-    let dout_ff = Dff_en(ppl._out.x + 1, ppl._out.y, `dout_ff`)
-    wire(ppl.out, dout_ff.p1)
+    let dout_ff = Dff_en(ppl._out.x + 1, ppl._out.y, name: `dout_ff`)
+    wire(ppl.out, dout_ff.ports.D)
     dout_ff.draw
-    zigzagv(pre_stage_en.p2, dout_ff.en, ratio: 1)
+    zigzagv(pre_stage_en.ports.Q, dout_ff.ports.en, ratio: 1).draw
 
     let and1 = and-gate(or1._p3.x + 2, or1._p3.y + 1)
     and1.draw
 
-    let w3 = zigzagv_get_corner(or1.p3, and1.p1, ratio: .8)
+    let w3 = zigzagv(or1.p3, and1.p1, ratio: .8)
     w3.draw
-    joint(w3.c1)
+    let jx = joint(w3.c1)
+    jx.draw
 
-    zigzagv_corner(valid_sr.p2, and1.p2, w1.c1)
+    zigzagv_corner(valid_sr.p2, and1.p2, w1.c1).draw
 
-    let mul_valid_ff = Dff(dout_ff._p1.x, and1._p3.y, name: `mul_valid`)
+    let mul_valid_ff = Dff(
+      dout_ff.ports._D.x,
+      and1._p3.y,
+      name: `mul_valid`,
+      name-anchor: "south",
+    )
 
     mul_valid_ff.draw
-    wire(and1.p3, mul_valid_ff.p1)
+    wire(and1.p3, mul_valid_ff.ports.D)
 
-    let dout = wedge(dout_ff._p2.x + 2, dout_ff._p2.y, txt: `dout`, txtpos: "west", padx: .3)
+    let dout = io-pin(dout_ff.ports._Q.x + 2, dout_ff.ports._Q.y, name: `dout`, txtpos: "west", padx: .3)
     dout.draw
-    let out_valid = wedge(dout._p1.x, mul_valid_ff._p2.y, txt: `out_valid`, txtpos: "west", padx: .3)
+    let out_valid = io-pin(dout._p1.x, mul_valid_ff.ports._Q.y, name: `out_valid`, txtpos: "west", padx: .3)
     out_valid.draw
 
-    wire(dout_ff.p2, dout.p1)
-    wire(mul_valid_ff.p2, out_valid.p1)
+    wire(dout_ff.ports.Q, dout.p1)
+    wire(mul_valid_ff.ports.Q, out_valid.p1)
     blockx2 = out_valid._p1.x
     blocky2 = out_valid._p1.y + 1
 
@@ -166,6 +184,7 @@
   let p3
   let dr = {
     import cetz.draw: *
+    import circucetz: *
 
     let N = calc.pow(2, stage)
     let shr = memcell(
@@ -178,7 +197,7 @@
       // fill-color: green.transparentize(90%),
     )
     shr.draw
-    let bf = bf_skel(shr._p2.x + .4, shr._p2.y, v-space: .6, h-space: .7, x-off: 0)
+    let bf = bf_skel(shr._p2.x + .4, shr._p2.y, h: .6, w: .7, x-off: 0)
     bf.draw
 
 
@@ -189,7 +208,6 @@
     line(bf.p2, p2)
     let bfj1 = (shr._p2.x + .2, bf._p1.y)
     let bfj2 = (shr._p2.x + .2, bf._p2.y)
-
     let mux1 = mux(
       bf._p3.x + .2,
       bf._p3.y,
@@ -209,10 +227,10 @@
     mux1.draw
     mux2.draw
 
-    let shr-r-p1 = (mux1._out.x - .1, shr._p2.y - .7)
+    let shr-r-p1 = (mux1.ports._out.x - .1, shr._p2.y - .7)
 
-    zigzagv(shr-r-p1, mux2.out, ratio: 3)
-    zigzagv(shr.p1, shr-r-p1, ratio: -.1)
+    zigzagv(shr-r-p1, mux2.ports.out, ratio: 3).draw
+    zigzagv(shr.p1, shr-r-p1, ratio: -.1).draw
 
     let muxconn1 = (dash: "dashed", thickness: .5pt, paint: gray)
     let muxconn2 = (paint: black)
@@ -221,22 +239,24 @@
       muxconn1 = (paint: black)
       // mux1 is bottom connection to bf
       // mux2 zigzag connection to pre-bf
-      joint(bfj2, r: 1.2pt)
+      let jx = joint(bfj2, r: 1.2pt)
+      jx.draw
     } else {
-      joint(bfj1, r: 1.2pt)
+      let jx = joint(bfj1, r: 1.2pt)
+      jx.draw
     }
-    zigzagv(bfj2, (mux2.x, mux2.inp_pos.at(1)), ratio: 0, stroke: muxconn1)
-    line(bf.p3, (mux1.x, mux1.inp_pos.at(0)), stroke: muxconn1)
+    zigzagv(bfj2, (mux2.ports._p0.x, mux2.ports._p1.y), ratio: 0, stroke: muxconn1).draw
+    line(bf.p3, (mux1.ports._p0.x, mux1.ports._p0.y), stroke: muxconn1)
     // stroke with low contrast
 
-    line(bf.p4, (mux2.x, mux2.inp_pos.at(0)), stroke: muxconn2)
-    zigzagv(bfj1, (mux1.x, mux1.inp_pos.at(1)), ratio: 0, stroke: muxconn2)
+    line(bf.p4, (mux2.ports._p0.x, mux2.ports._p0.y), stroke: muxconn2)
+    zigzagv(bfj1, (mux1.ports._p0.x, mux1.ports._p1.y), ratio: 0, stroke: muxconn2).draw
 
     /// mux2-out
     content((shr._p1.x + .7, shr._p2.y - .7), mux2-out, anchor: "south-west", padding: .1)
 
-    x = mux2._out.x + 1
-    y = (mux1._out.y + mux2._out.y) / 2
+    x = mux2.ports._out.x + 1
+    y = (mux1.ports._out.y + mux2.ports._out.y) / 2
 
     let tw = Label((x, y), $W_(#N)$)
     tw.draw
@@ -246,8 +266,8 @@
     } else {
       p3 = (tw._p4.x + .5, p2.at(1))
     }
-    zigzagv(mux1.out, tw.p2, ratio: 1)
-    zigzagv(tw.p4, p3, ratio: 0)
+    zigzagv(mux1.ports.out, tw.p2, ratio: 1).draw
+    zigzagv(tw.p4, p3, ratio: 0).draw
 
     content((tw._p4.x - .3, p3.at(1) + .1), tw-out, anchor: "north-west", padding: .1)
 
@@ -271,9 +291,9 @@
     p1: p1,
     p2: p2,
     p3: p3,
-    _p1: ptyp(p1),
-    _p2: ptyp(p2),
-    _p3: ptyp(p3),
+    _p1: circucetz.utils.ptyp(p1),
+    _p2: circucetz.utils.ptyp(p2),
+    _p3: circucetz.utils.ptyp(p3),
   )
 }
 
@@ -282,6 +302,7 @@
   let h
   let dr = {
     import cetz.draw: *
+    import circucetz: *
     let s1 = R2SDC_Stage(
       x,
       y,

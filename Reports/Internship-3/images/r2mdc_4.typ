@@ -1,7 +1,7 @@
 #import "@preview/cetz:0.5.2"
 #import "../drawing.typ": *
 #import "colors.typ": *
-#import "shapes.typ": *
+#import "@local/circucetz:0.1.0"
 #import "@preview/circuiteria:0.2.0"
 
 #let R2MDC_stage(
@@ -14,7 +14,7 @@
   params: (),
   show-stages: false,
   stage-color: rgb("#49c6e5"),
-	stage: 0,
+  stage: 0,
   txtsize: 10pt,
 ) = {
   let x1 = 0 // left upper pin
@@ -28,9 +28,9 @@
   let padx = .3
   let dr = {
     import cetz.draw: *
+    import circucetz: *
     translate(x: x, y: y)
     let cellh = .5
-
     let mmc1 = memcell(buffer, x1, y1, cell-height: cellh, cell-width: memcw1, contents: params.shr-content)
     mmc1.draw
 
@@ -41,23 +41,23 @@
 
     let bf-off = .2
     let bfhs = .7
-    let bf1 = bf_skel_old(mmc1._p2.x + .2, mmc1._p2.y, bfhs, stage-height, x-off: bf-off)
-    bf1.at(0)
+    let bf1 = bf_skel(mmc1._p2.x + .2, mmc1._p2.y, w: bfhs, h: stage-height, x-off: bf-off)
+    bf1.draw
 
 
-    line((mmc1._p2.x, mmc1._p2.y), (bf1.at(1), bf1.at(2)))
-    line((x2, y2), (bf1.at(3), bf1.at(4)))
+    line((mmc1._p2.x, mmc1._p2.y), bf1.p1)
+    line((x2, y2), bf1.p2)
 
     let c1r = .25
     let tx1 = x1
     let ty1 = y1
 
-    x4 = bf1.at(5)
-    x3 = bf1.at(5)
+    x4 = bf1._p3.x
+    x3 = bf1._p3.x
     x3 += .3
     x4 += .3
 
-    line((bf1.at(5), y4), (x4 - c1r, y4))
+    line((bf1._p3.x, y4), (x4 - c1r, y4))
     circle((x4, y4), radius: c1r)
     content((x4, y4), text(size: 6pt)[$W_(#calc.pow(2, buffer))$])
     x4 += c1r
@@ -88,20 +88,20 @@
       line((x4, y4), mmc2.p1)
       x3 = mmc2._p2.x + .3
       x4 = mmc2._p2.x + .3
-      let sww1 = switcher(x3, y1, bfhs / 2, stage-height, off: .5, switch: params.cross)
-      sww1.at(0)
+      let sww1 = switcher(x3, y1, w:bfhs / 2, h:stage-height, off: .5, switch: params.cross)
+      sww1.draw
 
-      x3 = sww1.at(5) + padx
-      x4 = sww1.at(5) + padx
+      x3 = sww1._p3.x + padx
+      x4 = sww1._p3.x + padx
 
-      line((bf1.at(5), bf1.at(6)), (sww1.at(1), sww1.at(2)))
-      line(mmc2.p2, (sww1.at(3), sww1.at(4)))
-      stage1x = (sww1.at(5) + x3) / 2
+      line((bf1._p3.x, bf1._p3.y), (sww1._p1.x, sww1._p1.y))
+      line(mmc2.p2, sww1.p2)
+      stage1x = (sww1._p3.x + x3) / 2
     } else {
       x3 = x4
       stage1x = x3 + padx
       line(
-        (bf1.at(5), bf1.at(6)),
+        (bf1._p3.x, bf1._p3.y),
         (x4 + padx, y3),
       )
       line(
@@ -121,7 +121,6 @@
         anchor: "south",
       )
     }
-
     translate(x: -x, y: -y)
   }
   x1 += x
@@ -137,6 +136,7 @@
 
 #let R2MDC_4unit(values) = {
   import cetz.draw: *
+  import circucetz: *
   let (x1, y1) = values.at(0).pos
   let (x2, y2) = values.at(0).pos
   let cellh = .6
@@ -155,7 +155,8 @@
   st.draw
   x1 += .5
   x2 += .5
-  (y1, y2) = st.inp_pos
+  y1 = st.ports._p0.y
+  y2 = st.ports._p1.y
 
   if (values.at(0).show-stages) {
     rect((rx1 - .15, y1 - .6), (x1 + .15, y1 + 1.4), fill: purple.transparentize(90%), stroke: 0.1pt)
@@ -179,7 +180,7 @@
     params: values.at(1),
     show-stages: values.at(0).show-stages,
     stage-color: stage-1-color,
-		stage: 0
+    stage: 0,
   )
   s1.at(0)
 
@@ -201,8 +202,9 @@
     params: values.at(2),
     show-stages: values.at(0).show-stages,
     stage-color: stage-2-color,
-		stage: 1
+    stage: 1,
   )
+
   s2.at(0)
 
   line(
@@ -399,227 +401,166 @@
 #let ckt-r2mdc-stage = {
   cetz.canvas({
     import cetz.draw: *
+    import circucetz: *
+
     scale(y: -1)
-    let x1 = 0
-    let y1 = 0
-    let x2 = 0
-    let y2 = 0
-    let inpx = -.6
-    let blockx1 = inpx
-    let blockpdd = 1
-    let blocky1 = -2.7
 
-    let mmc2 = memcell(4, x1, y1)
-    mmc2.draw
-    // line(
-    //   mmc2.p1,
-    //   (sww1.at(1), mmc2.at(2)),
-    // )
+    //////////// Input pins
 
-    x1 = mmc2._p2.x + .7
-    x2 = mmc2._p2.x + .7
+    let in_valid = io-pin(0, 0, name: `in_valid`)
+    let in0 = io-pin(0, 1.5, name: `in0`)
+    let in1 = io-pin(0, 3, name: `in1`)
+    let in_ctr = io-pin(0, 4.5, name: `in_ctr`)
 
+    in_valid.draw
+    in0.draw
+    in1.draw
+    in_ctr.draw
 
-    ///// butterfly
-    let bfw = 1
-    let bfh = 1.5
-    let bfp = .5
-
-    let bf1 = bf_skel_old(x1, y1, bfw, bfh, x-off: 0)
-    bf1.at(0)
-    x2 = bf1.at(3)
-    y2 = bf1.at(4)
-
-    rect((bf1.at(1) - bfp, bf1.at(2) - bfp * 1.2), (bf1.at(5) + bfp * .7, y2 + bfp * 1.4))
-    content((bf1.at(1) - bfp / 2, bf1.at(2)), $a$, anchor: "south", padding: 0.1)
-    content((bf1.at(1) - bfp / 2, y2), $b$, anchor: "north", padding: 0.1)
-    content((bf1.at(5), bf1.at(2)), $c$, anchor: "south", padding: 0.1)
-    content((bf1.at(5), y2), $d$, anchor: "north", padding: 0.1)
-
-    let tx1 = x1
-
-
-    let in0 = wedge_old(inpx, y1, txt: `in0`)
-    let in1 = wedge_old(inpx, y2, txt: `in1`)
-    in0.at(0)
-    in1.at(0)
-    line((in0.at(1), in0.at(2)), mmc2.p1)
-    line((in1.at(1), in1.at(2)), (bf1.at(3), bf1.at(4)))
-    line(mmc2.p2, (bf1.at(1), bf1.at(2)))
-
-
-    x1 = bf1.at(5) + .8
-    y1 = bf1.at(6)
-
-    let r_bf0 = Dff_old(x1, y1, `r_bf0`)
-    r_bf0.at(0)
-    line((tx1, r_bf0.at(2)), (x1, r_bf0.at(2)))
-    let r_bf1 = Dff_old(x1, y1 + 1.5, `r_bf1`)
-    r_bf1.at(0)
-
-    line((x2, y2), ((x1 + x2) * .65, y2))
-    line(((x1 + x2) * .65, y2), ((x1 + x2) * .65, r_bf1.at(2)))
-    line(((x1 + x2) * .65, r_bf1.at(2)), (x1, r_bf1.at(2)))
-
-    let r1_ctr = Dff_old(x1, y1 + 3, `r1_ctr`)
-    r1_ctr.at(0)
-
-    let r_valid1 = Dff_old(x1, y1 - 1.5, `r_valid1`)
-    r_valid1.at(0)
-
-
-    /// stage 2
-    let idxgen = block_old(
-      r1_ctr.at(3) + .5,
-      r1_ctr.at(2),
-      text(size: 9pt)[`idx
-gen`],
-      w: .9,
+    /////////// stage 1
+    let mmc1 = memcell(4, in0._p1.x + 1, in0._p1.y)
+    let bf1 = bf_skel(
+      mmc1._p2.x + .7,
+      mmc1._p2.y,
+      w: 1,
+      h: 1.5,
+      x-off: 0,
     )
-    idxgen.at(0)
-    line((r1_ctr.at(3), r1_ctr.at(2)), (idxgen.at(1), idxgen.at(3)))
 
-    let tw = block_old(
-      idxgen.at(2) + .3,
-      idxgen.at(3),
-      text(size: 9pt)[`Twiddle
-ROM`],
-      w: 1.5,
-    )
-    tw.at(0)
-    line((idxgen.at(2), idxgen.at(3)), (tw.at(1), tw.at(3)))
-
-    let ax = tw.at(2) + .5
-    let ay = r_bf1.at(2)
-    let bx = ax
-    let by = ay - .5
-    let mh = 1.5
-    let mw = 2.5
-    translate(x: ax, y: ay + .3)
-    rect((0, -mh / 2), (rel: (mw, mh)), name: "mulr", fill: yellow.transparentize(70%))
-    content((mw, mh / 2 - .2), text(size: 10pt)[multiplier], anchor: "east", padding: .1)
-    let cx = .5
-    let cy = -.3
-    let tcx = cx
-    circle((cx, cy), radius: .25)
-    content((cx, cy), $times$)
-    let rh = .6
-    let rw = .4
-    let rx = .6
-
-    rect((cx + rx, cy - rh / 2), (cx + rx + rw, cy + rh / 2))
-    line((cx + .25, cy), (cx + rx, cy), name: "l2")
-    line(
-      (((cx + rx) + cx + rx + rw) / 2, cy + rh / 2 - .2),
-      (((cx + rx) + cx + rx + rw) / 2 - rw / 3, cy + rh / 2),
-      (((cx + rx) + cx + rx + rw) / 2 + rw / 3, cy + rh / 2),
-      close: true,
-    )
-    line((cx + rx + rw, cy), (cx + rx + rw + .6 - .25, cy), name: "l2")
-    cx += rx + rw + .6
-    circle((cx, cy), radius: .25)
-    content((cx, cy), $+$)
-    cx += .25
-    let mulx = cx + ax
-    let muly = ay
-
-    translate(x: -ax, y: -ay - .3)
-    let dffx = tcx + ax + rx
-
-    line((r_bf1.at(3), r_bf1.at(2)), (ax + tcx - .25, ay), name: "l1")
-    line((tw.at(2), tw.at(3)), (ax + tcx, tw.at(3)), name: "l2")
-    line((ax + tcx, tw.at(3)), (ax + tcx, ay + .25), name: "l3")
-    content("l1.90%", $a$, anchor: "south", padding: .1)
-    content("l3.10%", $b$, anchor: "west", padding: .1)
-
-
-    let r2_bf0 = Dff_old(dffx, r_bf0.at(2), `r2_bf0`)
-    r2_bf0.at(0)
-    let r2_ctr = Dff_old(dffx, r1_ctr.at(2) + 1, `r2_ctr`)
-    r2_ctr.at(0)
-
-    let r_valid2 = Dff_old(dffx, r_valid1.at(2), `r_valid2`)
-    r_valid2.at(0)
-
-    line((r_bf0.at(3), r_bf0.at(2)), (r2_bf0.at(1), r_bf0.at(2)))
-    line(
-      ((r1_ctr.at(3) + idxgen.at(1)) / 2, r1_ctr.at(2)),
-      ((r1_ctr.at(3) + idxgen.at(1)) / 2, r2_ctr.at(2)),
-    )
-    line(
-      ((r1_ctr.at(3) + idxgen.at(1)) / 2, r2_ctr.at(2)),
-      (r2_ctr.at(1), r2_ctr.at(2)),
-    )
-    line((r_valid1.at(3), r_valid1.at(2)), (r_valid2.at(1), r_valid1.at(2)))
-
-    //// commmutator
-    let commx = mulx + .6
-    let commy = muly
-    let mmc1 = memcell(2, commx, muly)
     mmc1.draw
-    commx = mmc1._p2.x
-    line(
-      (mulx, muly),
-      (mmc1._p1.x, muly),
+    bf1.draw
+
+    // connections
+    line(in0.p1, mmc1.p1)
+    line(in1.p1, bf1.p2)
+    line(mmc1.p2, bf1.p1)
+
+
+    ////////// stage 2
+    let r_bf0 = Dff(bf1._p3.x + .8, bf1._p3.y, name: `r_bf0`, name-anchor: "south")
+    let r_bf1 = Dff(r_bf0.ports._D.x, bf1._p4.y, name: `r_bf1`, name-anchor: "south")
+    let r1_ctr = Dff(r_bf0.ports._D.x, in_ctr._p1.y, name: `r1_ctr`, name-anchor: "south")
+    let r_valid1 = Dff(r_bf0.ports._D.x, in_valid._p1.y, name: `r_valid1`, name-anchor: "south")
+
+    r_bf0.draw
+    r_bf1.draw
+    r1_ctr.draw
+    r_valid1.draw
+
+    line(bf1.p4, r_bf1.ports.D)
+    line(bf1.p3, r_bf0.ports.D)
+    line(in_ctr.p2, r1_ctr.ports.D)
+    line(in_valid.p2, r_valid1.ports.D)
+
+    ////////// stage 3
+
+    let idxgen = block(
+      r1_ctr.ports._Q.x + .8,
+      r1_ctr.ports._Q.y,
+      w: 1.5,
+      name: align(center)[
+        #text(size: 9pt, font: "Noto Mono")[Idx\ Gen]
+      ],
+      ports: (
+        west: ((id: "p1"),),
+        east: ((id: "p2"),),
+      ),
+			origin-port: "p1"
     )
 
+    let tw = block(
+      idxgen.ports._p2.x + .5,
+      idxgen.ports._p2.y,
+      w: 1.5,
+      name: align(center)[
+        #text(size: 9pt, font: "Noto Mono")[Twiddle\ ROM]
+      ],
+      ports: (
+        west: ((id: "p1"),),
+        east: ((id: "p2"),),
+      ),
+			origin-port: "p1"
+    )
 
-    let mmc3 = memcell(2, mmc1._p1.x, r2_ctr.at(2))
+    let ppl1 = pipelined_multiplier(
+      tw.ports._p2.x + .5,
+      r_bf1.ports._D.y,
+    )
+
+    tw.draw
+    idxgen.draw
+    ppl1.draw
+
+    line(r1_ctr.ports.Q, idxgen.ports.p1)
+    line(idxgen.ports.p2, tw.ports.p1)
+    line(r_bf1.ports.Q, ppl1.p1)
+    L-wire(tw.ports.p2, ppl1.p2).draw
+
+    ///////// Stage 5
+
+    let r2_bf0 = Dff(ppl1._clk.x, r_bf0.ports._D.y, name: `r2_bf0`, name-anchor: "south")
+    let r2_ctr = Dff(ppl1._clk.x, r1_ctr.ports._D.y + 1, name: `r2_ctr`, name-anchor: "south")
+    let r_valid2 = Dff(ppl1._clk.x, r_valid1.ports._D.y, name: `r_valid2`, name-anchor: "south")
+
+    r2_bf0.draw
+    r2_ctr.draw
+    r_valid2.draw
+
+    line(r_bf0.ports.Q, r2_bf0.ports.D)
+    line(r_valid1.ports.Q, r_valid2.ports.D)
+    let zw1 = zigzagv(r1_ctr.ports.Q, r2_ctr.ports.D, ratio: .07)
+    zw1.draw
+    joint(zw1.c1).draw
+
+
+    //////// stage 6
+
+    let mmc2 = memcell(2, ppl1._out.x + .6, ppl1._out.y)
+    let mmc3 = memcell(2, mmc2._p1.x, r2_ctr.ports._D.y)
+    let mmc4 = memcell(2, mmc2._p1.x, r_valid2.ports._D.y)
+
+    let sww1 = switcher(
+      mmc2._p2.x + .3,
+      r2_bf0.ports._D.y,
+      w: .7,
+      h: calc.abs(r2_bf0.ports._D.y - mmc2._p2.y),
+      txtsize: 10pt,
+    )
+
+    mmc2.draw
     mmc3.draw
-    let mmc4 = memcell(2, mmc1._p1.x, r_valid2.at(2))
     mmc4.draw
+    sww1.draw
 
 
-    let swh = commy - r2_bf0.at(2)
-    let swx = .3
-    let sww = .75
-    let sww1 = switcher(commx + swx, r2_bf0.at(2), sww, swh, txtsize: 10pt)
-    sww1.at(0)
-    line(
-      (r2_bf0.at(3), r2_bf0.at(2)),
-      (sww1.at(3), r2_bf0.at(2)),
-    )
-    line(
-      (mmc1._p2.x, mmc1._p1.y),
-      (sww1.at(1), mmc1._p1.y),
-    )
-    commx = sww1.at(5) + .3
-    commy = sww1.at(6)
+    line(ppl1.out, mmc2.p1)
+    line(r2_bf0.ports.Q, sww1.p1)
+    line(mmc2.p2, sww1.p2)
 
-    let in_ctr = wedge_old(inpx, r1_ctr.at(2), txt: `in_ctr`)
-    in_ctr.at(0)
-    let in_valid = wedge_old(inpx, r_valid1.at(2), txt: `in_valid`)
-    in_valid.at(0)
-    line(
-      (inpx, r1_ctr.at(2)),
-      (r1_ctr.at(1), r1_ctr.at(2)),
-    )
-    line(
-      (inpx, r_valid1.at(2)),
-      (r_valid1.at(1), r_valid1.at(2)),
-    )
+    //////// output side
 
+    let outx = sww1._p3.x + 1
 
-    let out0 = wedge_old(commx, sww1.at(6), txt: `out0`, txtpos: "west", padx: .3)
-    out0.at(0)
-    let out1 = wedge_old(commx, sww1.at(4), txt: `out1`, txtpos: "west", padx: .3)
-    out1.at(0)
-    let out_cnt = wedge_old(commx, mmc3._p1.y, txt: `out_cnt`, txtpos: "west", padx: .3)
-    out_cnt.at(0)
-    let out_valid = wedge_old(commx, mmc4._p1.y, txt: `out_valid`, txtpos: "west", padx: .3)
-    out_valid.at(0)
+    let out0 = io-pin(outx, sww1._p3.y, name: `out0`, txtpos: "west", padx: .3)
+    let out1 = io-pin(outx, sww1._p2.y, name: `out1`, txtpos: "west", padx: .3)
+    let out_cnt = io-pin(outx, mmc3._p1.y, name: `out_cnt`, txtpos: "west", padx: .3)
+    let out_valid = io-pin(outx, mmc4._p1.y, name: `out_valid`, txtpos: "west", padx: .3)
 
-    line((r2_ctr.at(3), r2_ctr.at(4)), (mmc3._p1.x, mmc3._p1.y))
-    line((r_valid2.at(3), r_valid2.at(4)), (mmc4._p1.x, mmc4._p1.y))
+    out0.draw
+    out1.draw
+    out_cnt.draw
+    out_valid.draw
 
-    line((sww1.at(5), sww1.at(6)), (out0.at(1), out0.at(2)))
-    line((sww1.at(5), sww1.at(8)), (out1.at(1), out1.at(2)))
-    line(mmc3.p2, (out_cnt.at(1), out_cnt.at(2)))
-    line(mmc4.p2, (out_valid.at(1), out_valid.at(2)))
+    line(r2_ctr.ports.Q, mmc3.p1)
+    line(r_valid2.ports.Q, mmc4.p1)
+    line(sww1.p3, out0.p1)
+    line(sww1.p4, out1.p1)
+    line(mmc3.p2, out_cnt.p1)
+    line(mmc4.p2, out_valid.p1)
 
-    let blockx2 = out_valid.at(1)
-    let blocky2 = out_cnt.at(2) + blockpdd
+    let borderx2 = out_valid._p1.x
+    let bordery2 = out_cnt._p1.y + 1
 
-    rect((blockx1, blocky1), (blockx2, blocky2))
+    rect((0, -1.5), (borderx2, bordery2))
   })
 }
