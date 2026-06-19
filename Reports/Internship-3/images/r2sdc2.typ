@@ -24,7 +24,6 @@
       cnt.ports._p2.y,
       name: text(size: 9pt)[*`Twiddle`*],
       name-anchor: "south",
-      name-padding: .9,
       w: 1.5,
       h: 1.5,
       ports: (

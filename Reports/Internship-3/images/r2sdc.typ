@@ -1,7 +1,5 @@
-#import "@preview/circuiteria:0.2.0": circuit, element, util, wire
-#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
-#import "../drawing.typ": *
 #import "@preview/cetz:0.5.2"
+#import "@local/circucetz:0.1.0"
 #import "colors.typ": *
 
 #let _r2sdcports = (
@@ -22,15 +20,17 @@
     (id: "rst", name: `rst`),
   ),
 )
-#let ckt-r2sdc = [#circuit(length: 2em, {
-  element.block(
-    x: 1,
-    y: 0,
+#let ckt-r2sdc = cetz.canvas({
+  import circucetz: *
+  let block-h = 3.5
+  let ctrl = block(
+    1,
+    0,
     w: 5,
-    h: 4,
-    id: "ctrl",
-    name: [Controller],
+    h: block-h,
+    name: "Controller",
     name-anchor: "north",
+    name-padding: .3,
     fill: maroon.transparentize(80%),
     ports: (
       west: (
@@ -51,72 +51,62 @@
       ),
     ),
   )
-  element.block(
-    x: 8,
-    y: 0,
+  let S1 = block(
+    8,
+    0,
     w: 5.5,
-    h: 4,
-    id: "r2sdc1",
-    name: [R2SDC Stage 1],
+    h: block-h,
+    name: "R2SDC Stage 1",
     ports: _r2sdcports,
     name-anchor: "north",
+    name-padding: .3,
     fill: stage-1-color.transparentize(80%),
   )
-  element.block(
-    x: 15,
-    y: 0,
+  let S0 = block(
+    15,
+    0,
     w: 5.5,
-    h: 4,
-    id: "r2sdc2",
-    name: [R2SDC Stage 0],
+    h: block-h,
+    name: "R2SDC Stage 0",
     ports: _r2sdcports,
     name-anchor: "north",
+    name-padding: .3,
     fill: stage-2-color.transparentize(80%),
   )
 
-  element.block(
-    x: -1,
-    y: -1.3,
-    w: 1,
-    h: 1,
-    id: "clkb",
-    name: [clk],
-    ports: (
-      east: (
-        (id: "p"),
-      ),
-    ),
+  ctrl.draw
+  S1.draw
+  S0.draw
+
+  let din = io-pin(0, ctrl.ports._din.y, name: `din`)
+  let in_valid = io-pin(0, ctrl.ports._in_valid.y, name: `in_valid`)
+  let clk = io-pin(0, ctrl.ports._clk.y - .8, name: `clk`)
+  let rst = io-pin(0, clk._p1.y - .7, name: `rst`)
+
+  din.draw
+  in_valid.draw
+  clk.draw
+  rst.draw
+
+	wire(din.p2, ctrl.ports.din)
+	wire(in_valid.p2, ctrl.ports.in_valid)
+	
+  wire(ctrl.ports.dout, S1.ports.din)
+  wire(S1.ports.dout, S0.ports.din)
+  wire(ctrl.ports.out_valid, S1.ports.in_valid)
+  wire(S1.ports.out_valid, S0.ports.in_valid)
+
+  let crosswires = (
+    L-wire(clk.p2, ctrl.ports.clk),
+    L-wire(clk.p2, S1.ports.clk),
+    L-wire(rst.p2, ctrl.ports.rst),
+    L-wire(rst.p2, S1.ports.rst),
   )
 
-  element.block(
-    x: -1,
-    y: -2.3,
-    w: 1,
-    h: 1,
-    id: "rstb",
-    name: [rst],
-    ports: (
-      east: (
-        (id: "p"),
-      ),
-    ),
-  )
-  wire.stub("ctrl-port-din", "west", name: [*din*], length: .5)
-  wire.stub("ctrl-port-in_valid", "west", name: [*in_valid*], length: .5)
-  wire.stub("r2sdc2-port-dout", "east", name: [*dout*], length: .5)
-  wire.stub("r2sdc2-port-out_valid", "east", name: [*out valid*], length: .5)
-  let dwire(x, y, dy: -1) = wire.wire("w10", (x, y), directed: true, style: "dodge", dodge-y: dy, dodge-margins: (0, 0))
-
-  dwire("clkb-port-p", "ctrl-port-clk")
-  dwire("clkb-port-p", "r2sdc1-port-clk")
-  dwire("clkb-port-p", "r2sdc2-port-clk")
-
-  dwire("rstb-port-p", "ctrl-port-rst", dy: -2)
-  dwire("rstb-port-p", "r2sdc1-port-rst", dy: -2)
-  dwire("rstb-port-p", "r2sdc2-port-rst", dy: -2)
-
-  vwire("w1", "ctrl-port-out_valid", "r2sdc1-port-in_valid")
-  vwire("w1", "ctrl-port-dout", "r2sdc1-port-din")
-  vwire("w1", "r2sdc1-port-out_valid", "r2sdc2-port-in_valid")
-  vwire("w1", "r2sdc1-port-dout", "r2sdc2-port-din")
-})]
+  for w in crosswires {
+    w.draw
+    joint(w.c1).draw
+  }
+  L-wire(clk.p2, S0.ports.clk).draw
+  L-wire(rst.p2, S0.ports.rst).draw
+})

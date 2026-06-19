@@ -34,6 +34,8 @@
   (0, 0, 0, 0, 0, 2, 4, 6, 8, 8, 10),
 )
 
+#let BRAM = nt.add(RAMB36, RAMB18)
+
 #let DSP-per-N = (
   (0.5, 0.25, 0.125, 0.0625),
   (1, 0.75, 0.5, 0.3125, 0.1875, 0.1093, 0.0625, 0.0351, 0.0195, 0.0107, 0.0058),
@@ -82,10 +84,11 @@
 
 #let plots-to-do = (
   "Total LUTs/N": Total-LUT-N,
-  "SLR*/N": SLR-per-N,
+  // "SLR*/N": SLR-per-N,
   "Flip-Flops/N": FF-per-N,
-  "RAMB36": RAMB36,
-  "RAMB18": RAMB18,
+  // "RAMB36": RAMB36,
+  // "RAMB18": RAMB18,
+  "BRAM": BRAM,
   "DSPs/N": DSP-per-N,
   "Power": Power,
   "Fmax": Fmax,
@@ -97,6 +100,7 @@
   "Flip-Flops/N": "units",
   "RAMB36": "units",
   "RAMB18": "units",
+  "BRAM": "units",
   "DSPs/N": "units",
   "Power": "mW",
   "Fmax": "MHz",
@@ -114,14 +118,12 @@
       axis-style: "scientific",
       x-label: "",
       y-label: y-units.at(i),
-      // legend: (5, 4),
       {
         let dat = ()
         for j in range(plots.len()) {
           let algodata = plots.at(j)
           plot.add(
             point-sizes.zip(algodata),
-            // label: algos.at(j),
             style: (stroke: colors.at(j)),
           )
           plot.add-vline(
@@ -156,7 +158,5 @@ All datas have been plotted here for quick comparison:
   ..plots-to-do.keys().map(i => plot-graph(i))
 )
 
-SLR: Super Logic Region
-
-The throughput trend closely matches with $F_max$.
+The throughput is not plotted here as it closely matches with $F_max$.
 From this we its clear that inplace algorithm performs worse in all cases except at power consumption. Also MDC architecture is prefered in high throughput requirements (such as radar, SDR, etc.). With both pipelined architectures, the synthesis tool was able to infer BRAM blocks past a certain number of transform size.

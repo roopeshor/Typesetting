@@ -40,6 +40,7 @@
   code: "DejaVu Sans Mono"
 )
 
+#let COLOR_TWIDDLE_MAPS = true
 
 #let addToPDFBookmark(entry, outlined: false) = {
   show heading: none

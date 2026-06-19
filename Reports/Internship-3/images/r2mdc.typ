@@ -1,8 +1,6 @@
-#import "@preview/circuiteria:0.2.0": circuit, element, util, wire
-#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
-#import "../drawing.typ": *
 #import "@preview/cetz:0.5.2"
-#import "r2mdc_4.typ": stage-2-color, stage-1-color
+#import "@local/circucetz:0.1.0"
+#import "r2mdc_4.typ": stage-1-color, stage-2-color
 
 #let _r2mdcports = (
   west: (
@@ -22,16 +20,16 @@
     (id: "rst", name: `rst`),
   ),
 )
-#let ckt-r2mdc = [#circuit(length: 2em, {
-  element.block(
-    x: 1,
-    y: 0,
+#let ckt-r2mdc = cetz.canvas({
+  import circucetz: *
+  let block-h = 4.3
+  let ctrl = block(
+    1,
+    0,
     w: 5,
-    h: 5,
-    id: "ctrl",
-    name: [Controller],
-		name-anchor: "north",
-		fill: maroon.transparentize(80%),
+    h: block-h,
+    name: align(center)[#text(font: "Source Sans 3")[*Controller*]],
+    fill: maroon.transparentize(80%),
     ports: (
       west: (
         (id: "din", name: `din`),
@@ -49,75 +47,63 @@
       ),
     ),
   )
-  element.block(
-    x: 8,
-    y: 0,
+  let S0 = block(
+    8,
+    0,
     w: 5.5,
-    h: 5,
-    id: "r2mdc1",
-    name: [R2MDC \ Stage 0],
+    h: block-h,
+    name: align(center)[#text(font: "Source Sans 3")[*R2MDC \ Stage 0*]],
     ports: _r2mdcports,
-		fill: stage-1-color.transparentize(80%)
+    fill: stage-1-color.transparentize(80%),
   )
-  element.block(
-    x: 15,
-    y: 0,
+  let S1 = block(
+    15,
+    0,
     w: 5.5,
-    h: 5,
-    id: "r2mdc2",
-    name: [R2MDC \ Stage 1],
+    h: block-h,
+    name: align(center)[#text(font: "Source Sans 3")[*R2MDC \ Stage 1*]],
     ports: _r2mdcports,
-		fill: stage-2-color.transparentize(80%)
+    fill: stage-2-color.transparentize(80%),
   )
 
-  element.block(
-    x: -1,
-    y: -1.3,
-    w: 1,
-    h: 1,
-    id: "clkb",
-    name: [clk],
-    ports: (
-      east: (
-        (id: "p"),
-      ),
-    ),
-  )
+  let clk = io-pin(0, -1.3, name: `clk`)
+  let rst = io-pin(0, -2.3, name: `rst`)
+  let din = io-pin(0, ctrl.ports._din.y, name: `din`)
+  let in_valid = io-pin(0, ctrl.ports._in_valid.y, name: `in_valid`)
 
-  element.block(
-    x: -1,
-    y: -2.3,
-    w: 1,
-    h: 1,
-    id: "rstb",
-    name: [rst],
-    ports: (
-      east: (
-        (id: "p"),
-      ),
-    ),
-  )
-  wire.stub("ctrl-port-din", "west", name: [*din*], length: .5)
-  wire.stub("ctrl-port-in_valid", "west", name: [*in_valid*], length: .5)
-  wire.stub("r2mdc2-port-out1", "east", name: [*Out 1*], length: .5)
-  wire.stub("r2mdc2-port-out0", "east", name: [*Out 0*], length: .5)
-  wire.stub("r2mdc2-port-out_valid", "east", name: [*out valid*], length: .5)
-	let dwire(x,y,dy:-1) = wire.wire("w10", (x,y), directed: true, style: "dodge", dodge-y: dy, dodge-margins: (0,0))
+  ctrl.draw
+  S0.draw
+  S1.draw
 
-	dwire("clkb-port-p", "ctrl-port-clk")
-	dwire("clkb-port-p", "r2mdc1-port-clk")
-	dwire("clkb-port-p", "r2mdc2-port-clk")
-	
-	dwire("rstb-port-p", "ctrl-port-rst", dy: -2)
-	dwire("rstb-port-p", "r2mdc1-port-rst", dy: -2)
-	dwire("rstb-port-p", "r2mdc2-port-rst", dy: -2)
-  
-	vwire("w1", "ctrl-port-out_valid", "r2mdc1-port-in_valid")
-  vwire("w1", "ctrl-port-out1", "r2mdc1-port-in1")
-  vwire("w1", "ctrl-port-out0", "r2mdc1-port-in0")
-  vwire("w1", "ctrl-port-out_cnt", "r2mdc1-port-in_cnt")
-  vwire("w1", "r2mdc1-port-out_valid", "r2mdc2-port-in_valid")
-  vwire("w1", "r2mdc1-port-out1", "r2mdc2-port-in1")
-  vwire("w1", "r2mdc1-port-out0", "r2mdc2-port-in0")
-  vwire("w1", "r2mdc1-port-out_cnt", "r2mdc2-port-in_cnt")
-})]
+  clk.draw
+  rst.draw
+  din.draw
+  in_valid.draw
+
+  wire(din.p1, ctrl.ports.din)
+  wire(in_valid.p1, ctrl.ports.in_valid)
+
+  wire(ctrl.ports.out_valid, S0.ports.in_valid)
+  wire(ctrl.ports.out0, S0.ports.in0)
+  wire(ctrl.ports.out1, S0.ports.in1)
+  wire(ctrl.ports.out_cnt, S0.ports.in_cnt)
+
+  wire(S0.ports.out_valid, S1.ports.in_valid)
+  wire(S0.ports.out0, S1.ports.in0)
+  wire(S0.ports.out1, S1.ports.in1)
+  wire(S0.ports.out_cnt, S1.ports.in_cnt)
+
+  let lwires = (
+    L-wire(clk.p2, ctrl.ports.clk),
+    L-wire(clk.p2, S0.ports.clk),
+    L-wire(rst.p2, S0.ports.rst),
+    L-wire(rst.p2, ctrl.ports.rst),
+  )
+  for wi in lwires {
+    wi.draw
+    joint(wi.c1).draw
+  }
+
+  L-wire(clk.p2, S1.ports.clk).draw
+  L-wire(rst.p2, S1.ports.rst).draw
+})
