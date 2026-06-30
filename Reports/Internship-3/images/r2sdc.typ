@@ -1,5 +1,4 @@
 #import "@preview/cetz:0.5.2"
-#import "@local/circucetz:0.1.0"
 #import "colors.typ": *
 
 #let _r2sdcports = (
@@ -21,7 +20,7 @@
   ),
 )
 #let ckt-r2sdc = cetz.canvas({
-  import circucetz: *
+  import "../circucetz/lib.typ": *
   let block-h = 3.5
   let ctrl = block(
     1,

@@ -6,17 +6,16 @@
 
 ///////// Title, Preamble
 /// 
-// #set page(numbering: "a")
-// #showFooter("none")
-// #include "title.typ"
+#set page(numbering: "a")
+#showFooter("none")
+#include "title.typ"
 // #include "certificate.typ"
-// #set page(margin: (left: 1.3in, right: 1.2in, top: 1.2in, bottom: 1.2in))
-// #include "acknowledgment.typ"
-// #include "abstract.typ"
+#set page(margin: (left: 1.3in, right: 1.2in, top: 1.2in, bottom: 1.2in))
+#include "acknowledgment.typ"
 
-// #set page(numbering: "i")
-// #showFooter("number")
-// #counter(page).update(1)
+#set page(numbering: "i")
+#showFooter("number")
+#counter(page).update(1)
 #include "tocloft.typ"
 
 
@@ -31,15 +30,11 @@
 
 
 #showFooter("doe-number")
-// #include "introduction.typ"
-//    |-- Objective
-//    |-- background work
-// |-- Methods
-//    |-- DIT r2_inplace
-// 	 |-- piplelined DIF r2 
-// 
+#include "introduction.typ"
+
 #include "methods.typ"
 #include "summary.typ"
+
 // Disable chapter numbering
 // #show heading.where(level: 1): it => {
 //   set align(center + top)

@@ -1,11 +1,10 @@
 #import "@preview/cetz:0.5.2"
 #import "colors.typ": *
-#import "@local/circucetz:0.1.0"
 
 #let ckt-r2sdc-stage = {
   cetz.canvas({
     import cetz.draw: *
-    import circucetz: *
+    import "../circucetz/lib.typ": *
     scale(y: -1)
     let x = 0
     let y = 0
@@ -181,9 +180,10 @@
   let p1
   let p2
   let p3
+	import "../circucetz/lib.typ": utils.ptyp
   let dr = {
     import cetz.draw: *
-    import circucetz: *
+    import "../circucetz/lib.typ": *
 
     let N = calc.pow(2, stage)
     let shr = memcell(
@@ -290,9 +290,9 @@
     p1: p1,
     p2: p2,
     p3: p3,
-    _p1: circucetz.utils.ptyp(p1),
-    _p2: circucetz.utils.ptyp(p2),
-    _p3: circucetz.utils.ptyp(p3),
+    _p1: ptyp(p1),
+    _p2: ptyp(p2),
+    _p3: ptyp(p3),
   )
 }
 
@@ -301,7 +301,7 @@
   let h
   let dr = {
     import cetz.draw: *
-    import circucetz: *
+    import "../circucetz/lib.typ": *
     let s1 = R2SDC_Stage(
       x,
       y,

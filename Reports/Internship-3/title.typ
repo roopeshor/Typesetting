@@ -1,48 +1,49 @@
-#import "settings.typ": addToPDFBookmark, author, regNo
+#import "settings.typ": addToPDFBookmark, author, regNo, report-title
 
 #set text(size: 13.5pt)
 #set par(spacing: .9em)
 #place(center + horizon)[
   #addToPDFBookmark("Cover")
-  *MINI PROJECT REPORT*
+  #text(size: 15pt)[*ADVANCED SYSTEMS LABORATORY*]
 
-  #v(10pt)
-  on
-  #v(10pt)
+  #text(size: 15pt)[*DEFENCE RESEARCH AND DEVELOPMENT ORGANISATION*]
 
-  #text(size: 18pt)[*DISTRIBUTED COMMUNICATION NETWORK*]
+  #image("images/drdo.png", width: 4.5cm)
+
+  #text(size: 18pt)[*INTERNSHIP REPORT*]
+
+  _On_
+
+  #text(size: 18pt)[*#report-title*]
+
 
   #v(13pt)
   _Submitted by_
-  #v(13pt)
-
-  #text(weight: "bold")[#upper[#author] (#regNo)] 
-
-  #v(13pt)
-
-  _in partial fulfillment of requirement for the award of the degree_\
-  _of_
+  #v(10pt)
+  #text(weight: "bold")[#upper[#author] (#regNo)]
 
   #v(13pt)
+  _Submitted in partial fulfillment of the requirements for the\
+  B.Tech in Electronics and Communication Engineering_\
 
-  *BACHELOR OF TECHNOLOGY*\
-  *in*\
-  *ELECTRONICS AND COMMUNICATION*
+  #v(13pt)
+
+  *Under the Guidance of*\
+  Venket Reddy G, Sc 'F'
+  #v(10pt)
+
+  *Internship Duration:*\
+  May 18 2026 - June 15 2026 \
+
 
   #v(30pt)
-  #image("images/cusat.svg", width: 3.5cm)
-  #v(30pt)
-
-  *DIVISION OF ELECTRONICS ENGINEERING*
-
-  *SCHOOL OF ENGINEERING*
-
-  *COCHIN UNIVERSITY OF SCIENCE AND TECHNOLOGY*
-
-  *KOCHI - 682022*
+  *DIVISION OF ELECTRONICS ENGINEERING*\
+  *SCHOOL OF ENGINEERING*\
+  *COCHIN UNIVERSITY OF SCIENCE AND TECHNOLOGY*\
+  *KOCHI - 682022*\
 
   #v(13pt)
 
-  *APRIL 2026*
+  *July 2026*
 ]
 #pagebreak()

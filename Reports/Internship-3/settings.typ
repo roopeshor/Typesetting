@@ -12,7 +12,7 @@
 
 #let author = "Roopesh O R"
 #let regNo = "20323085"
-#let report-title = "Implementation of FFT"
+#let report-title = "Analysis and Implementation of FFT Algorithms"
 
 #let hf(a, b) = $frac(#a, #b, style: "horizontal")$
 
@@ -36,7 +36,7 @@
   headfoot: 11pt,
 )
 #let fontfams = (
-  body: "New Computer Modern",
+  body: "Times New Roman",
   code: "DejaVu Sans Mono"
 )
 

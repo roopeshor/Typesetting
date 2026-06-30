@@ -1,7 +1,6 @@
 #import "@preview/cetz:0.5.2"
 #import "../drawing.typ": *
 #import "colors.typ": *
-#import "@local/circucetz:0.1.0"
 #import "@preview/circuiteria:0.2.0"
 
 #let R2MDC_stage(
@@ -28,7 +27,7 @@
   let padx = .3
   let dr = {
     import cetz.draw: *
-    import circucetz: *
+    import "../circucetz/lib.typ": *
     translate(x: x, y: y)
     let cellh = .5
     let mmc1 = memcell(buffer, x1, y1, cell-height: cellh, cell-width: memcw1, contents: params.shr-content)
@@ -136,7 +135,7 @@
 
 #let R2MDC_4unit(values) = {
   import cetz.draw: *
-  import circucetz: *
+  import "../circucetz/lib.typ": *
   let (x1, y1) = values.at(0).pos
   let (x2, y2) = values.at(0).pos
   let cellh = .6
@@ -401,7 +400,7 @@
 #let ckt-r2mdc-stage = {
   cetz.canvas({
     import cetz.draw: *
-    import circucetz: *
+    import "../circucetz/lib.typ": *
 
     scale(y: -1)
 

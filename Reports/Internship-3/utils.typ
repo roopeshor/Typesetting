@@ -1,3 +1,4 @@
+#import "@preview/headcount:0.1.1": dependent-numbering
 #let mod-inverse(a, m) = {
   let a-mod = calc.rem(a, m)
   // Handle negative inputs safely
@@ -40,13 +41,11 @@
 
 
 #let colors = (
-  rgb("#001f3f"),
+  rgb("#000000"),
   rgb("#00b0c7"),
-  rgb("#e909c3"),
-  rgb("#420296"),
-  rgb("#428c0a"),
+  rgb("#3d8903"),
+  rgb("#7527f2"),
   rgb("#e00c01"),
-  rgb("#efb700"),
 )
 
 #let map-colors(i, txt) = {
@@ -79,5 +78,10 @@
 }
 
 
-#let MOD = 7
-#let mod-arith(a, b) = calc.rem(a * b, MOD)
+#let mod-arith(a, b, MOD: 5) = calc.rem(a * b, MOD)
+
+#let numbered_eq(content) = math.equation(
+    block: true,
+    numbering: dependent-numbering("Eq (1.1)"),
+    content,
+)
