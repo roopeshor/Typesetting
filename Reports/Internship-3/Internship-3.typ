@@ -5,7 +5,6 @@
 #show: report
 
 ///////// Title, Preamble
-/// 
 #set page(numbering: "a")
 #showFooter("none")
 #include "title.typ"
@@ -17,8 +16,6 @@
 #showFooter("number")
 #counter(page).update(1)
 #include "tocloft.typ"
-
-
 
 ////// Content
 
@@ -46,7 +43,8 @@
 //   ]
 // }
 
-// #showFooter("none")
-// #showHeader(false)
-// #bibliography("bib.yaml", style: "ieee", title: [References])
+#pagebreak()
+#showFooter("none")
+#showHeader(false)
+#bibliography("bib.yaml", style: "ieee", title: [References], full: true)
 // #include "appendix.typ"

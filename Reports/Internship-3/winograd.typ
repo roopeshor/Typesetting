@@ -4,7 +4,10 @@
 #import "@preview/acrostiche:0.7.0": *
 #import "@preview/cetz:0.5.2"
 
+#import "images/winograd5.typ": *
+
 #let out-map(txt) = { $Y'(#txt)$ }
+#let outr-map(txt) = { $Y(#txt)$ }
 #let in-map(txt) = { $x_(#txt)$ }
 #let twiddle-map(txt) = {
   if COLOR_TWIDDLE_MAPS { map-colors(txt, $W^(#txt)$) } else { text[$W^(#txt)$] }
@@ -29,7 +32,7 @@ The operation can be expressed as a matrix multiplication:
 
 #let matc = row-col-T
 #let matM = elementwise-transform-2d(matrix-from-rc(row-col, row-col, mod-arith), twiddle-map)
-#let matcY = elementwise-transform-2d(row-col-T, out-map)
+#let matcY = elementwise-transform-2d(row-col-T, outr-map)
 #let matcx = elementwise-transform-2d(row-col-T, in-map)
 
 #set math.mat(column-gap: 1em, delim: "[")
@@ -75,7 +78,7 @@ $ Y'(g^p) = sum_(q = 0)^(N - 2) x(g^(-q)) W^(g^(p-q)) $
 
 The summation above is identical to cyclic convolution of two sequences
 $x(g^(-q))$ and $W^(g^(p-q))$ of length $N-1$. For the case where $N = 5$, the generator is 2:
-$ Y'(2^p) = sum_(q = 0)^(5) x(2^(-q)) W^(2^(p-q)) $
+$ Y'(2^p) = sum_(q = 0)^(3) x(2^(-q)) W^(2^(p-q)) $
 Corresponding matrix form is:
 
 #let output-mapping = ();
@@ -100,14 +103,15 @@ Now the operation has become a length-4 cyclic convolution of sequences
 #let matW = matM.at(0).join($,tthick$)
 $
       a_q & = x(2^(-q)) = {matcx} \
-  b_(p-q) & = W^(2^(p-q)) = {matW} \
+  b_(p-q) & = W^(2^(p-q)) = {W^1, tthick W^2, tthick W^4, tthick W^3} \
   Y'(2^p) & = sum_(q = 0)^3 a_q dot b_((p-q)thick (mod 4))
 $
 
-Now we apply Winograd Fast convolution algorithm. For that we are representing this sequence as polynomials with complex coefficients:
+Now we apply Winograd Fast convolution algorithm. For that we are representing this sequence as polynomials:
 $
+  a
   x'(z) = x_1 + x_3 z + x_4 z^2 + x_2 z^3#h(1cm)
-  W'(z) = W_1 + W_3 z + W_4 z^2 + W_2 z^3
+  W'(z) = W^1 + W^2 z + W^4 z^2 + W^3 z^3
 $
 
 The circular convolution is given by:
@@ -144,9 +148,9 @@ Here $m(z) = z^4 - 1 = (z - 1)(z + 1)(z^2 + 1)$. Required factors are:
       [*$N_i$*],
     ),
     table.hline(),
-    [0], [$z-1$], [$z^3 + z^2 + z + 1$], [$x_1 + x_3 + x_4 + x_2$], [$W^1 + W^3 + W^4 + W^2$], [$1\/4$],
-    [1], [$z+1$], [$z^3 - z^2 + z - 1$], [$x_1 - x_3 + x_4 - x_2$], [$W^1 - W^3 + W^4 - W^2$], [$-1\/4$],
-    [2], [$z^2+1$], [$z^2 - 1$], [$x_1 - x_4 + z(x_3 - x_2)$], [$W^1 - W^4 + z(W^3 - W^2)$], [$-1\/2$],
+    [0], [$z-1$], [$z^3 + z^2 + z + 1$], [$x_1 + x_3 + x_4 + x_2$], [$W^1 + W^2 + W^4 + W^3$], [$1\/4$],
+    [1], [$z+1$], [$z^3 - z^2 + z - 1$], [$x_1 - x_3 + x_4 - x_2$], [$W^1 - W^2 + W^4 - W^3$], [$-1\/4$],
+    [2], [$z^2+1$], [$z^2 - 1$], [$x_1 - x_4 + z(x_3 - x_2)$], [$W^1 - W^4 - z(W^3 - W^2)$], [$-1\/2$],
   )
 ]
 
@@ -159,7 +163,7 @@ We initialize some intermediate values:
     #v(13pt)
     c_01 = x_3 + x_2 #h(1cm) d_01 & = W^3 + W^2 = 2 cos(4pi\/5) \
     #v(13pt)
-    c_20 = x_1 - x_4 #h(1cm) d_20 & = W^1 - W^4 = 2 sin(2pi\/5)j \
+    c_20 = x_1 - x_4 #h(1cm) d_20 & = W^1 - W^4 = -2 sin(2pi\/5)j \
     #v(13pt)
     c_21 = x_3 - x_2 #h(1cm) d_21 & = W^3 - W^2 = 2 sin(4pi\/5)j
   $],
@@ -170,7 +174,7 @@ We initialize some intermediate values:
     circle((0, 0), stroke: (dash: "dashed", paint: gray, thickness: 1pt))
 
     let r = 1.2
-    line((0, -r), (0, r), stroke: (paint: gray, thickness: .5pt))
+    line((0, -r), (0, r), stroke: (paint: gray, thickness: .5pt), name: "yaxis")
     line((-r, 0), (r, 0), stroke: (paint: gray, thickness: .5pt))
     let cols = (0, red, blue, blue, red)
     for t in range(1, 5) {
@@ -185,6 +189,7 @@ We initialize some intermediate values:
         name: "p",
       )
       content(xy2, $W^(#t)$)
+      content("yaxis.start", text()[Roots of unity], anchor: "north", padding: +.4)
     }
   }),
 )
@@ -192,47 +197,67 @@ and rewrite $x^((i))$ and $w^((i))$ as : \
 
 $x^((0)) & = c_00 + c_01 #h(1cm) & w^((0)) & = d_00 + d_01 = -1 \
 x^((1)) & = c_00 - c_01 #h(1cm) & w^((1)) & = d_00 - d_01 = 2.236068 \
-x^((1)) & = c_20 - c_21z #h(1cm) & w^((1)) & = d_20 - d_21z = j 1.902113 - j 1.175570z \ $
+x^((2)) & = c_20 + c_21z #h(1cm) & w^((2)) & = d_20 - d_21z = -j 1.902113 - j 1.175570z \ $
 
 
 $y^((i))$ are computed using #ref(<eq:ymodeq>):
 $
-  y^((0)) & = - (c_00 + c_01) #h(1cm) = y_0 \
-  y^((1)) & = (c_00 - c_01) 2.236068 #h(1cm) = y_1 \
-  y^((2)) & = c_20 d_20 - c_21 d_21 -z(c_20 d_21 + c_21 d_20) \
-          & = y_20 - z y_21
+  y^((0)) & = - (c_00 + c_01) #h(1cm) = -y_00 \
+  y^((1)) & = (c_00 - c_01) w^((1)) #h(.6cm) = y_10 w^((1)) \
+  y^((2)) & = c_20 d_20 + c_21 d_21 + z(c_21 d_20 - c_20 d_21) \
+          & = y_20 + z y_21
 $
 
 Finally using #ref(<eq:yfinal>):
 
 $
-  Y'(z) & = y_0 / 4 (z^3 + z^2 + z + 1) - y_1 / 4 (z^3 - z^2 + z - 1) - 1/2 (y_20 - z y_21)(z^2 - 1) \
-        & = z^3 [y_0/4 - y_1/4 + 0 + y_21 / 2] + z^2 [y_0/4 + y_1/4 - y_20 / 2 + 0] + \
-        & #h(16pt)z[y_0/4 - y_1/4 + 0 - y_21 / 2] + [y_0/4 + y_1/4 + y_20/ 2 + 0]
+  Y'(z) & = -y_00 / 4 (z^3 + z^2 + z + 1) - y_10 / 4 (z^3 - z^2 + z - 1) - 1/2 (y_20 + z y_21)(z^2 - 1) \
+        & = z^3 [-y_00/4 - y_10/4 + 0 - y_21 / 2] + z^2 [-y_00/4 + y_10/4 - y_20 / 2 + 0] + \
+        & #h(16pt)z[-y_00/4 - y_10/4 + 0 + y_21 / 2] + [-y_00/4 + y_10/4 + y_20/ 2 + 0]
 $
 
-Hence corresponding coefficients are:
+Entire operation is described in matrix notation:
 
 #let multMat = (
-  (1, -1, 0, 1),
-  (1, 1, -1, 0),
-  (1, -1, 0, -1),
-  (1, 1, 1, 0),
+  (1, 0, 0, 0, 0),
+  (0, 1, 1, 1, 0),
+  (0, 1, -1, 0, 1),
+  (0, 1, 1, -1, 0),
+  (0, 1, -1, 0, -1),
 )
 
-$
-  mat(..matcY) = mat(..multMat) mat(
-    - (c_00 + c_01)\/4;
-    (c_00 - c_01) 2.236068 \/4;
-    (c_20 d_20 - c_21 d_21)\/2;
-    (c_20 d_21 + c_21 d_20)\/2;
-  )
-$
-$
-  mat(..matcY) = mat(..multMat) mat(
-    y_0\/4;
-    y_1\/4;
-    y_20\/2;
-    y_21\/2;
-  )
-$
+#numbered_eq(
+  $
+    mat(
+      Y(0);
+      Y(1);
+      Y(2);
+      Y(4);
+      Y(3)
+    ) = mat(
+      x_0;
+      x_0;
+      x_0;
+      x_0;
+      x_0;
+    ) + mat(..multMat)
+    mat(
+      y_00;
+      -y_00\/4;
+      y'_1;
+      y'_20;
+      y'_21;
+    )
+  $,
+)
+where $ y'_1 & = y_10 [w^((1))/4] #h(1cm)
+       y'_20 & = c_20 [d_20/2] + c_21 [d_21/2] #h(1cm)
+               y'_21 & = c_21 [d_20/2] - c_20 [d_21/2] #h(1cm) $.
+
+With this method the total number of additions and multiplications went from 20 and 25 to 22 and 5 respectively (multiplication 1/4 is right shifts and multiplication by -1 is left as implementation specific as it requries one addition when 2's complement is used).
+Due to large number of dependent additions, the whole operation can be pipelined and high throughput can be achieved.
+
+#figure(
+	winograd5-ckt,
+	caption: [Signal flow of Winograd algorithm for 5 point DFT]
+)

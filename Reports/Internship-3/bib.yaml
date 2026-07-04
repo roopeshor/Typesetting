@@ -1,73 +1,95 @@
-wsn-reliable:
+zero-pad-pFFT:
   type: Article
-  title: The Reliability of Wireless Sensor Network on Pipeline Monitoring System.
+  title: Area-Efficient Pipelined FFT Processor for Zero-Padded Signals
   author:
-    - Hafizh Prihtiadi
-    - Mitra Djamal
-controlled-flooding:
-  type: Article
-  title: Controlled Flooding in Wireless Ad-hoc Networks
+    - Yongchul Jung
+    - Jaechan Cho
+    - Seongjoo Lee
+    - Yunho Jung
+  url: https://www.mdpi.com/2079-9292/8/12/1397
+FFT-Review:
+  type: Book
+  title: "Fast Fourier Transforms: A Tutorial Review and a State of the Art"
   author:
-    - A. Rahman
-    - W. Olesinski
-    - P. Gburzynski
-  url: https://web.archive.org/web/20170210205207/http://www.senserf.com/pg/PAPERS/tarp1.pdf
-routing:
+    - P. Duhamel
+    - M. Vetterli 
+  url: https://dsp-book.narod.ru/DSPMW/07.PDF
+Good-FFT:
   type: Article
-  title: A distributed routing algorithm for mobile wireless networks
-  author:
-    - M. Scott Corson
-    - Anthony Ephremides
-meshtastic:
-  type: Web
-  title: Build Long-Range IoT Applications Fast With Meshtastic
-  author: Stephen Cass
-  url: https://spectrum.ieee.org/build-iot-apps-with-meshtastic
-energy-evaluation:
+  title: The Relationship Between Two Fast Fourier Transforms
+  author: I. J. GOOD
+  url: https://ieeexplore.ieee.org/document/1671829
+HTC-FFT-GT:
   type: Article
-  author:
-    - S. Santha Meena
-    - J. Manikandan
-  title: Study and evaluation of different topologies in wireless sensor network
-history:
+  title: High-Throughput and Compact FFT Architectures Using the Good-Thomas and Winograd Algorithms
+  author: 
+    - Nikhilesh Bhagat
+    - Daniel Valencia
+    - Amirhossein Alimohammad
+    - Fred Harris
+  url: https://amir.sdsu.edu/Bhagat18High.pdf
+FFT-emp-OFDM:
   type: Article
-  title: Computer network development to achieve resource sharing
-  author:
-    - Lawrence G. Roberts
-    - Barry D. Wessler
-wsn:
-  title: "Wireless Sensor Network as a Mesh: Vision and Challenges"
-  author:
-    - Zhanserik Nurlan
-    - et al.
+  title: Empirical performance prediction for IFFT/FFT cores for OFDM systems-on-a-chip
+  author: 
+    - K. Pagiamtzis
+    - P.G. Gulak
+  url: https://ieeexplore.ieee.org/document/1187288
+FFT64-motion-comp:
   type: Article
-dapf:
+  title: A 64-point Fourier transform chip for video motion compensation using phase correlation
+  author: 
+    - C. Chiu
+    - Wing Hui
+    - Tiong Jiu Ding
+    - J.V. McCanny
+  url: https://ieeexplore.ieee.org/document/542320/
+FFT64-LAN-OFDM:
   type: Article
-  title: An efficient flooding algorithm for Mobile Ad-hoc networks
-  author:
-    - Fatemeh Nourazar
-    - Masoud Sabaei
-nRF-datasheet:
-  title: nRF24L01 Single Chip 2.4GHz Transceiver
+  title: A 64-Point Fourier Transform Chip for High-Speed Wireless LAN Application Using OFDM
+  author: 
+    - Koushik Maharatna
+    - Eckhard Grass
+    - Ulrich Jagdhold
+  url: https://ieeexplore.ieee.org/document/1269925
+pFFT-word-seq:
   type: Article
-  author: Nordic Semiconductor
-  url: https://cdn.sparkfun.com/datasheets/Wireless/Nordic/nRF24L01_Product_Specification_v2_0.pdf 
-stm-datasheet:
-  title: Low-density performance line, ARM-based 32-bit MCU with 16 or 32 KB Flash, USB, CAN, 6 timers, 2 ADCs, 6 com. interfaces
+  title: A pipelined FFT processor for word-sequential data
+  author: 
+    - Guoan Bi
+    - E.V. Jones
+  url: https://ieeexplore.ieee.org/document/45545
+pFFT-vlsi-impl:
   type: Article
-  author: ST Microelectronics
-  url: https://www.st.com/resource/en/datasheet/stm32f103c6.pdf
-stm-flasing:
-  type: Web
-  title: How to program and debug the STM32 using the Arduino IDE
-  author: B.Montanari
-  url: https://community.st.com/t5/stm32-mcus/how-to-program-and-debug-the-stm32-using-the-arduino-ide/ta-p/608514
-minicom:
-  type: Web
-  title: minicom(1) - Linux man page
-  url: https://linux.die.net/man/1/minicom
-stm-connection:
-  type: Web
-  author: Barnaby Walters
-  title: Programming a Blue/Black Pill STM32 Board with a ST-Link v2
-  url: https://waterpigs.co.uk/articles/black-blue-pill-stm32-st-link-connection/
+  title: Pipeline and Parallel-Pipeline FFT Processors for VLSI Implementations
+  author: 
+    - Erling H Wold
+    - Alvin M Despain
+  url: https://ieeexplore.ieee.org/document/1676458/
+pFFT-new-approach:
+  type: Article
+  title: A new approach to pipeline FFT processor
+  author: 
+    - Shousheng He
+    - Mats Torkelson
+  url: https://ieeexplore.ieee.org/document/508145
+digit-rev-FFT-HT:
+  type: Article
+  title: An Improved Digit-Reversal Permutation Algorithm for the Fast Fourier and Hartley Transforms
+  author: David M. Wevans
+  url: https://ieeexplore.ieee.org/document/1165252/
+dsp-handbook:
+  type: Book
+  title: The Scientist and Engineer's Guide to Digital Signal Processing
+  author: Steven W. Smith
+  url: https://www.dspguide.com/
+dsp48:
+  type: Book
+  title: 7 Series DSP48E1 Slice
+  author: Xilinx
+  url: https://docs.amd.com/v/u/en-US/ug479_7Series_DSP48E1
+artix-7:
+  type: Article
+  title: "7 Series FPGAs Data Sheet: Overview"
+  author: Xilinx
+  url: https://docs.amd.com/v/u/en-US/ds180_7Series_Overview

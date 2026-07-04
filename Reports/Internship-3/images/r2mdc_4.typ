@@ -1,7 +1,7 @@
 #import "@preview/cetz:0.5.2"
 #import "../drawing.typ": *
 #import "colors.typ": *
-#import "@preview/circuiteria:0.2.0"
+// #import "@preview/circuiteria:0.2.0"
 
 #let R2MDC_stage(
   buffer,

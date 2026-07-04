@@ -39,13 +39,13 @@
 
 #pagebreak()
 
-#addToPDFBookmark("List of Tables", outlined: true)
-#outline(
-  title: text(size: fontsizes.heading1)[List of Tables],
-  target: figure.where(kind: table),
-)
+// #addToPDFBookmark("List of Tables", outlined: true)
+// #outline(
+//   title: text(size: fontsizes.heading1)[List of Tables],
+//   target: figure.where(kind: table),
+// )
 
-#pagebreak()
+// #pagebreak()
 
 // #addToPDFBookmark("List of Abbreviations", outlined: true)
 // #print-index(

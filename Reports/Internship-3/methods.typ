@@ -3,4 +3,5 @@
 #include "dif-R2MDC.typ"
 #include "dif-R2SDC.typ"
 = Specialzied methods
-#include "winograd-15.typ"
+#include "winograd.typ"
+#include "RFFT.typ"

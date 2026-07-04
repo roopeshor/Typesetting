@@ -36,7 +36,7 @@
   headfoot: 11pt,
 )
 #let fontfams = (
-  body: "Times New Roman",
+  body: "STIX Two Text",
   code: "DejaVu Sans Mono"
 )
 
@@ -98,7 +98,7 @@
     set align(center + top)
     if it.numbering == none [
       #text(size: fontsizes.heading1, weight: "bold")[#it.body]
-      #it.has("unnumbered")
+      // #it.has("unnumbered")
     ] else [
       #pagebreak(weak: true)
       #block[

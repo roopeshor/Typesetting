@@ -33,14 +33,14 @@ With this constraints, tool reports `medium` confidence in power estimation.
 The *Artix-7 (part no: `xc7a100tcsg324-1`)* FPGA was used as reference FPGA on which all synthesis and implementation tasks was done.
 
 == Cooley-Tukey: Radix-2 DIT
-Cooley-Tukey algorithm re-expresses the #acr("DFT") of an arbitrary composite size $N = N_1 N_2$ in terms of $N_1$ smaller DFTs of sizes $N_2$, recursively, to reduce the computation time to $cal(O)(N log N)$ for highly composite $N$. Because of the algorithm's importance, specific variants and implementation styles have become known by their own names, such as Radix-2, Radix-4, mixed-radix, etc. Because the Cooley-Tukey algorithm breaks the DFT into smaller DFTs, it can be combined arbitrarily with any other algorithm for the DFT.
+// Cooley-Tukey algorithm re-expresses the #acr("DFT") of an arbitrary composite size $N = N_1 N_2$ in terms of $N_1$ smaller DFTs of sizes $N_2$, recursively, to reduce the computation time to $cal(O)(N log N)$ for highly composite $N$. Because of the algorithm's importance, specific variants and implementation styles have become known by their own names, such as Radix-2, Radix-4, mixed-radix, etc. Because the Cooley-Tukey algorithm breaks the DFT into smaller DFTs, it can be combined arbitrarily with any other algorithm for the DFT.
 
 #figure(
   image("images/Cooley-tukey-general.png", width: 60%),
   caption: [Steps involved in Cooley-Tukey algorithm ],
 )
 
-A radix-2 #acr("DIT") FFT is the simplest and most common form of the Cooley-Tukey algorithm. Radix-2 DIT divides a DFT of size $N$ into two interleaved DFTs of size $N \/ 2$ with each recursive stage. Hence the overall time complexity of algorithm is $cal(O)(N log N)$. The following is the derivation of radix-2 DIT:
+// A radix-2 #acr("DIT") FFT is the simplest and most common form of the Cooley-Tukey algorithm. Radix-2 DIT divides a DFT of size $N$ into two interleaved DFTs of size $N \/ 2$ with each recursive stage. Hence the overall time complexity of algorithm is $cal(O)(N log N)$. The following is the derivation of radix-2 DIT:
 
 DFT of sequence $x_n$ is defined by:
 
