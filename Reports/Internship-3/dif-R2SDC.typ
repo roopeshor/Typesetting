@@ -6,9 +6,9 @@
 // #import "images/r2mdc_4.typ": *
 == Radix-2 Single Path Delay Commutator (R2SDC)
 
-Single path Delay Commutator is a different pipelined implementation of DIF algorithm. Unlike MDC, SDC produces single output per cycle and uses fewer number of shift registers, at the expense of higher latency and higher complexity of stage controllers. The whole operation is described in #ref(<fig:r2sdc-algo-steps>). A overview is given below:
-+ In first N/2 clock cycles data coming is shifted to shit registers
-+ In coming cycles, $x[n]$ and $x[n + N\/2]$ datas are available. The butterfly computes the sum and difference, in which the differnce is shifted back to the same shift register and sum is passed to twiddle factor multiplier.
+Single path Delay Commutator is a different pipelined implementation of DIF algorithm. Unlike MDC, SDC produces single output per cycle and uses fewer number of shift registers, at the expense of higher latency and higher complexity of stage controllers @pFFT-new-approach @zero-pad-pFFT . The whole operation is described in @fig:r2sdc-algo-steps. An overview is given below: 
++ In first N/2 clock cycles data coming is shifted to shift registers
++ In coming cycles, $x[n]$ and $x[n + N\/2]$ datas are available. The butterfly computes the sum and difference, in which the difference is shifted back to the same shift register and sum is passed to twiddle factor multiplier.
 + After all inputs are passed (cycles > $N$) the shift register is completely full of differences. It shifts it out to twiddle factor directly.
 
 === Implementation
@@ -36,5 +36,5 @@ From this point onwards, the twiddle factors are computed using `initial` blocks
 The result is similar to that of MDC case. But here due slightly different architecture, the output arrives one  clock cycle earlier.
 #figure(
   image("images/r2sdc_4_sim.png"),
-  caption: [Simulation result for 4 point complex test signal],
+  caption: [Simulation result for 4 point complex test signal in R2SDC],
 )

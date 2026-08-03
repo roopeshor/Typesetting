@@ -81,7 +81,13 @@
 #let mod-arith(a, b, MOD: 5) = calc.rem(a * b, MOD)
 
 #let numbered_eq(content) = math.equation(
-    block: true,
-    numbering: dependent-numbering("Eq (1.1)"),
-    content,
+  block: true,
+  numbering: dependent-numbering("(1.1)"),
+  content,
 )
+
+#let show_eqnum(eq) = context {
+  let el = query(eq).first()
+  
+  numbering(dependent-numbering("(1.1)"), ..counter(math.equation).at(el.location()))
+}

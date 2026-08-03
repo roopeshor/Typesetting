@@ -36,8 +36,8 @@
       bboxp1,
       bboxp2,
       name: "stage" + s,
-      fill: cols.at(s).transparentize(80%),
-      // stroke: (dash: "dashed")
+      fill: cols.at(s).transparentize(85%),
+      // stroke: (dash: "dashed", thickness: .5pt),
       stroke: none,
     )
     content("stage" + s + ".north", [Stage #s], anchor: "north", padding: .1)
@@ -194,7 +194,7 @@
 
 	//tmp stroke
 	line("y20.end", (rel: (0, mulpy)), name: "x0_1", stroke: none)
-  content("x0_1.end", text(size: 9pt)[*$x_0$*], name: "x0", anchor: "east")
+  content("x0_1.end", [*$x_0$*], name: "x0", anchor: "east")
 
   line("y20.end", (rel: (ext5, 0)), name: "y20")
   line("x0_1.end", (rel: (ext5, 0)), name: "x0_1")
@@ -206,7 +206,7 @@
   line("y20.start", "x0-y20")
 
 	line("y21.end", (rel: (0, -mulpy - .1)), name: "x0_2-start", stroke: none)
-  content("x0_2-start.end", text(size: 9pt)[*$x_0$*], name: "x0_2", anchor: "east")
+  content("x0_2-start.end", [*$x_0$*], name: "x0_2", anchor: "east")
 
   line("y21.end", (rel: (ext5, 0)), name: "y21")
   line("x0_2.east", (rel: (ext5, 0)), name: "x0_2")

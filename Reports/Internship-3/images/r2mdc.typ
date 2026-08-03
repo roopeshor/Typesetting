@@ -21,7 +21,7 @@
 )
 #let ckt-r2mdc = cetz.canvas({
   import "../circucetz/lib.typ": *
-  let block-h = 4.3
+  let block-h = 3.5
   let ctrl = block(
     1,
     0,

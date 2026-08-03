@@ -537,7 +537,6 @@
     y,
 		name: `Counter`,
 		name-anchor: "south",
-		name-padding: .6,
     ports: (
       east: (
         (id: "p1"),

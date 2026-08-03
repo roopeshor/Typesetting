@@ -11,6 +11,7 @@
   "DFT": "Discrete Fourier Transform",
   "WNS": "Worst Negative Slack",
   "CRT": "Chinese Remainder Theorem",
+  "ASIC": "Application Specific Integrated Circuit",
 ))
 
 // set listing heading style
@@ -37,13 +38,14 @@
 )
 
 
-#pagebreak()
+// #pagebreak()
+#v(3cm)
 
-// #addToPDFBookmark("List of Tables", outlined: true)
-// #outline(
-//   title: text(size: fontsizes.heading1)[List of Tables],
-//   target: figure.where(kind: table),
-// )
+#addToPDFBookmark("List of Tables", outlined: true)
+#outline(
+  title: text(size: fontsizes.heading1)[List of Tables],
+  target: figure.where(kind: table),
+)
 
 // #pagebreak()
 

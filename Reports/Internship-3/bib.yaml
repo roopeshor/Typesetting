@@ -17,7 +17,7 @@ FFT-Review:
 Good-FFT:
   type: Article
   title: The Relationship Between Two Fast Fourier Transforms
-  author: I. J. GOOD
+  author: I.J. Good
   url: https://ieeexplore.ieee.org/document/1671829
 HTC-FFT-GT:
   type: Article
@@ -35,23 +35,23 @@ FFT-emp-OFDM:
     - K. Pagiamtzis
     - P.G. Gulak
   url: https://ieeexplore.ieee.org/document/1187288
-FFT64-motion-comp:
-  type: Article
-  title: A 64-point Fourier transform chip for video motion compensation using phase correlation
-  author: 
-    - C. Chiu
-    - Wing Hui
-    - Tiong Jiu Ding
-    - J.V. McCanny
-  url: https://ieeexplore.ieee.org/document/542320/
-FFT64-LAN-OFDM:
-  type: Article
-  title: A 64-Point Fourier Transform Chip for High-Speed Wireless LAN Application Using OFDM
-  author: 
-    - Koushik Maharatna
-    - Eckhard Grass
-    - Ulrich Jagdhold
-  url: https://ieeexplore.ieee.org/document/1269925
+# FFT64-motion-comp:
+#   type: Article
+#   title: A 64-point Fourier transform chip for video motion compensation using phase correlation
+#   author: 
+#     - C. Chiu
+#     - Wing Hui
+#     - Tiong Jiu Ding
+#     - J.V. McCanny
+#   url: https://ieeexplore.ieee.org/document/542320/
+# FFT64-LAN-OFDM:
+#   type: Article
+#   title: A 64-Point Fourier Transform Chip for High-Speed Wireless LAN Application Using OFDM
+#   author: 
+#     - Koushik Maharatna
+#     - Eckhard Grass
+#     - Ulrich Jagdhold
+#   url: https://ieeexplore.ieee.org/document/1269925
 pFFT-word-seq:
   type: Article
   title: A pipelined FFT processor for word-sequential data
@@ -93,3 +93,12 @@ artix-7:
   title: "7 Series FPGAs Data Sheet: Overview"
   author: Xilinx
   url: https://docs.amd.com/v/u/en-US/ds180_7Series_Overview
+wikipedia-cooley-tukey:
+  type: Web
+  title: Cooley-Tukey FFT algorithm
+  author: Wikipedia
+  url: https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm
+FFT-cv-HJN:
+  type: Book
+  title: Fast Fourier Transform and Convolution Algorithms
+  author: Henri J Nussbaumer

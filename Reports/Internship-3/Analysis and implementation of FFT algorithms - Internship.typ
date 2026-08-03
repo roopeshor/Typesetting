@@ -30,8 +30,10 @@
 #include "introduction.typ"
 
 #include "methods.typ"
-#include "summary.typ"
 
+#include "summary.typ"
+#include "conclusion.typ"
+#include "scope.typ"
 // Disable chapter numbering
 // #show heading.where(level: 1): it => {
 //   set align(center + top)
@@ -46,5 +48,7 @@
 #pagebreak()
 #showFooter("none")
 #showHeader(false)
-#bibliography("bib.yaml", style: "ieee", title: [References], full: true)
-// #include "appendix.typ"
+#bibliography("bib.yaml", style: "ieee", title: [References],
+full: true
+)
+#include "appendix.typ"

@@ -1,8 +1,8 @@
-= Comparison
+= Comparison <comparison>
 #import "@preview/cetz:0.5.2"
 #import "@preview/cetz-plot:0.1.4"
 #import "@preview/numty:0.1.0" as nt
-
+#v(-15pt)
 
 
 #let Total-LUT-N = (
@@ -56,19 +56,28 @@
 
 #let point-sizes = (3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)
 
-#let Throughputs = ()
+#let Throughput = ()
+#let N_ = nt.pow(2, point-sizes).slice(0, 4);
 #let TPconsts = (
-  nt.div(2, (3, 4, 5, 6)),
-  (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+  nt.div(
+    N_,
+    (
+      nt.add(
+        N_,
+        nt.mult(nt.div(N_, 2), point-sizes.slice(0, 4)),
+      )
+    ),
+  ),
+  (2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
   (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 )
 #for i in range(Fmax.len()) {
   let t = ()
   let fm = Fmax.at(i)
-  Throughputs += (nt.mult(fm, TPconsts.at(i)),)
+  Throughput += (nt.mult(fm, TPconsts.at(i)),)
 }
 
-// #Throughputs.len()
+// #Throughput.len()
 #let colors = (
   blue,
   red,
@@ -88,36 +97,40 @@
   "Flip-Flops/N": FF-per-N,
   // "RAMB36": RAMB36,
   // "RAMB18": RAMB18,
-  "BRAM": BRAM,
   "DSPs/N": DSP-per-N,
+  "BRAM": BRAM,
   "Power": Power,
   "Fmax": Fmax,
-  // "Throughputs": Throughputs,
+  "Throughput": Throughput,
 )
 #let y-units = (
-  "Total LUTs/N": "units",
-  "SLR*/N": "units",
-  "Flip-Flops/N": "units",
+  "Total LUTs/N": "units/Sa",
+  "SLR*/N": "units/Sa",
+  "Flip-Flops/N": "units/Sa",
   "RAMB36": "units",
   "RAMB18": "units",
   "BRAM": "units",
-  "DSPs/N": "units",
+  "DSPs/N": "units/Sa",
   "Power": "mW",
   "Fmax": "MHz",
-  "Throughputs": "MHz",
+  "Throughput": "MSa/s",
 )
 
-#let plot-graph(i) = {
-  let plots = plots-to-do.at(i)
+#let plot-graph(plots, i) = {
+  let p = plots.flatten().sorted()
+
   cetz.canvas({
     import cetz.draw: *
     import cetz-plot: *
-    content((3, 4.3), text()[#i])
+    content((3, 4.4), text()[#i])
     plot.plot(
-      size: (6, 4),
+      size: (6, 4.1),
       axis-style: "scientific",
       x-label: "",
       y-label: y-units.at(i),
+      y-axis: (
+        ticks: (step: 2), // Ticks will appear every 2 units instead of the default
+      ),
       {
         let dat = ()
         for j in range(plots.len()) {
@@ -136,27 +149,139 @@
   })
 }
 
-All datas have been plotted here for quick comparison:
-#align(center)[
-  #cetz.canvas({
-    import cetz.draw: *
-    let dy = 3
-    let A = algos.len()
-    content((-dy / 2 - 1, 0), text(size: 11pt)[*Legend: *], anchor: "west")
-    rect((-dy / 2 - 1.2, -.4), (A * dy - dy / 4, .5))
-    for j in range(A) {
-      line((j * dy, 0), (j * dy + .9, 0), stroke: colors.at(j))
-      content((j * dy + 1, 0), text(size: 10pt)[#algos.at(j)], anchor: "west")
-    }
-  })]
+#let grd = (
+  ..plots-to-do.keys().map(i => plot-graph(plots-to-do.at(i), i)),
+  align(horizon + center)[
+    #text(size: 11pt)[*Legend*]
+    #v(-10pt)
+    #table(
+      columns: 4,
+      stroke: none,
+      box(line(
+        length: 1cm,
+        stroke: (paint: colors.at(0), thickness: 2pt),
+      )),
+      text(size: 10pt)[#algos.at(0)],
+      box(line(
+        length: 1cm,
+        stroke: (paint: colors.at(1), thickness: 2pt),
+      )),
+      text(size: 10pt)[#algos.at(1)],
 
-#grid(
-  columns: 2,
-  column-gutter: 30pt,
-  row-gutter: 10pt,
-  align: right,
-  ..plots-to-do.keys().map(i => plot-graph(i))
+      box(line(
+        length: 1cm,
+        stroke: (paint: colors.at(2), thickness: 2pt),
+      )),
+      text(size: 10pt)[#algos.at(2)],
+    )
+    #v(10pt)
+    #text()[*_x-axis_ is $log_2("transform size")$*]
+  ],
 )
 
-The throughput is not plotted here as it closely matches with $F_max$.
-From this we its clear that inplace algorithm performs worse in all cases except at power consumption. Also MDC architecture is prefered in high throughput requirements (such as radar, SDR, etc.). With both pipelined architectures, the synthesis tool was able to infer BRAM blocks past a certain number of transform size.
+
+== Comparison of 16 point transforms
+To include Winograd in the comparison, case of 16 point transforms and their parameters are listed in @tabl:comp.
+#let heads = (
+  [*Techniques*],
+  table.vline(),
+  [*Total LUT*],
+  table.vline(),
+  [*Flip-Flops*],
+  table.vline(),
+  [*DSPs*],
+  table.vline(),
+  [*Power (mW)*],
+  table.vline(),
+  [*$F_"max"$ (MHz)*],
+  table.vline(),
+  [*Throughput (MSa/s)*],
+  table.vline(),
+  [*Latency (cycles)*],
+)
+#show table.cell.where(y: 0): set align(center)
+#figure(
+  caption: [Comparison of various 16 point techniques],
+  [#table(
+      stroke: none,
+      columns: (1.5fr, .8fr, 1fr, .8fr, 1fr, 1fr, 1.5fr, 1.2fr),
+      table.header(..heads),
+      table.hline(),
+      [In-place],
+      [1611],
+      [555],
+      [4],
+      [104],
+      [79.2],
+      [#Throughput.at(0).at(1)],
+      [49],
+
+      [R2MDC],
+      [419],
+      [645],
+      [12],
+      [187],
+      [137.1],
+      [274.2],
+      [10],
+
+      [R2SDC],
+      [516],
+      [327],
+      [12],
+      [154],
+      [118.3],
+      [118.3],
+      [17],
+
+      [Winograd],
+      [2330],
+      [2850],
+      [20],
+      [208],
+      [136.4],
+      [136.4],
+      [19],
+    )
+  ],
+)<tabl:comp>
+
+// #cetz.canvas({
+//   import cetz.draw: *
+//   import cetz-plot: chart
+//   set-style(
+//     legend: (fill: white),
+//     barchart: (bar-width: 1, cluster-gap: 0),
+//     axes: (
+//       bottom: (
+//         tick: (label: (angle: 40deg, anchor: "east")),
+//       ),
+//     ),
+//   )
+//   chart.barchart(
+//     mode: "clustered",
+//     size: (6, auto),
+//     label-key: 0,
+//     value-key: (..range(1, 5),),
+//     (([Total LUT], 1611, 419, 516, 2330),),
+//   )
+// })
+
+In this case also R2MDC seems to have better edge over all other techniques. But this power only comes handly when all data are available readily. However in most practical cases data is being continously fetched from realworld, making throughput of MDC unusable. Winograd and R2SDC are the next to consider. Winograd takes consumes significantly higher number of hardware resources in order to reduce multiplications. Perhaps my implementation might not me very efficient. Depending on pipeline depth the maximum operating frequency of winograd can be between 136.8 MHz to 142.8 MHz. However deeper pipelining increases latency.
+
+== Comparison of scalable techniques
+The resource and performance of scalable techniques are shown in @fig:scal-ref. Same number of DSPs are required for SDC and MDC. Since In-place technique is non-pipelined, throughput is computed as $F_"max" \/ (2+ log_2(N)\/2)$ as one compute frame is $2N + N log_2(N)\/2$ cycles long and no input can be supplied during this frams.
+From the graphs it is clear that inplace algorithm performs worse in all cases except at power consumption. Also MDC architecture is preferred in high throughput requirements (such as radar, SDR, etc.). With both pipelined architectures, the synthesis tool was able to infer BRAM blocks past a certain number of transform size. For inplace technique, performance was not calculated for transform sizes greater than 64. (At higher number of points, the design was not synthesizable due to increased number of components and complexity). The maximum frequency drops as transform size increases. This might be due to the longer paths in the FPGA required to connect extensive.
+#show figure: set block(breakable: true, spacing: 15pt)
+#figure(
+  gap: 1pt,
+  caption: [Resource and performance analysis of scalable techniques.],
+	kind: image,
+  grid(
+    columns: 2,
+    column-gutter: 30pt,
+    row-gutter: -4pt,
+    align: right,
+    ..grd
+  ),
+)<fig:scal-ref>

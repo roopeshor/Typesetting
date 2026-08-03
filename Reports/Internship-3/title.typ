@@ -1,4 +1,4 @@
-#import "settings.typ": addToPDFBookmark, author, regNo, report-title
+#import "settings.typ": addToPDFBookmark, author, regNo, report-title, submitted-to
 
 #set text(size: 13.5pt)
 #set par(spacing: .9em)
@@ -8,7 +8,7 @@
 
   #text(size: 15pt)[*DEFENCE RESEARCH AND DEVELOPMENT ORGANISATION*]
 
-  #image("images/drdo.png", width: 4.5cm)
+  #image("images/drdo.svg", width: 4.5cm)
 
   #text(size: 18pt)[*INTERNSHIP REPORT*]
 
@@ -29,7 +29,7 @@
   #v(13pt)
 
   *Under the Guidance of*\
-  Venket Reddy G, Sc 'F'
+  #submitted-to
   #v(10pt)
 
   *Internship Duration:*\

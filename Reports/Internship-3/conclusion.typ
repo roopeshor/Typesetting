@@ -1,0 +1,9 @@
+= Conclusion
+During the internship, I evaluated FFT techniques (In-place, R2MDC, R2SDC and Winograd) on an Artix-7 FPGA. The analysis showed that the choice of technique depends heavily on specific performance (latency, throughput, etc.) requirement, nature of input signal (stream/available ahead of time) as well as hardware constraints (LUT, DSP, power, etc.). The performance also depends heavily on specific FPGA family, hence the comparisons I had presented are taken only in a empirical sense. Below is a quick summary of algorithms
+
+- *In-place Radix-2 DIT*: Best suited for systems with stringent power limits and low speed requirements. It consumes the least power but has the lowest throughput due to its memory access bottleneck. The algorithm can also be mapped directly to software.
+- *R2MDC*: Used for high-throughput, systems in which input data is available ahead of time. It achieves the highest throughput  by processing two samples per clock cycle. But the technique is only useful if all input datas are available at the time of processing. Also the outputs are The outputs are in bit-reversed order.
+- *R2SDC*: A middle ground for pipelined processing. It offers a steady throughput of 1 sample per cycle while using roughly half the flip-flops of MDC. Just like MDC the outputs are in bit-reversed order. Therefore further post processing is required somewhere down the processing pipeline.
+- *Winograd*: Used in situation where hardware multipliers (DSP slices) are scarce. It trades multipliers for adders and LUTs. However careful implementation is required to get maximum resource efficiency.
+
+Other methods like Good-Thomas, Prime Factor Algorithms were also looked upon and studies. Similar to Winograd, they all aims to bring down number of multipliers, because in the context of ASIC, area of multiplier and delay for processing is much higher than adders.  But due to limited time resources, I did not pursue them and are not discussed here.

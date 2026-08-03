@@ -1,3 +1,4 @@
+
 #import "@preview/headcount:0.1.0": *
 
 /* showFooterState: Possible values:
@@ -13,6 +14,7 @@
 #let author = "Roopesh O R"
 #let regNo = "20323085"
 #let report-title = "Analysis and Implementation of FFT Algorithms"
+#let submitted-to= "G. Venkat Reddy, Sc 'F'"
 
 #let hf(a, b) = $frac(#a, #b, style: "horizontal")$
 
@@ -34,9 +36,10 @@
   heading2: 14pt,
   heading3: 12pt,
   headfoot: 11pt,
+	body: 11.5pt,
 )
 #let fontfams = (
-  body: "STIX Two Text",
+  body: "Times New Roman PS",
   code: "DejaVu Sans Mono"
 )
 
@@ -49,7 +52,7 @@
 
 #let report(body) = {
   set par(justify: true, first-line-indent: 1em, leading: .75em)
-  set text(font: fontfams.body, size: 11pt)
+  set text(font: fontfams.body, size: fontsizes.body)
   set heading(numbering: "1.")
   set list(indent: 1em)
   set enum(indent: 1em)
@@ -57,6 +60,7 @@
     gap: 15pt,
     numbering: dependent-numbering("1.1"),
   )
+
   set page(
     footer: context {
       if showFooterState.get() == "doe-number" {
@@ -89,8 +93,8 @@
     if el != none and el.func() == heading {
       link(el.location(), [#emph[#it: #el.body]])
     } else {
-      it
-    }
+			it
+		}
   }
 
 
@@ -98,7 +102,6 @@
     set align(center + top)
     if it.numbering == none [
       #text(size: fontsizes.heading1, weight: "bold")[#it.body]
-      // #it.has("unnumbered")
     ] else [
       #pagebreak(weak: true)
       #block[
