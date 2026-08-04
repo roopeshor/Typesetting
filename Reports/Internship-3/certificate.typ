@@ -1,10 +1,10 @@
-#import "settings.typ": addToPDFBookmark, fontsizes, author
+#import "settings.typ": addToPDFBookmark, fontsizes, author, report-title
 #set page(margin: 1.2in)
 #place(center + horizon)[
-  #text(size: fontsizes.heading1)[
+  #text(size: fontsizes.heading2)[
     DIVISION OF ELECTRONICS ENGINEERING\
     SCHOOL OF ENGINEERING\
-    COCHIN UNIVERSITY OF SCIENCE AND\
+    COCHIN UNIVERSITY OF SCIENCE AND
     TECHNOLOGY\
     KOCHI-682022
   ]
@@ -12,7 +12,7 @@
   #v(10pt)
   #image("images/cusat.svg", width: 4cm)
   #v(10pt)
-  #text(size: fontsizes.heading1)[*CERTIFICATE*]
+  #text(size: fontsizes.heading2)[*CERTIFICATE*]
   #addToPDFBookmark("Certificate")
   #v(10pt)
 
@@ -20,12 +20,12 @@
     #text(
       size: 12pt,
 			style: "italic"
-    )[Certified that the mini project report entitled *“DISTRIBUTED COMMUNICATION NETWORK”* is a bonafide work of #h(2pt)#text(weight: "bold")[#upper[#author]]#h(2pt) towards the partial fulfillment for the award of the degree of B.Tech in Electronics and Communication of Cochin University of Science and Technology, Kochi-682022.]
+    )[Certified that the internship report titled *“#upper[#report-title]”* is a bonafide work of #h(2pt)#text(weight: "bold")[#upper[#author]]#h(2pt) towards the partial fulfillment for the award of the degree of B.Tech in Electronics and Communication of Cochin University of Science and Technology, Kochi-682022.]
   ]
 
   #v(3.5cm)
 
-  #place(left)[#text(size: 12pt)[*Mini Project Guide*]]
+  #place(left)[#text(size: 12pt)[*Internship Coordinator*]]
   #place(right)[#text(size: 12pt)[*Head of the Division*]]
 ]
 

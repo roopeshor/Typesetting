@@ -10,7 +10,7 @@
 
   #image("images/drdo.svg", width: 4.5cm)
 
-  #text(size: 18pt)[*INTERNSHIP REPORT*]
+  #text(size: 16pt)[*INTERNSHIP REPORT*]
 
   _On_
 

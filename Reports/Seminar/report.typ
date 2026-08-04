@@ -13,7 +13,7 @@
 
 // #include "certificate.typ"
 // #set page(margin: (left: 1.3in, right: 1.2in, top: 1.2in, bottom: 1.2in))
-// #include "acknowledgment.typ"
+#include "acknowledgment.typ"
 #include "abstract.typ"
 
 #set page(numbering: "i")

@@ -1,4 +1,6 @@
 #import "settings.typ": *
+
+// For checking layout
 // #import "@preview/scaffolder:0.2.1": scaffolding
 // #set page(background: scaffolding())
 
@@ -8,9 +10,11 @@
 #set page(numbering: "a")
 #showFooter("none")
 #include "title.typ"
+
 #include "certificate.typ"
 #set page(margin: (left: 1.3in, right: 1.2in, top: 1.2in, bottom: 1.2in))
 #include "acknowledgment.typ"
+#include "abstract.typ"
 
 #set page(numbering: "i")
 #showFooter("number")
@@ -27,19 +31,19 @@
 
 
 #showFooter("doe-number")
-#include "about.typ"
 #include "introduction.typ"
-
-#include "methods.typ"
-
-#include "summary.typ"
-#include "conclusion.typ"
-#include "scope.typ"
+#include "formatting.typ"
 
 #pagebreak()
 #showFooter("none")
 #showHeader(false)
-#bibliography("bib.yaml", style: "ieee", title: [References],
-full: true
+
+// remove full:true to only show references used in the document
+#bibliography(
+	"bib.yaml",
+	style: "ieee",
+	title: [References],
+	full: true
 )
+
 #include "appendix.typ"

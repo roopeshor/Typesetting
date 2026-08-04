@@ -10,7 +10,7 @@
 on
   #v(13pt)
   
-  #text(size: 18pt, weight: "bold")[#report-title]
+  #text(size: 18pt)[#text(weight: "bold")[#report-title]]
 
   #v(13pt)
   
@@ -18,11 +18,11 @@ on
   
 	#v(10pt)
   
-	#text(size: 14.5pt)[*Roopesh O R (20323085)*]
+	#text(size: 14.5pt)[*Author*]
 
   #v(13pt)
   
-	_in partial fulfilment of the requirements for the award \ of\ _
+	_Submitted in partial fulfillment of the requirements for the award \ of\ _
 
   #v(13pt)
 

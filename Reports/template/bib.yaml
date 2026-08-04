@@ -1,0 +1,35 @@
+zero-pad-pFFT:
+  type: Article
+  title: Area-Efficient Pipelined FFT Processor for Zero-Padded Signals
+  author:
+    - Yongchul Jung
+    - Jaechan Cho
+    - Seongjoo Lee
+    - Yunho Jung
+  url: https://www.mdpi.com/2079-9292/8/12/1397
+FFT-Review:
+  type: Book
+  title: "Fast Fourier Transforms: A Tutorial Review and a State of the Art"
+  author:
+    - P. Duhamel
+    - M. Vetterli 
+  url: https://dsp-book.narod.ru/DSPMW/07.PDF
+Good-FFT:
+  type: Article
+  title: The Relationship Between Two Fast Fourier Transforms
+  author: I.J. Good
+  url: https://ieeexplore.ieee.org/document/1671829
+HTC-FFT-GT:
+  type: Article
+  title: High-Throughput and Compact FFT Architectures Using the Good-Thomas and Winograd Algorithms
+  author: 
+    - Nikhilesh Bhagat
+    - Daniel Valencia
+    - Amirhossein Alimohammad
+    - Fred Harris
+  url: https://amir.sdsu.edu/Bhagat18High.pdf
+artix-7:
+  type: Article
+  title: "7 Series FPGAs Data Sheet: Overview"
+  author: Xilinx
+  url: https://docs.amd.com/v/u/en-US/ds180_7Series_Overview

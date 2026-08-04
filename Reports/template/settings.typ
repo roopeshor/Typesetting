@@ -12,7 +12,7 @@
 #let showFooter(type) = showFooterState.update(type)
 #let showHeader(bool) = showHeaderState.update(bool)
 
-#let report-title = "Wind Profile Estimation for K-Band Doppler Radar Based on Mutual Convolution Cost Function Method"
+#let report-title = "Seminar Title"
 
 #let fit-to-page(content) = context {
   let content-size = measure(content)
@@ -57,17 +57,8 @@
   numbering(dependent-numbering("(1.1)"), ..counter(math.equation).at(el.location()))
 }
 
-
-// 1. Keep the global tracking state
-#let in-figure-outline = state("in-figure-outline", false)
-
-// 3. Keep your flexible caption function linked to the safe state
-#let flex-caption(long, short) = context {
-  if in-figure-outline.get() { short } else { long }
-}
-
 #let report(body) = {
-  set par(justify: true, first-line-indent: 1em, leading: .8em)
+  set par(justify: true, first-line-indent: 1em, leading: .75em)
   set text(font: fontfams.body, size: fontsizes.body)
   set heading(numbering: "1.")
   set list(indent: 1em)
@@ -97,7 +88,7 @@
         let has-heading = query(heading.where(level: 1)).any(it => it.location().page() == current-page)
         if counter(heading).get().first() > 0 and not has-heading [
           // Display header from 1st numbered heading
-          #text(size: 11pt, style: "italic")[Seminar Report]
+          #text(size: 11pt, style: "italic")[#report-title]
         ]
       }
     },
@@ -140,7 +131,7 @@
         #text(size: fontsizes.heading2, weight: "bold")[
           #counter(heading).display().trim(".") #it.body
         ]
-        // spacing after heading
+				// spacing after heading
         #v(7pt)
       ]
     ]
@@ -181,7 +172,7 @@
   }
 
   // set spacing around figure
-  show figure: set block(spacing: 15pt)
+  show figure: set block(spacing: 20pt)
 
   // put caption on top
   show figure: set figure.caption(position: top)
@@ -192,15 +183,6 @@
   // code font
   show raw: set text(font: fontfams.code)
 
-  show outline: it => {
-    if it.target == figure.where(kind: image) {
-      in-figure-outline.update(true)
-      it
-      in-figure-outline.update(false)
-    } else {
-      it
-    }
-  }
   // contents
   body
 }
