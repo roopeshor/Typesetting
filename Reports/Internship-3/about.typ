@@ -6,6 +6,6 @@ With a mission to empower India with cutting-edge defence technologies and reduc
 
 DRDO plays a crucial role in the development of strategic and tactical systems, including the Agni and Prithvi missile series, Tejas Light Combat Aircraft, Arjun Main Battle Tank, electronic warfare systems, unmanned aerial vehicles, and many more. These innovations not only enhance the strength of the Indian Armed Forces but also contribute to self-reliance through the "Make in India" initiative.
 
-One of DRDO's key strengths lies in its world-class scientists and engineers, who work tirelessly across domains to address the unique challenges faced by the nation. Its Directorate of Special Projects (DSP), where this internship was conducted, is a leading laboratory engaged in the development of advanced avionics and missile guidance systems.
+One of DRDO's key strengths lies in its world-class scientists and engineers, who work tirelessly across domains to address the unique challenges faced by the nation. Its Advanced System Laboratory (ASL), where this internship was conducted, is a leading laboratory engaged in the development of solid propulsion technologies, composites,aAerospace mechanisms, etc.
 
 DRDO is committed to continuous innovation, collaboration with academia and industry, and the pursuit of excellence in all its endeavors.  By  combining technological advancement with national security priorities, DRDO continues to be a cornerstone in India's journey towards defence self-sufficiency and technological leadership
