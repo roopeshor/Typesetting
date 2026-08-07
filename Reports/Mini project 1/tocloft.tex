@@ -1,0 +1,46 @@
+\renewcommand{\contentsname}{\hfill Table of contents\hfill}
+\renewcommand{\cfttoctitlefont}{\chapterFont}
+\renewcommand{\cftbeforetoctitleskip}{0pt}
+\renewcommand{\cftaftertoctitleskip}{10pt}
+
+\renewcommand{\cftlottitlefont}{\chapterFont}
+\renewcommand{\cftbeforelottitleskip}{0pt}
+\renewcommand{\cftafterlottitleskip}{10pt}
+\renewcommand{\listfigurename}{\hfill List of Figures\hfill}
+\renewcommand{\listtablename}{\hfill List of Tables\hfill}
+\renewcommand{\cftloftitlefont}{\chapterFont}
+\renewcommand{\cftbeforeloftitleskip}{0pt}
+\renewcommand{\cftafterloftitleskip}{10pt}
+
+\renewcommand{\cftbeforechapskip}{3pt}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+
+\tableofcontents
+
+\newpage
+
+\pagenumbering{roman}
+
+\newlength{\padtab}
+\renewcommand{\cfttabpresnum}{\tablename\ }
+\renewcommand{\cfttabaftersnum}{:}
+\settowidth{\padtab}{\cfttabpresnum\cfttabaftersnum}
+\addtolength{\cfttabnumwidth}{\padtab}
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Table}
+\listoftables
+\newpage
+
+\newlength{\padfig}
+\renewcommand{\cftfigpresnum}{\figurename\ }
+\renewcommand{\cftfigaftersnum}{:}
+\settowidth{\padfig}{\cftfigpresnum\cftfigaftersnum}
+\addtolength{\cftfignumwidth}{\padfig}
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Figure}
+\listoffigures
+
+\newpage

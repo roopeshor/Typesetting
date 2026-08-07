@@ -1,0 +1,27 @@
+\chapter{Introduction}
+\setlength\parindent{1cm}
+
+In recent years, agriculture and gardening have increasingly adopted automation technologies to optimize resource usage and improve crop yield. One critical factor for successful plant growth is adequate and timely irrigation, yet many traditional irrigation practices are based on fixed schedules or manual observations, which can be inefficient. Water, being one of the most precious resources, is often overused in agricultural systems, especially in areas where it is already scarce. In this context, an automatic irrigation system offers a promising solution by supplying water only when and where it is needed, based on real-time environmental conditions.
+
+The primary objective of this project is to develop a low-cost, automatic irrigation system that leverages soil moisture sensing and wireless RF communication to automate the operation of a water pump based on soil moisture conditions. The system is designed to operate autonomously, detecting when the soil becomes too dry and initiating irrigation, and then turning off the pump once optimal moisture levels have been restored. This approach not only ensures that plants receive water precisely when they need it, but also minimizes water consumption and labor. Furthermore, by using a simple yet effective 433 MHz RF communication setup, the system allows for wireless transmission of data between distant transmitter and receiver units, making it especially useful in outdoor environments or locations where wiring may be impractical.
+
+The irrigation system comprises two main units: a transmitter and a receiver. At the transmitter end, a soil moisture sensor continuously monitors the moisture level in the soil. The sensor produces a digital signal depending on whether the moisture content is above or below a predefined threshold. This signal is fed into an HT12E encoder IC, which prepares the data for wireless transmission through a 433 MHz RF transmitter module. On the receiver side, the signal is received by an RF receiver module and decoded using an HT12D decoder IC. Based on the received data, a switching circuit drives a relay module to control a water pump. When the soil is dry, the relay is activated to turn the pump on; once the soil becomes sufficiently moist, the system sends an updated signal to the receiver, which in turn deactivates the relay, switching off the pump.
+
+An additional feature of this system is the integration of a NodeMCU (ESP32) microcontroller, which acts as a web server to provide real-time monitoring through a webpage. The receiver unit sends updates to the NodeMCU, which then displays the pump activation (ON/OFF), connectivity and soil status on a simple web interface. This allows users to remotely track irrigation activity from any device connected to the same network, providing transparency and convenience.
+
+Compared to traditional irrigation methods such as flood, furrow, and basin irrigation, which are known for their simplicity but suffer from significant inefficiencies, the automatic irrigation system offers a more sustainable and precise solution. Traditional methods often lead to water wastage through evaporation, deep percolation, and runoff, while also risking overwatering or underwatering of crops. Even sensor-assisted micro-irrigation systems, though more accurate, generally rely on manual intervention and scheduled watering. In contrast, the developed system fully automates the irrigation process by using real-time soil moisture data and wireless RF communication. Water is delivered only when necessary, minimizing wastage and preserving soil health. The inclusion of a NodeMCU for web-based monitoring further enhances the system by enabling remote access to soil conditions and system status.
+
+This system is especially beneficial in large agricultural fields or greenhouses where continuous human monitoring is not feasible. It can help reduce the burden on farmers, optimize water usage, and improve the overall health of plants.
+
+\begin{figure}[ht]
+  \centering
+	\vspace*{.5cm}
+  \addsvg{multi}{.9\linewidth}
+	\vspace*{.5cm}
+  \caption{A practical system to control irrigation in multiple fields}
+	\label{pract-sys}
+	\vspace*{.5cm}
+\end{figure}
+
+
+In addition, the use of RF-based communication makes the system scalable and adaptable, as multiple transmitter units can potentially be deployed in different zones of a field, all communicating wirelessly with a central control unit. A model of such system is given in \fref{pract-sys}. The system can also be integrated with existing micro irrigation systems in the farmland to aid the automation of irrigation. The system is based on a simple model proposed in an issue of EFY Express magazine \cite{efy}

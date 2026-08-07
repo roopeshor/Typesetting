@@ -1,0 +1,102 @@
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Appendix}
+\chapter*{Appendix}
+\setlength\parindent{1cm}
+\section*{Source code for web server}
+\setmonofont{IBM Plex Mono}
+\fontsize{11}{11}\selectfont
+\setstretch{1.3}
+\begin{minted}[breaklines]{cpp}
+#include <WiFi.h>
+#include <WebServer.h>
+
+const char* ssid = "home";
+const char* password = "psw@shell12";
+
+WebServer server(80);
+
+String pumpStatus = "OFF";
+String pump = "OFF";
+String logData = "";
+
+void handleRoot() {
+  int sensor1=digitalRead(32); //valid transmission
+  int sensor2=digitalRead(35); //moisture
+ 
+  String vt = sensor1==1 ? "Connected" : "Disconnected";
+  String moist = sensor2==1 ? "Dry" : "Wet";
+  
+  if (sensor1==1 && sensor2==1) {
+    pump = "ON";
+  } else {
+    pump = "OFF";
+  }
+
+  server.send(200, "text/html",
+  "<meta http-equiv='refresh' content='3'>"
+  "<script>"
+    "function updateTime() {"
+    "  const now = new Date();"
+    "  document.getElementById('timestamp').innerText = 'Last updated: "
+    "' + now.toLocaleString();"
+    "}"
+    "window.onload = updateTime;"
+  "</script>"
+  "<h1>Status: " + vt + "</h1>"
+  "<h1>" + moist + " soil</h1>"
+  "<h1>Pump: " + pump + "</h1>"
+  "<p id='timestamp'></p>"
+  "<pre>" + logData + "</pre>"
+  );
+}
+
+void checkForChanges() {
+  int sensor1 = digitalRead(32);
+  int sensor2 = digitalRead(35);
+
+  unsigned long now = millis();
+  String timeStr = String(now / 1000) + "s since boot";
+
+  if (pump != pumpStatus) {
+    logData += "Pump turned " + pump + " at " + timeStr + "\n";
+    pumpStatus = pump;
+  }
+
+  if (logData.length() > 2000) {
+    logData = "Log trimmed...\n" +
+      logData.substring(logData.length() - 1000);
+  }
+}
+
+void setup() {
+  pinMode(32, INPUT);
+  pinMode(35, INPUT);
+
+  Serial.begin(115200);
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi..");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected.");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  server.on("/", handleRoot);
+
+  server.begin();
+  Serial.println("HTTP server started");
+}
+
+void loop() {
+  checkForChanges();
+  server.handleClient();
+}
+
+\end{minted}
