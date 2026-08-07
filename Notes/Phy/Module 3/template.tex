@@ -1,0 +1,91 @@
+\documentclass[12pt, a4paper]{article}
+
+% use ../../imports.tex in sub folder
+\input{configs.tex}
+\input{extended-commands.tex}
+
+\begin{document}
+% \umodule{1}{Module name}
+
+\chapterheader{1}{Module/chapter name}
+
+\topic{A Main Topic}
+
+Usually its good to include a brief introduction that spans atleast 3-4 lines.
+One can also write equations that might be generic for the whole right here:
+$$(f*g)(s) = \int_{-\infty}^\infty f(t)g(s-t)dt$$
+
+You can left align the equation with \verb|\eqnleft{}| without \verb|$$..$$|
+\eqnleft{(f*g)(s) = \int_{-\infty}^\infty f(t)g(s-t)dt}
+
+
+\subtopic{Sub Topic 1 - Tables}
+It might be good to use \verb|longtblr| for tables. it might helps save some space
+when there isn't much space for the whole table in the page.
+And it is much easier to work with
+
+\begin{longtblr}{
+	colspec = {Q[c, 5cm]X[c]},
+	hlines,	vlines,
+	rowsep=5pt,	colsep=5pt,
+	row{1}={bg=blue!20!white}
+	}
+	\thead{Stuff 1} & \thead{Stuff 2} \\
+	Detail 1        & Detail a        \\
+	Detail 2        & Detail b        \\
+	Detail 3        & Detail 4
+\end{longtblr}
+\pagebreak
+
+\ssubsection{Minpages \& Boxed equations}
+\begin{minipage}[t][][t]{.499\textwidth}%
+	\centering
+
+	\textcolor{blue!30}{\rule{\textwidth}{1cm}}
+	Minpage 1
+	\begin{flalign*}
+		\setlength\fboxsep{1em}
+		\Aboxed{ f(x)   & = 0 }           & \Aboxed{ g(x) & = b} & \\
+		\Aboxed{ h(x) } & \Aboxed{ i(x) } &
+	\end{flalign*}
+
+	Some proofs
+\end{minipage}%
+\hfill%
+\vline%
+\begin{minipage}[t][][t]{.5\textwidth}%
+	\centering
+	\textcolor{red!30}{\rule{\textwidth}{1cm}}
+	Minpage 2
+
+	\tikz \draw (0, 0) -- (4, 0) -- (4, 4) -- (0, 4) -- cycle;
+\end{minipage}
+
+
+\ssubsection{Boxes}
+
+\textbf{Info Box}: This may contain essential information that could be missed
+out while reading paragraphs of text.
+
+
+\note{Note:}{\textwidth}{
+	\emph{Do not overuse this!}. It is meant for important stuff only.
+}
+
+% \vspace*{1cm}
+
+\sidebox{6cm}{
+	Side boxes are Tik\textit{Z} overlays, and are by default anchored to north east.
+}%
+\begin{minipage}[t][][t]{.6\textwidth}
+	\textbf{Sidebox}: Side box shows some minor notes, for.eg in equations etc. They should provide useful hints. If and must only be used in cases where adding that extra bit of info breaks the continuity of argument. The thing is its is hard to get it aligned.\\[10pt]
+	\verb|\sidebox[x][y]{width}{content}[border][fill]|
+\end{minipage}
+
+\subtopic{Dates}
+\margindate{06 Aug}%
+Always add date to notes! \verb|\margindate{06 Aug}|
+
+\ruler
+
+\end{document}
