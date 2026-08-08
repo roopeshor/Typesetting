@@ -19,13 +19,13 @@
   outline(title: none, indent: 1em),
 )
 
-= Background & Introduction
+= Introduction
 == Background
 #grid(
   column-gutter: 1em,
   columns: (2fr, 1fr),
   [
-    - Wind profiles are estimated from Doppler Radars via signal processing techniques.
+    - Wind profiles are estimated from Doppler Radars via signal processing techniques. #text(fill: white, size: 0pt)[@tan2024wind]
 
     - Radar echoes are often heavily corrupted by background noise (gets worse in cold climate)
 
@@ -33,12 +33,30 @@
 
     - Under low SNR conditions, multiple peaks are observed
   ],
-  figure(image("assets/image-1.png", height: 85%), caption: [Doppler spectrum of an\ observation]),
+  link(<st-w-fig>)[#figure([#image("assets/image-1.png", height: 85%)], caption: [Doppler spectrum])<ds>],
 )
 
 
-== Introduction
-- Paper proposes a new method to estimate wind profiles from doppler radars by combining several methods including MCCF.
+== Earlier Works
+- *Clothiaux et al. @clothiaux1994first* proposed identifying spectral peaks by selecting the longest chain and the maximum sum of power spectra values as the principle
+- *Anandan et al. @anandan2005adaptive* proposed a method called adaptive moment estimation (AME) based on SNR and wind shear.
+- *Sinha et al. @sinha2017estimation, @sinha2018doppler* proposed the multiparameter cost function (MPCF) method for estimating the wind profile.
+- *Li et al. @li2022improved* proposed an improved moment estimation (IME) method for wind estimation.
+- *Bhatta et al. @bhatta2020wind* proposed the Viterbi data association (VDA) method to track the wind profile.
+
+
+In the field of turbulence detection, the traditional denoising method is coherent accumulation (CA)
+// - The complex least mean square (CLMS) filter is proposed to adaptively filter the radar echo signal in the complex domain.
+- *Took and Mandic @took2008quaternion* proposed the quaternion least mean square (QLMS) for wind vector evaluation based on CLMS.
+// - However, the CLMS filter has been proven that its filtering performance will reduce unstable signals [21].
+- *Pei and Ding @pei2010fractional* proposed the fractional Fourier transform (FRFT) method to make the energy of unstable signals more concentrated to improve the filtering performance of adaptive filtering for unstable signals.
+- *Chen et al. @chen2010novel* proposed the normalized leakage LMS (NL-LMS) to maximize the energy of the target signal and suppress clutter in the FRFT domain.
+- *Shi et al. @shi2015shrinkage* proposed shrinkage widely linear CLMS (SWL-CLMS), which significantly improved the convergence speed and reduced the steady-state misalignment.
+- *Menguc and Acır @menguc2018augmented* proposed the augmented complex valued least mean kurtosis (ACLMK) filter, which utilizes augmented statistics to define the negative kurtosis of the complex error signal as a cost function.
+- *Zhang et al. @zhang2019widely* proposed a wide linear complex estimation input adaptive filter (WLC-EIAF), designed to achieve unbiased estimation in scenarios where input and output signals are affected by noise interference.
+
+== About Proposed Method
+- Paper proposes a new method to estimate wind profiles from doppler radars by combining several methods including MCCF. @tan2024wind
 
 - Works well under low SNR and multiple peaks conditions.
 
@@ -49,7 +67,7 @@
   column-gutter: 1em,
   columns: (1fr, 1fr),
   [
-    - Experiment equipment: K-band vortex radar (VORTRAD)
+    - Experiment equipment: K-band Vortex Radar (VORTRAD)
 
     - Ground truth: LIDAR (usually has 99% accuracy in clear sky)
 
@@ -60,7 +78,7 @@
 == Overview
 #align(center + horizon)[
   #figure(
-    caption: [Flow diagram of method],
+    caption: [Flow diagram of method given by authors],
     image("assets/diagram.jpg"),
   )
 ]
@@ -93,9 +111,9 @@ Where $x_(c i)$ is result of $i^"th"$ CA.
 #grid(
   column-gutter: 1em,
   columns: (1fr, 1.1fr),
-  figure(image("assets/windows.jpg"), caption: [ST--W Window]),
+  link(<ds>)[#figure([#image("assets/windows.jpg")], caption: [ST--W Window])],
   [
-    - Idea is to restrict search region in both space and time (ST--W) for findng candidate peaks
+    - Idea is to restrict search region in both space and time (ST--W) for findng candidate peaks <st-w-fig>
     - Assumes wind velocity changes smoothly with altitude (space) and between successive radar scans (time).
     - In the figure
       - Red -> Space window
@@ -139,26 +157,50 @@ $ "wind shear " d_f = V_d / d_v = V_d /(f_(d"min") lambda \/ L) $
 
 *Method*:
 + Take a row vector $P = lr([p_1, p_2 , dots , p_N])$ of one range bin from $X$
-+ Create new vectors from $P$ with equal length (say half size) $ V_(r 1) = [p_1, p_2 , dots , p_(N\/2)] $
-+ From this a new vector V can be written as: $ V = lr([V_(r 1), V_(r 2), dots , V_(r n)]) $ Where $V_(r i)$ is segment of datas from different intervals in same range bin
-  #link(<perf-an>)[#align(center)[#cetz-canvas({
-    import cetz.draw: *
-    rect((0, -0.05), (5, 1.05), name: "r1", fill: red.transparentize(70%))
-    rect((3.5, 0), (rel: (5, 1)), name: "r2", fill: green.transparentize(70%))
-    rect((7, -0.05), (rel: (5, 1.1)), name: "r3", fill: blue.transparentize(70%))
-    rect((10.5, 0), (rel: (5, 1)), name: "r4", fill: orange.transparentize(70%))
-    rect((0, -.2), (15.5, 1.2))
-    content("r1.west", [$P:$#h(1cm)], anchor: "east")
-    content("r1", $V_(r 1)$, anchor: "east")
-    content("r2", $V_(r 2)$)
-    content("r3", $dots$)
-    content("r4", $V_(r n)$)
-  })]]
-+ Mutual convolution is performed: $     V_(C 1) & = V_(r 2) * V_(r 1)^"HR" \
++ Create new vectors from $P$ with equal length (say half size) $V_(r 1) = [p_1, p_2 , dots , p_(N\/2)]$
++ From this a new vector V can be written as: $V = lr([V_(r 1), V_(r 2), dots , V_(r n)])$ Where $V_(r i)$ is segment of datas from different intervals in same range bin
+#align(center)[
+  #scale(80%, reflow: true)[
+    #link(<perf-an>)[#cetz-canvas({
+        import cetz.draw: *
+        scale(y: -1)
+        rect((0, 0), (rel: (15 / 2, 1)), name: "r1", fill: red.transparentize(50%))
+        rect((1.5, 1.1), (rel: (15 / 2, 1)), name: "r2", fill: green.transparentize(50%))
+        rect((15 / 2 - 1.5, 3.2), (rel: (15 / 2, 1)), name: "r4", fill: blue.transparentize(50%))
+        rect((15 / 2, 4.3), (rel: (15 / 2, 1)), name: "r5", fill: yellow.transparentize(50%))
+        rect((0, -.1), (15, 5.4), name: "v")
+        content("r1", $V_(r 1)$)
+        content("r2", $V_(r 2)$)
+        content("v", $dots$)
+        content("r4", $V_(r (n-1))$)
+        content("r5", $V_(r n)$)
+        content("v.west", [$V:$#h(1cm)], anchor: "east")
+        translate(y: 1)
+
+        rect((0, 5.5), (15, 6.5), name: "r")
+        rect((0, 5.5), (rel: (2, 1)), name: "p1")
+        rect("p1.south", (rel: (2, 1)), anchor: "west", name: "p2")
+        rect("p2.south", (rel: (2, 1)), anchor: "west", name: "p3")
+        rect("p3.south", (rel: (2, 1)), anchor: "west", name: "p4", stroke: none)
+        rect((15 - 3, 5.5), (rel: (2, 1)), anchor: "west", name: "pn")
+        rect("pn.south", (rel: (-2, 1)), anchor: "east", name: "pn-1", padding: (0em, 5em))
+        content("r", $dots$)
+        content("p1", $p_1$)
+        content("p2", $p_2$)
+        content("p3", $p_3$)
+        content("pn-1", $p_(n-1)$)
+        content("pn", $p_n$)
+
+        content("r.west", [$P:$#h(1cm)], anchor: "east")
+      })
+    ]
+  ]
+]
+#set math.mat(row-gap: .2em);
+4. Mutual convolution is performed:	$     V_(C 1) & = V_(r 2) * V_(r 1)^"HR" \
       V_(C 2) & = V_(r 3) * V_(r 1)^"HR" \
               & dots.v \
-  V_(C (n-1)) & = V_(r n) * V_(r 1)^"HR" $ $x^"HR" arrow$ take conjugate and then reverse order
-  #set math.mat(row-gap: .6em);
+  V_(C (n-1)) & = V_(r n) * V_(r 1)^"HR" quad quad quad x^"HR" arrow "take conjugate and then reverse order" $
 + Extracting the middle of the vector (To "maintain the same time complexity and velocity resolution of calculation"):$ lr([V'_C]) =
   mat(
     delim: "[",
@@ -181,27 +223,27 @@ $ "wind shear " d_f = V_d / d_v = V_d /(f_(d"min") lambda \/ L) $
       }
     ]
   ) $
-+ From $V'_(c f)$ we take a optimial solution $X_r$ corresponding to the "maximum power spectrum". Also  convolution results of adjacent delays are recorded as suboptimal solutions $X'_r$
++ We take a optimial solution $X_r$ from convolution results based on maximum power $V'_(c f)$ in . Also  convolution results of adjacent delays are recorded as suboptimal solutions $X'_r$
 
 == MCLMS
-
+#v(-10pt)
 #let tthick = $thick thick$;
-- \~ An adaptive filter, pretrained.
+- \~ An "adaptive filter", pretrained.
 - $X_r$ and $X'_r$ are taken input and desired signal of the filter.
-- After the coefficients have been fully updated, filter excels at the recognizing stable signals and removes multiple strong clutter.
+- After the coefficients have been fully updated, filter can recognize stable signals and removes multiple strong clutter.
 
 *For finding Filter coefficients:*
 
-+ Calculating the normalized parameters of filter coefficients as: $ u = 1 slash.big (sum_(j=1)^(N\/2)|X_r (j)|^2) $ #colbreak()
-+ $X$ is constructed from the samples of $X_r$: $ X = cases(
++ Calculate the normalized parameters of filter coefficients as: $ u = 1 slash.big (sum_(j=1)^(N\/2)|X_r (j)|^2) $
++ Construct "$X$" from the samples of $X_r$: $ X = cases(
     gap: #.5em,
-    display("zeros"lr((1,tthick k-j, tthick X_r (1:j))) quad & "," j < k),
-    display(X_r (j-k+1:j) quad quad & "," j < k)
-  ) quad quad j in {1, tthick 2, tthick dots, N\/2} $
-+ Initializing filter coefficients as $W_1 = 0$. The coefficients are then updated using: $  Y_j & = W_1 X^T \
+    display("zeros"lr((1,tthick k-j), tthick X_r (1:j)) quad & "," j < k),
+    display(X_r (j-k+1:j) quad quad & "," j >= k)
+  ) quad quad j in {1, tthick 2, tthick dots, N\/2} $($k$ - length of "coefficent vector")
++ Initialize filter coefficients as $W_1 = 0$. The coefficients are then updated using: $  Y_j & = W_1 X^T \
    e_j & = X'_(r j) - Y_j \
   W'_1 & = 0.98W_1 + u e_j X^H $
-+ Repeating above steps until all data are filtered, the coefficients have been fully updated
++ Repeat above steps until all data are filtered, the coefficients have been fully updated
 + We will use this coefficent to obtain the filtering result $Y_r$
 == Generating the Cost Function
 - To find out _candidate peaks_.
@@ -210,7 +252,7 @@ $ "wind shear " d_f = V_d / d_v = V_d /(f_(d"min") lambda \/ L) $
 + Compute doppler spectrum of each height bin $ M_r = |cal(F) (Y_r)| $
 + In each ST--W, spectral peaks are sorted and up to 3 peaks are selected.
 + If $M_(r"max")$ is spectral peak, then candidate peaks are: $ M_(r,j) >= 0.4 M_(r"max") $
-+ Cost value for each peak is: $ V_(r+1, j) = 1 - lr(|((M_(r+1) - M_r)d_v)/(alpha V_d)|) $$d_v$ = velocity resolution
++ Cost value for each peak is: $ V_(r+1, j) = 1 - lr(|((M_(r+1) - M_r)d_v)/(alpha V_d)|) quad quad  quad quad [d_v = "velocity resolution"] $
 + MCCF cost function: $ F_(r+1, j) = w_1 V_(r+1, j) + w_2 M_(r+1, j) quad quad "and" w_1 + w_2 = 1 $  $w_1, w_2$ are constraint weights
 + The peak with the highest cost value is selected
 + Repeat this for all height bins
@@ -333,6 +375,11 @@ $ "wind shear " d_f = V_d / d_v = V_d /(f_(d"min") lambda \/ L) $
 - Algorithm produces smoother and more continuous wind profiles
 - Achieves highest correlation coefficient (0.96) with LiDAR observation.
 - Authors note that the current method is validated only for clear-weather conditions and does not account for precipitation echoes such as rain or snow
+
+= References  <touying:skip>
+#set text(size: .87em)
+#set par(leading: .4em, spacing: .6em)
+#bibliography("bib.yaml", title: none)
 #focus-slide[
   Thank You
 ]
