@@ -5,6 +5,8 @@ Nowadays I'm transitioning to Typst, so wont use LaTeX that often
 
 ## Compiling (Typst)
 
+Uses typst `0.15.1`
+
 `typst compile file.typ`
 
 ## Compiling (LaTeX)
