@@ -28,7 +28,7 @@ The authors have utilized the K-band vortex radar (VORTRAD) as experiment equipm
 The experiment setup is shown in @img:setup. The VORTRAD is equipped with a shield and two devices are placed 3 m apart. The distance resolution, velocity resolution, and measurement distance of the two devices are consistent, and the accuracy of this LIDAR under clear sky conditions reaches 99%.
 For comparing the effectiveness of proposed method, researchers have compared MCCF against CA, AME, MPCF, and IME using SNR and Correlation coefficient
 
-#set text(size: 10pt)
+#set text(size: .9em)
 #figure(
 	caption: [Specification of VORTRAD Radar],
   table(
@@ -53,7 +53,14 @@ For comparing the effectiveness of proposed method, researchers have compared MC
     [14], [Range resolution], [20m],
   ),
 )<tab:spec>
+#set text(size: 1.11em)
 #figure(
   caption: [Experiment setup],
   image("images/setup.jpg", height: 7cm),
 )<img:setup>
+
+== Earlier Works
+
+Earlier research on wind-profile radar signal processing has primarily focused on reliable Doppler spectral peak detection, wind-profile tracking, and suppression of noise and clutter. Clothiaux et al. @clothiaux1994first proposed identifying atmospheric spectral peaks by constructing possible peak chains and selecting the longest chain with the maximum sum of spectral power, exploiting the expected continuity of wind velocity with height. Anandan et al. @anandan2005adaptive introduced Adaptive Moment Estimation (AME), which uses SNR and wind shear information to improve the identification of atmospheric echoes. Sinha et al. @sinha2017estimation, @sinha2018doppler developed the Multiparameter Cost Function (MPCF) method, which evaluates candidate Doppler peaks using multiple parameters such as spectral power and velocity/wind-shear continuity rather than simply selecting the strongest peak. Li et al. @li2022improved proposed an Improved Moment Estimation (IME) method to enhance wind estimation, while Bhatta et al. @bhatta2020wind introduced Viterbi Data Association (VDA) to track the most probable wind-velocity profile across successive range bins. These methods uses the spatial continuity of atmospheric winds, but their performance can become limited when the radar echo has low SNR and multiple competing spectral peaks.
+
+For turbulence and weak-echo detection, Coherent Accumulation (CA) is traditionally used to improve SNR by coherently integrating multiple radar pulses. Several studies have subsequently investigated adaptive filtering techniques for further noise and clutter suppression. Took and Mandic @took2008quaternion proposed Quaternion Least Mean Square (QLMS) based on CLMS for wind-vector estimation. Pei and Ding @pei2010fractional introduced the Fractional Fourier Transform (FRFT) to concentrate the energy of unstable signals, thereby improving adaptive-filtering performance. Chen et al. @chen2010novel combined FRFT-domain processing with Normalized Leakage LMS (NL-LMS) to enhance target-signal energy and suppress clutter. Shi et al. @shi2015shrinkage proposed Shrinkage Widely Linear CLMS (SWL-CLMS) to improve convergence speed and reduce steady-state misalignment. Menguc and Acır @menguc2018augmented developed an Augmented Complex-Valued Least Mean Kurtosis (ACLMK) filter that uses augmented statistics and the kurtosis of the complex error signal as its cost function. Zhang et al. @zhang2019widely proposed a Widely Linear Complex Estimation Input Adaptive Filter (WLC-EIAF) for unbiased signal estimation when both input and output are affected by noise. Building on these developments, the paper combines the advantages of existing moment-estimation, cost-function, and adaptive-filtering approaches with Mutual Convolution to form the proposed MCCF framework, aiming specifically at reliable wind-profile extraction in low-SNR conditions with multiple Doppler spectral peaks.

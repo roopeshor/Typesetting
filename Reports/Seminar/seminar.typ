@@ -35,4 +35,11 @@
 #include "method.typ"
 #include "results.typ"
 #include "conclusion.typ"
-
+#pagebreak()
+#set par(leading: .5em, spacing: .9em)
+#bibliography("bib.yaml", title: [References])
+#set page(
+  margin: (left: 1in, right: 0.8in, y: 1in),
+)
+#showFooter("number")
+#include "appendix.typ"

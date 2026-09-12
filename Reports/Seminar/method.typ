@@ -162,13 +162,11 @@ This balances how coefficients are adjusted even when one input is much larger i
 #let tthick = $thick thick$;
 
 $ X = cases(gap: #(.5em),
-	display("zeros"lr((1,tthick k-j, tthick X_r (1:j))) quad & "," j < k),
-	display(X_r (j-k+1:j) quad quad & "," j < k)
+	display("zeros"lr((1,tthick k-j), tthick X_r (1:j)) quad & "," j < k),
+	display(X_r (j-k+1:j) quad quad & "," j >= k)
 ) quad quad j in {1, tthick 2, tthick dots, N\/2} $
-
-This effectively forms a sliding window over the signal, allowing the adaptive filter to operate as a finite impulse response (FIR) filter. The filter coefficients are initially set to zero,
-
-$ W_1 = 0 $
+Where $k$ = length of "filter coefficent vector".
+This effectively forms a sliding window over the signal, allowing the adaptive filter to operate as a finite impulse response (FIR) filter. The filter coefficients are initially set to zero: $W_1 = 0 $
 
 For each input vector, the filter output is calculated using
 

@@ -1,0 +1,221 @@
+tan2024wind:
+  type: Article
+  title: "Wind Profile Estimation for K-Band Doppler Radar Based on Mutual Convolution Cost Function Method"
+  author:
+    - Zaixing Tan
+    - Guangli Yang
+    - Siye Wang
+    - Lijun Wang
+    - Yvxin Fan
+    - Rui Wang
+    - Yong Luo
+  date: 2024-08
+  parent:
+    type: periodical
+    title: "IEEE Sensors Journal"
+    volume: 24
+    issue: 15
+  page-range: 24044-24053
+clothiaux1994first:
+  type: Article
+  title: "A first-guess feature-based algorithm for estimating wind speed in clear-air Doppler radar spectra"
+  author:
+    - E. E. Clothiaux
+    - R. S. Penc
+    - D. W. Thomson
+    - T. P. Ackerman
+    - S. R. Williams
+  date: 1994-06
+  parent:
+    type: periodical
+    title: "Journal of Atmospheric and Oceanic Technology"
+    volume: 11
+    issue: 4
+  page-range: 888-908
+
+anandan2005adaptive:
+  type: Article
+  title: "An adaptive moments estimation technique applied to MST radar echoes"
+  author:
+    - V. K. Anandan
+    - P. Balamuralidhar
+    - P. B. Rao
+    - A. R. Jain
+    - C. J. Pan
+  date: 2005-04
+  parent:
+    type: periodical
+    title: "Journal of Atmospheric and Oceanic Technology"
+    volume: 22
+    issue: 4
+  page-range: 396-408
+
+sinha2017estimation:
+  type: Article
+  title: "Estimation of Doppler profile using multiparameter cost function method"
+  author:
+    - S. Sinha
+    - T. V. C. Sarma
+    - M. L. Regeena
+  date: 2017-02
+  parent:
+    type: periodical
+    title: "IEEE Transactions on Geoscience and Remote Sensing"
+    volume: 55
+    issue: 2
+  page-range: 932-942
+
+sinha2018doppler:
+  type: Article
+  title: "Doppler profile tracing using MPCF on MU radar and sodar: Performanceanalysis"
+  author:
+    - S. Sinha
+    - M. L. Regeena
+    - T. V. C. Sarma
+    - H. Hashiguchi
+    - K. R. Tuckley
+  date: 2018-02
+  parent:
+    type: periodical
+    title: "IEEE Geoscience and Remote Sensing Letters"
+    volume: 15
+    issue: 4
+  page-range: 508-511
+
+li2022improved:
+  type: Article
+  title: "Improved moments estimation for ground-based K-band Doppler radar using cost function method"
+  author:
+    - Y. Li
+    - R. Wang
+    - Y. Luo
+    - H. Li
+    - G. Yang
+  date: 2022
+  parent:
+    type: periodical
+    title: "IEEE Access"
+    volume: 10
+  page-range: 32049-32059
+
+bhatta2020wind:
+  type: Article
+  title: "Wind profile tracking in MST radar using Viterbi data association"
+  author:
+    - A. Bhatta
+    - R. Biswas
+    - S. R. B. Pillai
+    - T. V. C. Sarma
+  date: 2020-10
+  parent:
+    type: periodical
+    title: "IEEE Transactions on Geoscience and Remote Sensing"
+    volume: 58
+    issue: 10
+  page-range: 7074-7084
+
+rao1995system:
+  type: Article
+  title: "System description and sample vector wind measurements in ST mode"
+  author:
+    - P. B. Rao
+    - A. R. Jain
+    - P. Kishore
+    - P. Balamuralidhar
+    - S. H. Damle
+    - G. Viswanathan
+  date: 1995-07
+  parent:
+    type: periodical
+    title: "Radio Science"
+    volume: 30
+    issue: 4
+  page-range: 1125-1138
+
+took2008quaternion:
+  type: Article
+  title: "The quaternion LMS algorithm for adaptive filtering of hyper complex processes"
+  author:
+    - C. C. Took
+    - D. P. Mandic
+  date: 2008-12
+  parent:
+    type: periodical
+    title: "IEEE Transactions on Signal Processing"
+    volume: 57
+    issue: 4
+  page-range: 1316-1327
+
+zhang2019widely:
+  type: Article
+  title: "Widely linear complex-valued estimated-input LMS algorithm for bias-compensated adaptive filtering with noisy measurements"
+  author:
+    - S. Zhang
+    - J. Zhang
+    - W. X. Zheng
+    - H. C. So
+  date: 2019-07
+  parent:
+    type: periodical
+    title: "IEEE Transactions on Signal Processing"
+    volume: 67
+    issue: 13
+  page-range: 3592-3605
+
+pei2010fractional:
+  type: Article
+  title: "Fractional Fourier transform, Wigner distribution, and filter design for stationary and nonstationary random processes"
+  author:
+    - S.-C. Pei
+    - J.-J. Ding
+  date: 2010-08
+  parent:
+    type: periodical
+    title: "IEEE Transactions on Signal Processing"
+    volume: 58
+    issue: 8
+  page-range: 4079-4092
+
+chen2010novel:
+  type: Proceedings
+  title: "A novel adaptive filtering for LFM signal in FRFT domain"
+  author:
+    - X. Chen
+    - J. Guan
+    - S. Yu
+    - Y. He
+  date: 2010-10
+  parent:
+    type: book
+    title: "Proceedings of IEEE 10th International Conference on Signal Processing"
+  page-range: 239-242
+
+shi2015shrinkage:
+  type: Article
+  title: "Shrinkage linear and widely linear complex-valued least mean squares algorithms for adaptive beamforming"
+  author:
+    - Y.-M. Shi
+    - L. Huang
+    - C. Qian
+    - H. C. So
+  date: 2015-01
+  parent:
+    type: periodical
+    title: "IEEE Transactions on Signal Processing"
+    volume: 63
+    issue: 1
+  page-range: 119-131
+
+menguc2018augmented:
+  type: Article
+  title: "An augmented complex-valued least-mean kurtosis algorithm for the filtering of noncircular signals"
+  author:
+    - E. C. Menguc
+    - N. Acir
+  date: 2018-01
+  parent:
+    type: periodical
+    title: "IEEE Transactions on Signal Processing"
+    volume: 66
+    issue: 2
+  page-range: 438-448
