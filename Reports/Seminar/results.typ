@@ -71,8 +71,6 @@ The researchers next evaluated the complete MCCF algorithm by comparing its wind
 
 @img:4compar and @img:4compar2 present two radar observations recorded only one second apart. In Figure (a) each case shows the original Doppler spectra together with the wind profiles estimated by all four algorithms, while Figure (b) shows the spectra after MCLMS filtering together with the final MCCF estimates.
 
-The researchers have observed that the AME and IME methods sometimes select clutter peaks in the lower range bins. Since subsequent peak selection depends on previous estimates, these initial errors propagate upward, producing unstable wind profiles with large deviations. The MPCF method performs somewhat better but still exhibits considerable fluctuations, particularly above 100 m, because its candidate selection region is relatively broad. In contrast, the MCCF algorithm generates a much smoother and more continuous wind profile. The selected Doppler peaks follow a physically realistic gradual change in atmospheric wind velocity with altitude. Even though the two observations are separated by only one second, the other algorithms produce noticeably different wind profiles, whereas MCCF maintains nearly identical estimates, demonstrating superior temporal stability.
-
 #grid(
   columns: 1,
   row-gutter: 10pt,
@@ -93,6 +91,9 @@ The researchers have observed that the AME and IME methods sometimes select clut
     ),
   )<img:4compar2>],
 )
+
+
+The researchers have observed that the AME and IME methods sometimes select clutter peaks in the lower range bins. Since subsequent peak selection depends on previous estimates, these initial errors propagate upward, producing unstable wind profiles with large deviations. The MPCF method performs somewhat better but still exhibits considerable fluctuations, particularly above 100 m, because its candidate selection region is relatively broad. In contrast, the MCCF algorithm generates a much smoother and more continuous wind profile. The selected Doppler peaks follow a physically realistic gradual change in atmospheric wind velocity with altitude. Even though the two observations are separated by only one second, the other algorithms produce noticeably different wind profiles, whereas MCCF maintains nearly identical estimates, demonstrating superior temporal stability.
 
 == Scatter Plot and Correlation with LiDAR Observation
 The final experiment validates the estimated wind velocities using an independent reference instrument -- LiDAR. During March 3 to March 7, 2023, the VORTRAD radar and nearby LiDAR measured horizontal wind velocity. Because LiDAR generally has highest accuracy among all instruments, it provides a suitable reference for evaluating the radar algorithms.

@@ -11,8 +11,8 @@
 #showFooter("none")
 #include "title.typ"
 
-// #include "certificate.typ"
-// #set page(margin: (left: 1.3in, right: 1.2in, top: 1.2in, bottom: 1.2in))
+#set page(margin: (left: 1.3in, right: 1.2in, top: 1.2in, bottom: 1.2in))
+#include "certificate.typ"
 #include "acknowledgment.typ"
 #include "abstract.typ"
 
@@ -42,4 +42,5 @@
   margin: (left: 1in, right: 0.8in, y: 1in),
 )
 #showFooter("number")
+#showHeader(false)
 #include "appendix.typ"

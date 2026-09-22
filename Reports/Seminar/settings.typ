@@ -97,7 +97,7 @@
         let has-heading = query(heading.where(level: 1)).any(it => it.location().page() == current-page)
         if counter(heading).get().first() > 0 and not has-heading [
           // Display header from 1st numbered heading
-          #text(size: 11pt, style: "italic")[Seminar Report]
+          #text(size: 10pt, style: "italic")[#report-title]
         ]
       }
     },
