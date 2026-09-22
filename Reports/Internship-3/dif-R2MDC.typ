@@ -49,5 +49,5 @@ In each stage the size of delay element reduces by half. No delays, multipliers 
   image("images/r2mdc_4_sim.png"),
   caption: [Simulation result for two 4 point test signals in R2MDC],
 )
-Here 2 different inputs are passed consecutively, marked by differnt colors.
+Here 2 different inputs are passed consecutively, marked by different colors.
 For each sequence, 2 outputs are obtained at same clock cycle. It takes $log_2(N)$ clock cycles to get all ouputs after last input has been inserted, giving a total latency of $N + log_2(N)$

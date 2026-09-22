@@ -267,7 +267,7 @@ To include Winograd in the comparison, case of 16 point transforms and their par
 //   )
 // })
 
-In this case also R2MDC seems to have better edge over all other techniques. But this power only comes handly when all data are available readily. However in most practical cases data is being continously fetched from realworld, making throughput of MDC unusable. Winograd and R2SDC are the next to consider. Winograd takes consumes significantly higher number of hardware resources in order to reduce multiplications. Perhaps my implementation might not me very efficient. Depending on pipeline depth the maximum operating frequency of winograd can be between 136.8 MHz to 142.8 MHz. However deeper pipelining increases latency.
+In this case also R2MDC seems to have better edge over all other techniques. But MDC generates 2 output per cycle, hence a buffer and reordering stage is required in the subsequent sections. Winograd takes consumes significantly higher number of hardware resources in order to reduce multiplications. Perhaps my implementation might not me very efficient. Depending on pipeline depth the maximum operating frequency of winograd can be between 136.8 MHz to 142.8 MHz. However deeper pipelining increases latency.
 
 == Comparison of scalable techniques
 The resource and performance of scalable techniques are shown in @fig:scal-ref. Same number of DSPs are required for SDC and MDC. Since In-place technique is non-pipelined, throughput is computed as $F_"max" \/ (2+ log_2(N)\/2)$ as one compute frame is $2N + N log_2(N)\/2$ cycles long and no input can be supplied during this frams.
