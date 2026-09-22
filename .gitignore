@@ -19,3 +19,7 @@
 **/_minted*
 
 **/noupload
+Tools/**/*.svg
+Tools/**/*.png
+Tools/**/*.jpg
+Tools/**/*.pdf
