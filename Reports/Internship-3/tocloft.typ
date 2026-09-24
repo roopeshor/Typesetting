@@ -46,14 +46,4 @@
   target: figure.where(kind: table),
 )
 
-// #pagebreak()
-
-// #addToPDFBookmark("List of Abbreviations", outlined: true)
-// #print-index(
-//   title: text(size: fontsizes.heading1)[List of Abbreviations],
-//   row-gutter: 10pt,
-//   sorted: "up",
-// 	column-ratio: .2
-// )
-
-// #pagebreak()
+#pagebreak()

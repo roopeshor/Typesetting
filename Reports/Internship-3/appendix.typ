@@ -1,7 +1,5 @@
 #counter(heading).update(1)
 #set heading(numbering: "A.1")
-#set page(margin: (left: 1.2in, right: 1in, top: 1.4in, bottom: 1in))
-
 #heading(numbering: none)[Appendices]
 == Source code
 #rect(
@@ -10,6 +8,7 @@
 )
 #v(-10pt)
 == 16 point Winograd algorithm <ap:w16>
+
 
 Let  $u = 2pi \/ 16$, $C_1 = cos(u)$, $C_2 = cos(2u)$, $C_3 = cos(3u)$
 $S_1 = sin(u)$, $S_2 = sin(2u)$, $S_3 = sin(3u)$\

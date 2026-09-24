@@ -7,9 +7,17 @@
 ///////// Title, Preamble
 #set page(numbering: "a")
 #showFooter("none")
+#showHeader(false)
+#set page(margin: 1.5in)
 #include "title.typ"
+#set page(margin: (
+  left: 1.2in + .5cm,
+  right: 1.2in,
+  top: 1.2in,
+  bottom: 1.2in
+))
+
 #include "certificate.typ"
-#set page(margin: (left: 1.3in, right: 1.2in, top: 1.2in, bottom: 1.2in))
 #include "acknowledgment.typ"
 
 #set page(numbering: "i")
@@ -39,7 +47,6 @@
 #pagebreak()
 #showFooter("none")
 #showHeader(false)
-#bibliography("bib.yaml", style: "ieee", title: [References],
-full: true
-)
+#bibliography("bib.yaml", style: "ieee", title: [References], full: true)
+#set page(margin: (top: 1.2in, bottom: 1in))
 #include "appendix.typ"
