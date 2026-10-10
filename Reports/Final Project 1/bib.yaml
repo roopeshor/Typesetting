@@ -1,0 +1,26 @@
+Nathanson:
+  title: "Radar Design Principles"
+  author: Fred E. Nathanson
+  url: https://selasl.wordpress.com/wp-content/uploads/2011/08/mcgraw_hill_-_radar_design_principles.pdf
+  type: book
+titu:
+  title: "Design, Development, Calibration and Validation of 205 MHz Wind Profiler Radar"
+  type: "thesis"
+  author: "Titu K. Samson"
+mccf:
+  title: "Wind Profile Estimation for K-Band Doppler Radar Based on Mutual Convolution Cost Function Method"
+  type: "Article"
+  author: "Zaixing Tan et al."
+  date: 2024-08-01
+  parent:
+        title: IEEE Sensors Journal
+        volume: 24
+        issue: 15
+ime:
+  title: "Improved Moments Estimation for Ground-Based K-Band Doppler Radar Using Cost Function Method"
+  type: "Article"
+  author: "Li et al."
+  date: 2022-03-15
+  parent:
+        title: IEEE Access
+        volume: 10
