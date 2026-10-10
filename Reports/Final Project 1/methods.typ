@@ -1,5 +1,6 @@
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #import "@preview/cetz:0.5.2"
+#import "settings.typ": alt-captions
 = Estimation and Verification Methods
 About what algorithms have been covered... How results are validated
 - Radio sonde..
@@ -11,7 +12,7 @@ Then list methods:
 MCCF is a peak estimation algorithm proposed by Tang et al. @mccf which uses Mutual convolution to improve SNR and a velocity-frequency-weighted cost function to estimate the most prominent peak in the spectrum. It also uses Space-Time doppler window (ST window) to limit the number of candidate peaks as well as to improve the continuity of velocity profile. Space window is used to improve velocity continuity over height ranges and time window is used for improving velocity continuity in specific height over time.
 
 The algorithm is illustrated in @fig_mccf_flow. Here the cylindrical entries are final data as well as intermediate data acquired.
-The intermediate data might be useful in future for other algorithms to work on.
+The intermediate data might be useful for other algorithms to work on in further processing steps.
 #figure(
   caption: [MCCF Algorithm Flow.],
   [
@@ -60,7 +61,8 @@ The intermediate data might be useful in future for other algorithms to work on.
       nodeD((-1, 0), [*Moments\ $M_0$ $M_1$ $M_2$*], <res_blk>, fl: green.lighten(70%)),
     )],
 )<fig_mccf_flow>
-Individual steps are explained in upcoming subsections
+
+Individual steps are explained in upcoming subsections. The method applied to a doppler spectrum is shown in @fig_mccf_ps
 === Preprocessing
 Here the FFT of time series raw data (slow sampled) is computed.
 Then DC masking is applied in which value of 5 bins near DC bin is replaced with bacground noise with random phase.
@@ -76,46 +78,47 @@ The Space-Time window is intersection of both windows.
 
 === Mutual Convolution
 In this step the noise is heavily suppressed and SNR is improved.
-It works by slicing a spectrum in a height bin $P$ into $n$ slices of length $N\/2$ (where $N$ is length of original spectrum) then convolving adjacent slices together to form $n-1$ results.
+It works by slicing a spectrum in a height bin $P$ into $n$ slices of length $N\/2$ (where $N$ is length of original spectrum)
+then convolving adjacent slices ($X_i = V_i * V_(i+1)$) together to form $n-1$ results.
 From these results a optimal solution segment $X_r$ is chosen which contain the highest peak among all results.
-Also the segment adjacent to $X_r$ is chosen as suboptimal solution $X'_r$. Both of these are used in MCLMS filter.
+Also the segment adjacent to $X_r$ is chosen as suboptimal solution $X'_r$.
+Both of these are used in MCLMS filter.
 
-#figure(
-  scale(60%, reflow: true)[
-    #cetz.canvas({
-      import cetz.draw: *
-      scale(y: -1)
-      rect((0, 0), (rel: (15 / 2, .9)), name: "r1", fill: red.transparentize(50%))
-      rect((rel: (-15/2 + 1.5, .1)), (rel: (15 / 2, .9)), name: "r2", fill: green.transparentize(50%))
-      rect((15 / 2, 4.3), (rel: (15 / 2, .9)), name: "r5", fill: yellow.transparentize(50%))
-      rect((rel: (-15/2 - 1.5, -1.9)), (rel: (15 / 2, .9)), name: "r4", fill: blue.transparentize(50%))
-      rect((0, -.1), (15, 5.4), name: "v")
-      content("r1", $V_(r 1)$)
-      content("r2", $V_(r 2)$)
-      content("v", $dots$)
-      content("r4", $V_(r (n-1))$)
-      content("r5", $V_(r n)$)
-      content("v.west", [$V:$#h(1cm)], anchor: "east")
-      translate(y: 1)
-
-      rect((0, 5.5), (15, 6.5), name: "r")
-      rect((0, 5.5), (rel: (2, 1)), name: "p1")
-      rect("p1.south", (rel: (2, 1)), anchor: "west", name: "p2")
-      rect("p2.south", (rel: (2, 1)), anchor: "west", name: "p3")
-      rect("p3.south", (rel: (2, 1)), anchor: "west", name: "p4", stroke: none)
-      rect((15 - 3, 5.5), (rel: (2, 1)), anchor: "west", name: "pn")
-      rect("pn.south", (rel: (-2, 1)), anchor: "east", name: "pn-1", padding: (0em, 5em))
-      content("r", $dots$)
-      content("p1", $p_1$)
-      content("p2", $p_2$)
-      content("p3", $p_3$)
-      content("pn-1", $p_(n-1)$)
-      content("pn", $p_n$)
-
-      content("r.west", [$P:$#h(1cm)], anchor: "east")
-    })
-  ],
-)
+// #figure(
+// 	caption: [Slicing power spectrum ($P$) in MCCF],
+//   scale(60%, reflow: true)[
+//     #cetz.canvas({
+//       import cetz.draw: *
+//       scale(y: -1)
+//       rect((0, 0), (rel: (15 / 2, .9)), name: "r1", fill: red.transparentize(50%))
+//       rect((rel: (-15 / 2 + 1.5, 0)), (rel: (15 / 2, .9)), name: "r2", fill: green.transparentize(50%))
+//       rect((15 / 2, 4.3), (rel: (15 / 2, .9)), name: "r5", fill: yellow.transparentize(50%))
+//       rect((rel: (-15 / 2 - 1.5, -1.9)), (rel: (15 / 2, .9)), name: "r4", fill: blue.transparentize(50%))
+//       rect((0, 0), (15, 5.2), name: "v")
+//       content("r1", $V_(r 1)$)
+//       content("r2", $V_(r 2)$)
+//       content("v", $dots$)
+//       content("r4", $V_(r (n-1))$)
+//       content("r5", $V_(r n)$)
+//       content("v.west", [$V:$#h(1cm)], anchor: "east")
+//       translate(y: .3)
+//       rect((0, 5.5), (15, 6.5), name: "r")
+//       rect((0, 5.5), (rel: (2, 1)), name: "p1")
+//       rect("p1.south", (rel: (2, 1)), anchor: "west", name: "p2")
+//       rect("p2.south", (rel: (2, 1)), anchor: "west", name: "p3")
+//       rect("p3.south", (rel: (2, 1)), anchor: "west", name: "p4", stroke: none)
+//       rect((15 - 3, 5.5), (rel: (2, 1)), anchor: "west", name: "pn")
+//       rect("pn.south", (rel: (-2, 1)), anchor: "east", name: "pn-1", padding: (0em, 5em))
+//       content("r", $dots$)
+//       content("p1", $p_1$)
+//       content("p2", $p_2$)
+//       content("p3", $p_3$)
+//       content("pn-1", $p_(N-1)$)
+//       content("pn", $p_N$)
+//       content("r.west", [$P:$#h(1cm)], anchor: "east")
+//     })
+//   ],
+// )
 
 === MCLMS Adaptive Filtering
 MCLMS (Modified Complex Least Mean Square) filter is a adaptive filter. It learns its weight during slicing of spectrums, and after modifying the weight vector final filtered spectra is obrained through the optimal and suboptimal spectras. MCLMS can suppress clutter clutter even more by training a model that tries to match optimal solution with suboptimal solution. In the end the spectrum will have some of the clutter suppressesd.
@@ -125,10 +128,34 @@ and magnitude of peak itself $M_(r+1, j)$. Here $d_v$ represents the velocity re
 maximum wind shear, $alpha$ is the window coefficient. The cost of each peak is given by:
 $ F_(r+1,j) = w_1 V_(r+1,j) + w_2 M_(r+1,j) $
 The peaks with higest cost value is taken as the spectral peak. From this moments can be estimated based on Hildreth-Seikh method.
+The peaks estimated from one height bin is used to set ST window in next height bin, hence the process is iterative and cannot be done in single matrix operation step as in computing spectrum.
+
+
+#figure(
+  caption: alt-captions(
+    [
+      Power spectrum
+      (a) Original,
+      (b) after applying DC removal, mutual convoluton and MCLMS,
+      (c) Computed moments [red] and Space window [black] overlayed on top of original spectrum
+    ],
+    [Power spectrum plots in MCCF],
+  ),
+  grid(
+    columns: 3,
+    row-gutter: 6pt,
+    image("images/mccf-og-spectra.png", height: 7.6cm),
+    image("images/mccf-mclmc-spectra.png", height: 7.6cm),
+    image("images/ST Window.svg", height: 7.6cm),
+
+    [(a)], [(b)], [(c)],
+  ),
+)<fig_mccf_ps>
+
 
 == Improved Moments Estimation (IME)
 
-The Improved Moments Estimation (IME) algorithm proposed by Li *et al.*@ime is designed to extract reliable Doppler velocity profiles from ground-based K-band wind radar spectra, particularly when the atmospheric echoes have low signal-to-noise ratio (SNR) and are contaminated by clutter or multiple spectral peaks.
+The Improved Moments Estimation (IME) algorithm proposed by Li *et al.*@ime is designed to extract reliable Doppler velocity profiles from ground-based K-band wind radar spectra, particularly when the atmospheric echoes have low SNR and are contaminated by clutter or multiple spectral peaks.
 The method combines the adaptive Doppler-window concept of the Adaptive Moments Estimation (AME) method with the cost-function-based profile tracing concept of the Multiparameter Cost Function (MPCF) method.
 Its main objective is to reduce the computational search space while maintaining reliable wind-profile detection under low-SNR conditions.
 
@@ -139,7 +166,6 @@ The IME procedure consists of three main stages:
 + Grouping, profile tracing, and cost allocation.
 
 === Data Preprocessing
-
 
 Before profile extraction, the Doppler power spectra are processed to suppress unwanted spectral components. First, the zero-frequency region is affected by direct-current (DC) components and ground clutter. These components are suppressed by interpolation, in which the average values of three points around zero frequency are used to replace the contaminated values. Next, a five-point moving-average filter is applied to suppress transient interference while preserving the atmospheric echo characteristics. Finally, the noise power density $S_n$ of each range bin is estimated using the Hildebrand--Sekhon method. The estimated noise level is subtracted from the power spectrum, and negative values are set to zero. The resulting spectrum is therefore more suitable for identifying atmospheric spectral peaks. The preprocessing procedure described in the paper is summarized in @fig_ime
 
@@ -210,7 +236,12 @@ This restriction prevents noise and unrelated spectral components outside the ex
 
 === Grouping and Cost-Function-Based Profile Tracing
 
-After the prospective peaks have been identified, the algorithm constructs possible traces between adjacent range bins. A trace represents a possible Doppler velocity profile through height. Constructing all possible traces over the complete range would result in a large computational load; therefore, the spectra are divided into small groups containing at least three consecutive range bins. Candidate peaks within each group are then connected from one range bin to the next. For the first group, the initial value is the Doppler velocity of the most prominent peak, while subsequent groups use the velocity at the highest range bin of the preceding group as their initial value.  @fig_ime_group shows all links in a group and $M_j^r$
+After the prospective peaks have been identified, the algorithm constructs possible traces between adjacent range bins.
+A trace represents a possible Doppler velocity profile through height.
+Constructing all possible traces over the complete range would result in a large computational load; therefore, the spectra are divided into small groups containing at least three consecutive range bins.
+Candidate peaks within each group are then connected from one range bin to the next.
+For the first group, the initial value is the Doppler velocity of the most prominent peak, while subsequent groups use the velocity at the highest range bin of the preceding group as their initial value.
+@fig_ime_group shows all links in a group and $M_j^r$
 indicates the $j$ th peak of the
 $r$ th range bin.
 
@@ -335,6 +366,7 @@ The main advantage of IME is that it searches only a limited Doppler region and 
 mixing and matching various algorithms (spectra computing, denoising, moment estimation) of different methods (MCCF, IME, etc.). Is there any better results?
 
 Add figures for comparison of algorithms.
+
 
 == Verification methods
 === Radiosonde
