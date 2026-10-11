@@ -4,10 +4,10 @@
 
 #let settings = doc => {
   set page(numbering: "1")
-  set text(font: "MLMRoman12", size: 11pt)
+  set text(font: "MLMRoman10", size: 11pt)
   set par(
     justify: true,
-    leading: .85em,
+    leading: .8em,
   )
 
   set heading(
@@ -15,6 +15,8 @@
   )
   show heading.where(level: 2): set block(below: 1em)
   show heading.where(level: 3): set block(below: 1em)
+  show heading: set text(font: "MLMRoman12")
+	
   ////// Chapter format
   show heading.where(level: 1): it => [
     #pagebreak()

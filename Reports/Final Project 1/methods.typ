@@ -84,41 +84,6 @@ From these results a optimal solution segment $X_r$ is chosen which contain the 
 Also the segment adjacent to $X_r$ is chosen as suboptimal solution $X'_r$.
 Both of these are used in MCLMS filter.
 
-// #figure(
-// 	caption: [Slicing power spectrum ($P$) in MCCF],
-//   scale(60%, reflow: true)[
-//     #cetz.canvas({
-//       import cetz.draw: *
-//       scale(y: -1)
-//       rect((0, 0), (rel: (15 / 2, .9)), name: "r1", fill: red.transparentize(50%))
-//       rect((rel: (-15 / 2 + 1.5, 0)), (rel: (15 / 2, .9)), name: "r2", fill: green.transparentize(50%))
-//       rect((15 / 2, 4.3), (rel: (15 / 2, .9)), name: "r5", fill: yellow.transparentize(50%))
-//       rect((rel: (-15 / 2 - 1.5, -1.9)), (rel: (15 / 2, .9)), name: "r4", fill: blue.transparentize(50%))
-//       rect((0, 0), (15, 5.2), name: "v")
-//       content("r1", $V_(r 1)$)
-//       content("r2", $V_(r 2)$)
-//       content("v", $dots$)
-//       content("r4", $V_(r (n-1))$)
-//       content("r5", $V_(r n)$)
-//       content("v.west", [$V:$#h(1cm)], anchor: "east")
-//       translate(y: .3)
-//       rect((0, 5.5), (15, 6.5), name: "r")
-//       rect((0, 5.5), (rel: (2, 1)), name: "p1")
-//       rect("p1.south", (rel: (2, 1)), anchor: "west", name: "p2")
-//       rect("p2.south", (rel: (2, 1)), anchor: "west", name: "p3")
-//       rect("p3.south", (rel: (2, 1)), anchor: "west", name: "p4", stroke: none)
-//       rect((15 - 3, 5.5), (rel: (2, 1)), anchor: "west", name: "pn")
-//       rect("pn.south", (rel: (-2, 1)), anchor: "east", name: "pn-1", padding: (0em, 5em))
-//       content("r", $dots$)
-//       content("p1", $p_1$)
-//       content("p2", $p_2$)
-//       content("p3", $p_3$)
-//       content("pn-1", $p_(N-1)$)
-//       content("pn", $p_N$)
-//       content("r.west", [$P:$#h(1cm)], anchor: "east")
-//     })
-//   ],
-// )
 
 === MCLMS Adaptive Filtering
 MCLMS (Modified Complex Least Mean Square) filter is a adaptive filter. It learns its weight during slicing of spectrums, and after modifying the weight vector final filtered spectra is obrained through the optimal and suboptimal spectras. MCLMS can suppress clutter clutter even more by training a model that tries to match optimal solution with suboptimal solution. In the end the spectrum will have some of the clutter suppressesd.
@@ -130,23 +95,22 @@ $ F_(r+1,j) = w_1 V_(r+1,j) + w_2 M_(r+1,j) $
 The peaks with higest cost value is taken as the spectral peak. From this moments can be estimated based on Hildreth-Seikh method.
 The peaks estimated from one height bin is used to set ST window in next height bin, hence the process is iterative and cannot be done in single matrix operation step as in computing spectrum.
 
-
 #figure(
   caption: alt-captions(
     [
       Power spectrum
       (a) Original,
       (b) after applying DC removal, mutual convoluton and MCLMS,
-      (c) Computed moments [red] and Space window [black] overlayed on top of original spectrum
+      (c) Computed moments, reference moment and *Space window [white]* overlayed
     ],
     [Power spectrum plots in MCCF],
   ),
   grid(
     columns: 3,
     row-gutter: 6pt,
-    image("images/mccf-og-spectra.png", height: 7.6cm),
-    image("images/mccf-mclmc-spectra.png", height: 7.6cm),
-    image("images/ST Window.svg", height: 7.6cm),
+    image("images/mccf-raw.svg", height: 7.6cm),
+    image("images/mccf-dspec.svg", height: 7.6cm),
+    image("images/mccf-stw.svg", height: 7.6cm),
 
     [(a)], [(b)], [(c)],
   ),
@@ -235,15 +199,13 @@ The adaptive-window procedure is represented in @fig_ime_adaptive
 This restriction prevents noise and unrelated spectral components outside the expected velocity region from entering the profile-tracing stage.
 
 === Grouping and Cost-Function-Based Profile Tracing
-
 After the prospective peaks have been identified, the algorithm constructs possible traces between adjacent range bins.
 A trace represents a possible Doppler velocity profile through height.
 Constructing all possible traces over the complete range would result in a large computational load; therefore, the spectra are divided into small groups containing at least three consecutive range bins.
 Candidate peaks within each group are then connected from one range bin to the next.
 For the first group, the initial value is the Doppler velocity of the most prominent peak, while subsequent groups use the velocity at the highest range bin of the preceding group as their initial value.
 @fig_ime_group shows all links in a group and $M_j^r$
-indicates the $j$ th peak of the
-$r$ th range bin.
+indicates the $j$ th peak of the $r$ th range bin.
 
 #figure(
   caption: [Grouping and profile tracing. Each circle represents a candidate spectral peak],
@@ -366,7 +328,6 @@ The main advantage of IME is that it searches only a limited Doppler region and 
 mixing and matching various algorithms (spectra computing, denoising, moment estimation) of different methods (MCCF, IME, etc.). Is there any better results?
 
 Add figures for comparison of algorithms.
-
 
 == Verification methods
 === Radiosonde
