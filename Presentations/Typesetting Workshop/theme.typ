@@ -11,7 +11,7 @@
   // set page
   let header(self) = {
     set align(top)
-    show: components.cell.with(fill: self.colors.primary, inset: 1em)
+    show: components.cell.with(fill: self.colors.primary.darken(20%), inset: 1em)
     set par(leading: 1em)
     set align(horizon)
     set text(
@@ -159,8 +159,8 @@
     ),
     config-methods(alert: utils.alert-with-primary-color),
     config-colors(
-      primary: rgb("#3ea5b5"),
-      secondary: rgb("#3ea5b5").darken(10%),
+      primary: args.theme-color,
+      secondary: args.theme-color.darken(10%),
       neutral-lightest: rgb("#ffffff"),
       neutral-darkest: rgb("#000000"),
     ),
@@ -172,7 +172,7 @@
   )
   show outline.entry: set text(size: .9em)
   show outline.entry.where(level: 1): set block(above: 20pt)
-  show outline.entry.where(level: 1): set text(weight: "semibold", fill: rgb("#024f6e"))
+  show outline.entry.where(level: 1): set text(weight: "semibold", fill: args.theme-color.darken(20%))
   show figure.caption: set text(size: .8em, style: "italic")
   set text(font: "Arial", size: 18pt)
   show math.equation: set text(size: 1.2em)

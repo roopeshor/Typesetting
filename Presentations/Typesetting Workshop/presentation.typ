@@ -1,19 +1,39 @@
 #import "@preview/touying:0.7.4": *
 #import "theme.typ": *
 
-#let pc = rgb("#2384a7");
+#let pc = rgb("#239dad");
 
 #show: my-theme.with(
   aspect-ratio: "16-9",
+  theme-color: pc,
   config-info(
     title: [Typesetting with],
-    subtitle: [#image("assets/logo.svg", height: 2em)],
+    subtitle: [
+      #{
+        set text(
+          size: 3.05em,
+          font: "Buenard",
+          weight: "bold",
+          fill: pc,
+        )
+        box({
+          text("t")
+          text("y")
+          h(0.035em)
+          text("p")
+          h(-0.025em)
+          text("s")
+          h(-0.015em)
+          text("t")
+        }, inset: -3.05em)
+      }
+    ],
     author: [Roopesh O R],
     date: datetime.today(),
   ),
   config-colors(
     primary: pc,
-    secondary: pc.darken(20%),
+    secondary: pc.darken(30%),
     neutral-lightest: rgb("#ffffff"),
     neutral-darkest: rgb("#000000"),
   ),
@@ -68,7 +88,7 @@
 #grid(
   columns: 2,
   column-gutter: 20pt,
-  [*Typesetting* is the composition of text for publication, display, or distribution by means of arranging physical type (or sort) in mechanical systems or glyphs in digital systems representing characters
+  [*Typesetting* is the "composition of text for publication, display, or distribution by means of arranging physical type (or sort) in mechanical systems or glyphs in digital systems representing characters"
     #v(1cm)
     #image("assets/image.jpg", height: 7cm)
   ],
@@ -432,7 +452,7 @@ $"
 ";
 #table(
   columns: (1fr, 1fr),
-  raw(r,lang: "typst"),
+  raw(r, lang: "typst"),
 )
 #pagebreak()
 #code-preview(
