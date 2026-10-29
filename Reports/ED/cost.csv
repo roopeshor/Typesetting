@@ -1,0 +1,17 @@
+Component,Spec,Cost (₹)
+Main Microcontroller,"STM32F407VGT6 (ARM Cortex-M4, 168MHz)",500
+CAN Transceiver,SN65HVD230 (3.3V CAN),80
+Display Panel,"4.3"" Nextion / IPS TFT LCD (480x272, SPI/UART)",1000
+Battery IC,BQ76952 (Texas Instruments),480
+Balancing MOSFETs,"AO3400A (N-Channel, 30V 5.8A SOT-23)",80
+Balance Resistors,5.1 Ω / 5W Power Resistors (2512),160
+Isolators,,140
+Step-Down Buck Regulator,LM5116 / XL7015 (80V Input to 12V Output),120
+LDO Regulator,AMS1117-3.3V / MP2307,30
+Reverse Polarity Protection,High-Voltage P-FET (IRFR5305) + TVS Diodes,90
+Current Sense,INA219 / INA226 (High-Side),110
+Shunt Resistor,,60
+Thermistors,,80
+Main Circuit Board,4-Layer FR4 SMT PCB (150mm x 100mm),250
+Passive things,"connectors, etc.",500
+,,3680
