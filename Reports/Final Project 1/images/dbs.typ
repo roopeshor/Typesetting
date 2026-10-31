@@ -35,7 +35,7 @@
   line(centre, west, stroke: projection)
   line(centre, east, stroke: projection)
   line(centre, south, stroke: projection)
-  line((0, 0), (0, 7.95), stroke: projection)
+  line((0, 0), (0, 7.8), stroke: projection)
 
   // Ground-plane reference axes. Arrowheads follow the directions in the image.
   line((-2.48, -1.78), (2.82, 2.02),
@@ -44,35 +44,27 @@
     stroke: (paint: ink, thickness: 1.45pt), mark: black-arrow)
 
   // Oblique ellipse: South -> East -> North -> West -> South.
-  bezier(south, east,
-    (3.9456, 6.4023), (3.116, 6.9395),
-    stroke: (paint: ink, thickness: 1pt))
-  bezier(east, north,
-    (-0.416, 7.1605), (-2.4544, 6.8023),
-    stroke: (paint: ink, thickness: 1pt))
-  bezier(north, west,
-    (-3.9456, 5.6977), (-3.116, 5.1605),
-    stroke: (paint: ink, thickness: 1pt))
-  bezier(west, south,
-    (0.416, 4.9395), (2.4544, 5.2977),
-    stroke: (paint: ink, thickness: 1pt))
+  bezier(south, east, (3.9456, 6.4023), (3.116, 6.9395), stroke: (paint: ink, thickness: 1pt))
+  bezier(east, north, (-0.416, 7.1605), (-2.4544, 6.8023), stroke: (paint: ink, thickness: 1pt))
+  bezier(north, west, (-3.9456, 5.6977), (-3.116, 5.1605), stroke: (paint: ink, thickness: 1pt))
+  bezier(west, south, (0.416, 4.9395), (2.4544, 5.2977), stroke: (paint: ink, thickness: 1pt))
 
+  // Zenith arrow, extending above the red vertical vector.
+  // line((0, 7.34), (0, 8.47), stroke: (paint: ink, thickness: 1pt), mark: black-arrow)
+  
   // The four red components in the plane.
   line(centre, (-1.02, 7.08), stroke: U-vector, mark: U-arrow)
   line(centre, (-1.76, 6.16), stroke: red-vector, mark: red-arrow)
   line(centre, (0.96, 6.74), stroke: red-vector, mark: red-arrow)
-  line(centre, (0, 7.36), stroke: red-vector, mark: red-arrow)
+  line(centre, (0, 7.7), stroke: red-vector, mark: red-arrow)
 
-  // Zenith arrow, extending above the red vertical vector.
-  line((0, 7.34), (0, 7.97),
-    stroke: (paint: ink, thickness: 1pt), mark: black-arrow)
 
   // Angle markers. `anchor: "origin"` places each arc's centre at its coordinate.
   arc((0, 0), start: 62deg, stop: 89deg, radius: 0.93,
     anchor: "origin", stroke: (paint: ink, thickness: 1.0pt))
 
   // Cardinal / reference labels.
-  content((0, 8.18), text(size: .9em, weight: "bold")[#text[Zenith]], anchor: "south")
+  content((0, 8), text(size: .9em, weight: "bold")[#text[Zenith]], anchor: "south")
   content(north, text(size: .9em, weight: "bold")[North], anchor: "east", padding: 6pt)
   content(south, text(size: .9em, weight: "bold")[South], anchor: "west", padding: 6pt)
   content((east), text(size: .9em, weight: "bold")[East], anchor: "south", padding: 4pt)
@@ -80,11 +72,11 @@
 
   // Italic vector and axis labels.
   content((-1.43, 7.28), text(size: 1em, style: "italic")[$U$], anchor: "west")
-  content((0.12, 6.69), text(size: 1em, style: "italic")[$w$], anchor: "west")
+  content((0.12, 7.5), text(size: 1em, style: "italic")[$w$], anchor: "west")
   content((-1.65, 6.60), text(size: 1em, style: "italic")[$v$], anchor: "west")
   content((0.91, 6.48), text(size: 1em, style: "italic")[$u$], anchor: "west")
   content((0.43, 1.56), text(size: .9em, style: "italic")[$phi.alt$], anchor: "west")
   content((2.73, 1.50), text(size: 1em, style: "italic")[$x$], anchor: "west")
-  content((-3, 0), text(size: 1em, style: "italic")[$y$], anchor: "west")
+  content((-3.2, 0), text(size: 1em, style: "italic")[$y$], anchor: "west")
 })
 }

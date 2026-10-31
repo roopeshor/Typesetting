@@ -1,7 +1,7 @@
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #import "@preview/cetz:0.5.2"
-#import "settings.typ": alt-captions, acf
-#import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
+#import "settings.typ": alt-captions, acf, fit-to-page
+#import "images/mccf.typ": *
 
 = Estimation and Verification Methods
 Various techniques for moment/peak estimations have been devised in the past decade.
@@ -17,51 +17,7 @@ The algorithm is illustrated in @fig_mccf_flow. Here, the cylindrical entries ar
 The intermediate data might be useful for other algorithms to work on in further processing steps.
 #figure(
   caption: [MCCF Algorithm Flow.],
-  [
-    #set text(font: "Fira Sans", size: 9pt)
-    #diagram(
-      node-shape: fletcher.shapes.rect,
-      node-corner-radius: 5pt,
-      node-stroke: .75pt,
-      edge-stroke: 1pt,
-      let nodeD(pos, cnt, id, fl: blue.lighten(80%)) = {
-        node(
-          (rel: pos),
-          text(fill: black)[#cnt],
-          shape: fletcher.shapes.cylinder,
-          name: id,
-          fill: fl,
-        )
-      },
-      node((0, 0), [Raw Data]),
-      edge("-|>", [FFT]),
-      node((rel: (1, 0)), [Spectrum]),
-      edge("-|>"),
-      node((rel: (.8, 0)), [DC\ masking]),
-      edge("-|>", [IFFT]),
-      node((rel: (1, 0)), [Time\ Series]),
-      edge("-|>"),
-      node((rel: (.9, 0)), [Set ST\ Window], name: <st>),
-      nodeD((.8, -.8), [ST window Array], <st_dat>),
-      edge(<st.north>, "->", <st_dat.west>, bend: 50deg),
-      edge(<st.east>, "-|>", <mc_node.west>),
-      node((rel: (.35, .8)), [Mutual\ Convolution], name: <mc_node>),
-      edge("-|>"),
-      node((rel: (0, 2)), [MCLMS Filter], name: <mclms_node>),
-      nodeD((-.3, .9), [Denoised Spectra], <spec_dat>),
-      edge(<mclms_node.south>, "->", <spec_dat.north>, bend: 10deg),
-      edge(<mclms_node.west>, "-|>", <cps_node.east>),
-      node((rel: (-.3 - .6, -.9)), [Candiate Peak\ Selection], name: <cps_node>),
-      nodeD((-1.2, -1), [Peaks array], <peaks_dat>),
-      nodeD((0, 2), [Cost Array], <cost_dat>),
-      edge(<cps_node.west>, "-->", <st.south-west>, bend: 50deg),
-      edge(<cps_node.west>, "-|>", <me_node.east>),
-      edge(<cps_node.west>, "->", <peaks_dat.south>, bend: 20deg, [peak], label-pos: .4, label-side: center),
-      edge(<cps_node.south>, "->", <cost_dat.east>, bend: 20deg, [cost], label-pos: .6, label-side: center),
-      node((rel: (.8 - 1.2, -1)), [Moment estimation], name: <me_node>),
-      edge("->"),
-      nodeD((-1, 0), [*Moments\ $M_0$ $M_1$ $M_2$*], <res_blk>, fl: green.lighten(70%)),
-    )],
+  fit-to-page[#mccf-flow],
 )<fig_mccf_flow>
 
 Individual steps are explained in upcoming subsections. The method applied to a doppler spectrum is shown in @fig_mccf_ps
@@ -105,6 +61,7 @@ The peaks with higest cost value is taken as the spectral peak. From this moment
     ],
     [Power spectrum plots in MCCF],
   ),
+  fit-to-page(
   grid(
     columns: 3,
     row-gutter: 6pt,
@@ -113,7 +70,7 @@ The peaks with higest cost value is taken as the spectral peak. From this moment
     image("images/mccf-stw.svg", height: 7.6cm),
 
     [(a)], [(b)], [(c)],
-  ),
+  )),
 )<fig_mccf_ps>
 The peaks estimated from one height bin is used to set ST window in next height bin, hence the process is iterative and cannot be done in single matrix operation step as in computing spectrum.
 
@@ -137,7 +94,7 @@ Before profile extraction, the Doppler power spectra are processed to suppress u
 
 #figure(
   caption: [IME Method],
-  [
+  fit-to-page[
     #set text(size: 10pt, font: "Fira Sans")
     #diagram(
       node-stroke: 1pt,
@@ -173,7 +130,7 @@ The adaptive-window procedure is represented in @fig_ime_adaptive
 
 #figure(
   caption: [IME Adaptive window procedure],
-  [
+  fit-to-page[
     #set text(size: 10pt, font: "Fira Sans")
     #diagram(
       node-stroke: 1pt,
@@ -319,7 +276,7 @@ To make such mixing easier, our main focus was to first create a software archit
 @fig_hyb1 Shows the method in which Mutual Convolution (MC) from MCCF is first used to determine the spectrum, and then later processing is done by IME itself.
 #figure(
   caption: [Flow of Hybrid-1 method],
-  [
+  fit-to-page[
     #set text(size: 10pt, font: "Fira Sans")
     #diagram(
       node-stroke: 1pt,
@@ -382,7 +339,7 @@ The radiosonde reaches an altitude of 20 km to 30 km; thereafter, due to the low
   image("images/radiosonde-heightplots.png", height: 7cm),
 )<fig-rs-alts>
 
-In order for the data from the radiosonde to be useful for evaluating the algorithm, the balloon must hover over the same geographic area throughout the desired height range. For perspective, the ST radar has a beamwidth of $3degree$, Considering 30km target height, ideally, the ballon should be within $tan(3degree\/2)times 30 "km" approx 1 "km" $ radius within the launch site. But this can be much higher, considering that the atmosphere can be slowly varying in certain seasons. However, the radiosondes often drift too far from their initial destinations. This is illustrated in @fig-rs-traj-feb and @fig-rs-traj-nov. Data collected in the summer season is used for testing the algorithm. However, in those seasons, wind velocities are not turbulent enough to rigorously test the algorithm.
+In order for the data from the radiosonde to be useful for evaluating the algorithm, the balloon must hover over the same geographic area throughout the desired height range. For perspective, the ST radar has a beamwidth of $3degree$, Considering 30km target height, ideally, the ballon should be within $tan(3degree\/2)times 30 "km" approx 1 "km" $ radius within the launch site. But this can be much higher, considering that the atmosphere can be slowly varying in certain seasons. However, the radiosondes often drift too far from their initial destinations. This is illustrated in @fig-rs-traj-feb and @fig-rs-traj-nov. Data collected in the summer season is used for testing the algorithm. However, in those seasons, wind velocities are not turbulent enough to rigorously test the algorithm. 
 
 #figure(
   grid(
@@ -398,7 +355,7 @@ In order for the data from the radiosonde to be useful for evaluating the algori
   image("images/rs-feb-2021.jpg", height: 5cm),
   caption: [Trajectory of Radiosonde in the month of February 2021]
 )<fig-rs-traj-feb>
-
+Moreover radiosondes are rarely launched at intervals of less than 6 hours and so can only be used to provide information about the large-scale weather patterns.
 
 === LIDAR
 #acf("LIDAR") is a method for determining ranges by targeting an object or a surface with a laser and measuring the time for the reflected light to return to the optical receiver. Lidar may operate in a fixed direction (e.g., vertical), or it may scan directions, in a special combination of 3D scanning and laser scanning. In @mccf and @ime, the researchers used a ground-based lidar for measuring the wind velocity of the lower atmosphere (up to 1 km). In @mccf, it is mentioned that the lidar can achieve 99% accuracy in clear atmospheric conditions. Hence, lidar serves as an excellent ground reference for evaluating the algorithm's performance.
@@ -407,5 +364,79 @@ In order for the data from the radiosonde to be useful for evaluating the algori
   image("images/lidar.jpg", height: 6cm),
   caption: [A Lidar mounted on the rooftop of a building]
 )
-=== Synthetic data
-Synthetic radar data are artificially generated radar observation data made from a predefined array of wind velocities. This is done by starting with a UVW array and reversing the process of a typical radar signal processing pipeline, starting from UVW estimation to writing a raw file onto disk. The primary advantage of this method is that we have a ground truth to compare the algorithm's output as well as control to create data that can test the algorithms in various ways, which otherwise would require waiting to get suitable outputs from radar and manually going through them to pick a good one. This method is discussed depth in @chap-synth
+#import "settings.typ": *
+=== Synthetic Data and Validation <chap-synth>
+Synthetic radar data are artificially generated radar observation data made from a predefined array of wind velocities. This is done by starting with a UVW array and reversing the process of a typical radar signal processing pipeline, starting from UVW estimation to writing a raw file onto disk. The primary advantage of this method is that we have a ground truth to compare the algorithm's output as well as control to create data that can test the algorithms in various ways, which otherwise would require waiting to get suitable outputs from radar and manually going through them to pick a good one.
+==== Background
+While the algorithms are being developed, it is important to measure their performance with some metric. And to validate the algorithm, a ground truth is required. Traditionally, the default output of the radar signal processing chain implemented by Data Patterns was used.
+This approach has some drawbacks: first, the original algorithm may fail under certain breaking conditions (poor SNR, wind discontinuity, heavy interference, etc.), so it yields no useful data points in those height bins.
+Second, to test the algorithm under certain weather conditions, one must collect real-world observations, which may or may not be catalogued by weather patterns.
+Hence, for large-scale analysis of algorithms, reliance on physical data might not be viable.
+From this, we propose an idea of synthesising radar data on our own according to the specific needs.
+
+==== Method of synthesis
+The synthesiser is a reverse process of the radar processing chain shown in @fig-rsp-chain. First, a UVW array is synthesised based on the needs of atmospheric conditions.
+It is generated by combining wind velocities generated by various types of winds and atmospheric phenomena.
+Currently, we took 8 different processes as shown in @fig-synth-windcomponents.
+Then velocities are projected onto each beam direction; velocities are converted to a Doppler spectrum with spectrum broadening using @Nathanson and Zrnić's method @zrnic.
+Additional clutters like ground and bright bands are added to the final spectrum.
+
+The resulting spectrum is converted to the time domain. 
+To create a radar raw file, a dummy header file that has a pattern similar to that found in actual radar is created, and this time series data is attached to it.
+The synthesised file is opened again with the same radar processing chain  to test its validity. One sample of synthesised raw data is shown in @fig-synth-raw. The plot also compares the actual wind velocity with the output of the MCCF function. One important detail to note here is that not all components represent the actual physical processes. For eg, the synoptic background profile uses a basic model of wind velocity gradient due to surface friction. We used AI to figure out an initial list of wind components. However, our goal was to get a reasonably continuous, smooth pseudorandom wind profile and not to simulate the atmosphere as realistically as possible.
+
+We created a testbench that generates 500 raw data samples, each containing beams in 5 directions. For each data sample, 5 different algorithms were applied; their MSE and correlation coefficient was computed, stored in a file and then processed it later. The results are shown in the results chapter.
+
+
+
+#figure(
+  image("images/synth.pdf", width: 95%),
+  caption: [Various wind types and weather phenomena used in generating UVW array]
+)<fig-synth-windcomponents>
+
+#figure(
+  grid(
+    columns: 2,
+    column-gutter: 15pt,
+    image("images/synth-raw.png", height: 8cm),
+    image("images/synth-proc.png", height: 8cm),
+  ),
+  caption: [Synthesised raw data and corresponding velocity estimation using MCCF]
+)<fig-synth-raw>
+
+// == Spectrum broadening
+
+// @Nathanson
+
+// $ sigma_v = sqrt(sigma_"shear" ^ 2 + sigma_"beam" ^ 2 + sigma_t ^ 2) $
+
+// Wind shear:
+// $ sigma_"shear" = (d v)/(d z) thin (Delta r) / sqrt(12) $
+
+// Beam Broadening:
+// $  sigma_"beam" = "HPBW" / (4 sqrt(ln 2)) thin abs(v_"cross") $
+
+
+// Where $v_"cross"$ is wind component perpendicular to the beam axis given by:
+// $ v_"cross" = sqrt(U^2 + V^2 + W^2 - v_"radial"^2)  $
+
+// HPBW = $3.3degree$ @titu
+
+
+// Turbulance: $sigma_"t" = 0.6 "m/s"$
+
+// == DC clutter
+// DC spectra is modeled as a gaussian distribution with peak amplitude scaled by $r_"DC"$ times total power of that height range ($P_S = P_"signal" + P_"noise"$) with spectral width $sigma_"DC"$ which is again normally distributed random variable. This spectra is added to signal to finally obtain BeamData
+// $ S_"DC" (f, h) =  r_"DC" P_S  exp[-f^2 / (2 sigma_"DC"^2 (h))](exp[h/N] - 0.7) $ <eq_dc_clut>
+// Where $N$ is number of range bins.
+// #show heading.where(level: 1): it => [
+//   #pagebreak()
+//   #align(center)[
+//     #it.body
+//   ]
+// ]
+
+// == Bright band
+// Similar to DC clutter, bright bands are also modeled by gaussian distribution. A list of height bins are randomly chosen and a gaussian sig
+// $ S_"bb" (f, h) = P_S dot 10 ^ (-3.5) dot  chi_N dot exp(-f^2 / (2 sigma_"bb"^2 (h))) $ <eq_bb>
+// $chi_N$ is a random variable sampled from the range [1, 1.333].  $sigma_"bb"^2 (h)$ is spectral width of bright band. $10 ^ (-3.5)$ is chosen to account for -30 to -40dB reflectivity of bright band

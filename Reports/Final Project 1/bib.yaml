@@ -5,7 +5,7 @@ Nathanson:
   type: book
 titu:
   title: "Design, Development, Calibration and Validation of 205 MHz Wind Profiler Radar"
-  type: "thesis"
+  type: thesis
   author: "Titu K. Samson"
 mccf:
   title: "Wind Profile Estimation for K-Band Doppler Radar Based on Mutual Convolution Cost Function Method"
@@ -18,9 +18,22 @@ mccf:
         issue: 15
 ime:
   title: "Improved Moments Estimation for Ground-Based K-Band Doppler Radar Using Cost Function Method"
-  type: "Article"
+  type: article
   author: "Li et al."
   date: 2022-03-15
   parent:
         title: IEEE Access
         volume: 10
+zrnic:
+  type: article
+  title: Simulation of Weatherlike Doppler Spectra and Signals
+  author: Dušan S. Zrnić
+  date: 1975-06
+  pages: 619-620
+  parent:
+    title: Journal of Applied Meteorology and Climatology
+    volume: 14
+corr-fx:
+  type: web
+  url: https://in.mathworks.com/help/stats/corr.html
+  title: "corr - Linear or rank correlation - MATLAB"

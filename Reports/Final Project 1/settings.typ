@@ -6,10 +6,21 @@
   show heading: none
   heading(numbering: none, bookmarked: true, outlined: outlined)[#entry]
 }
+#let fit-to-page(content) = context {
+  let content-size = measure(content)
+  layout(size => {
+    if content-size.width > size.width {
+      let ratio = (size.width / content-size.width) * 100%
+      scale(x: ratio, y: ratio, reflow: true, content)
+    } else {
+      content
+    }
+  })
+}
+
 #let isChap = state("isChap", false);
 
 #let settings = doc => {
-  set page(numbering: "1")
   set text(font: "MLMRoman10", size: 11pt)
   set par(
     justify: true,
@@ -21,6 +32,7 @@
     numbering: "1.1.1",
     supplement: [Chapter]
   )
+  show heading: set par(first-line-indent: 0pt);
   show heading.where(level: 2): set block(below: 1em)
   show heading.where(level: 3): set block(below: 1em)
   show heading.where(level: 4): set heading(numbering: none)
@@ -28,9 +40,9 @@
   
   ////// Chapter format
   show heading.where(level: 1): it => [
-    #pagebreak()
     #align(center)[
       #if (isChap.get()) {
+        pagebreak(weak: true)
         [Chapter #counter(heading).get().first():\ ]
         text(size: 1.2em)[#it.body] 
         v(0.5cm)
@@ -41,12 +53,22 @@
     ]
     // also reset fig and eqn numbering
     #counter(math.equation).update(0)
-    #counter(figure).update(0)
+    #counter(figure.where(kind: image)).update(0)
+    #counter(figure.where(kind: table)).update(0)
   ]
 
   show heading.where(level: 2): it => [
+   #let c = counter(heading);
+    #counter(heading).display() #it.body \
+  ]
+  
+  show heading.where(level: 3): it => [
    #let c = counter(heading).get();
-    #h(-12pt)#c.at(0).#c.at(1) #it.body \
+    #counter(heading).display() #it.body \
+  ]
+  show heading.where(level: 4): it => [
+    #v(5pt)
+    #text(weight: "extrabold", size: 11.5pt)[#it.body] \
   ]
 
   ///// Figure and Caption format
@@ -73,6 +95,7 @@
       it
     }
   }
+
   show outline: it => {
     in-outline.update(true)
     it
@@ -118,6 +141,9 @@
     "LIDAR": ("Light Detection and Ranging"),
     "DBS": ("Doppler Beam Swing"),
     "ST Radar": ("Stratosphere–Troposphere radar"),
+    "IQ": ("In-phase and Quadrature"),
+    "NCI": ("Non-Coherent Integration"),
+    "MSE": ("Mean Square Error"),
   ))
 
 
