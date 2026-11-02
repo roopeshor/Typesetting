@@ -71,10 +71,10 @@
   content(west, text(size: .9em, weight: "bold")[West], anchor: "north-east", padding: 2pt)
 
   // Italic vector and axis labels.
-  content((-1.43, 7.28), text(size: 1em, style: "italic")[$U$], anchor: "west")
-  content((0.12, 7.5), text(size: 1em, style: "italic")[$w$], anchor: "west")
-  content((-1.65, 6.60), text(size: 1em, style: "italic")[$v$], anchor: "west")
-  content((0.91, 6.48), text(size: 1em, style: "italic")[$u$], anchor: "west")
+  content((-1.43, 7.28), text(size: 1em, style: "italic")[$R$], anchor: "west")
+  content((0.12, 7.5), text(size: 1em, style: "italic")[$W$], anchor: "west")
+  content((-1.65, 6.60), text(size: 1em, style: "italic")[$V$], anchor: "west")
+  content((0.91, 6.48), text(size: 1em, style: "italic")[$U$], anchor: "west")
   content((0.43, 1.56), text(size: .9em, style: "italic")[$phi.alt$], anchor: "west")
   content((2.73, 1.50), text(size: 1em, style: "italic")[$x$], anchor: "west")
   content((-3.2, 0), text(size: 1em, style: "italic")[$y$], anchor: "west")

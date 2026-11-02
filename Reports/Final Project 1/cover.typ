@@ -1,7 +1,8 @@
-#import "settings.typ": addToPDFBookmark
+#import "settings.typ": addToPDFBookmark, report-name
 
 #set text(size: 13pt)
 #set par(spacing: .9em)
+#set page(margin: 1.4in)
 #place(center + horizon)[
   #addToPDFBookmark("Cover")
   #text(size: 14pt)[*PROJECT PHASE I REPORT*]
@@ -9,7 +10,7 @@
   _On_
 #v(10pt)
 
-  #text(size: 18pt)[*Analysis and Verification of Wind Profile\ Estimation Algorithms*]
+  #text(size: 18pt)[*#report-name*]
 
   #v(20pt)
   _Submitted by_
@@ -23,7 +24,7 @@
 
   #v(23pt)
 
-  _in partial fulfilment of the requirements for the award of the degree of B.Tech in Electronics and Communication Engineering_
+  _In partial fulfilment of the requirements for the award of the degree of B.Tech in Electronics and Communication Engineering_
   #v(20pt)
   #image("images/cusat.svg", width: 4.5cm)
   

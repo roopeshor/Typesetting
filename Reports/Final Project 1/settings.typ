@@ -19,6 +19,7 @@
 }
 
 #let isChap = state("isChap", false);
+#let report-name = "Implementation and Evaluation of Wind Profile Estimation Algorithms"
 
 #let settings = doc => {
   set text(font: "MLMRoman10", size: 11pt)

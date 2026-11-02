@@ -1,4 +1,4 @@
-#import "settings.typ": addToPDFBookmark
+#import "settings.typ": addToPDFBookmark, report-name
 #set page(margin: 1.2in)
 #align(center + horizon)[
   #text(size: 15pt)[
@@ -20,7 +20,7 @@
     #text(
       size: 12pt,
 			style: "italic"
-    )[Certified that the project report entitled *“Analysis and Verification of Wind Profile Estimation Algorithms”* is a bonafide work of #h(2pt)#text(weight: "bold")[Naveen C Lal (20323079), Roopesh O R (20323085), Sneha S (20323094)]#h(2pt) towards the partial fulfilment of the award of the degree of B.Tech in Electronics and Communication of Cochin University of Science and Technology, Kochi-682022.]
+    )[Certified that the project report entitled *“#report-name”* is a bonafide work of #h(2pt)#text(weight: "bold")[Naveen C Lal (20323079), Roopesh O R (20323085), Sneha S (20323094)]#h(2pt) towards the partial fulfilment of the award of the degree of B.Tech in Electronics and Communication of Cochin University of Science and Technology, Kochi-682022.]
   ]
 
   #v(3.5cm)

@@ -7,6 +7,14 @@ titu:
   title: "Design, Development, Calibration and Validation of 205 MHz Wind Profiler Radar"
   type: thesis
   author: "Titu K. Samson"
+ml-method:
+  title: "Radar Signal Recognition Based on CSRDNN Network"
+  author: "Zheng Zhang et al."
+  type: article
+  date: 2024-06-19
+  parent:
+        title: IEEE Access
+        volume: 12
 mccf:
   title: "Wind Profile Estimation for K-Band Doppler Radar Based on Mutual Convolution Cost Function Method"
   type: "Article"

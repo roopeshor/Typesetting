@@ -28,7 +28,7 @@
       nodeD((.8, -.8), [ST window Array], <st_dat>),
       edge(<st.north>, "->", <st_dat.west>, bend: 50deg),
       edge(<st.east>, "-|>", <mc_node.west>),
-      node((rel: (.35, .8)), [Mutual\ Convolution], name: <mc_node>),
+      node((rel: (.35, .8)), [Mutual\ Convolution \ & FFT], name: <mc_node>),
       edge("-|>"),
       node((rel: (0, 2)), [MCLMS Filter], name: <mclms_node>),
       nodeD((-.3, .9), [Denoised Spectra], <spec_dat>),
