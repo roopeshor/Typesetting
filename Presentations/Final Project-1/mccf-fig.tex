@@ -1,0 +1,153 @@
+\begin{tikzpicture}[
+    >=Stealth,
+    process/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=black!70,
+        thick,
+        fill=red!5,
+        align=center,
+        font=\scriptsize,
+        minimum height=0.62cm,
+        inner sep=3pt
+    },
+    data/.style={
+        shape=cylinder,
+        aspect=0.25,
+        draw=black!70,
+        thick,
+        fill=blue!8,
+        align=center,
+        font=\tiny,
+        minimum height=0.62cm,
+        inner sep=2pt,
+        text width=1.1cm
+    },
+    arrow/.style={
+        -{Stealth[length=1.6mm]},
+        thick
+    }
+]
+
+% -------- Top row: preprocessing --------
+
+\node[process, text width=1.05cm] (raw)
+    at (-4.9,0) {Raw Data};
+
+\node[process, text width=1.15cm] (spectrum)
+    at (-2.8,0) {Spectrum};
+
+\node[process, text width=1.25cm] (dc)
+    at (-0.5,0) {DC Masking};
+
+\node[process, text width=1.15cm] (timeseries)
+    at (1.9,0) {Time Series};
+
+\node[process, text width=1.3cm] (st)
+    at (4.3,0) {Set ST Window};
+
+% FFT and IFFT are labelled on the arrows
+
+\draw[arrow]
+    (raw.east) --
+    node[above, font=\tiny] {FFT}
+    (spectrum.west);
+
+\draw[arrow]
+    (spectrum.east) --
+    (dc.west);
+
+\draw[arrow]
+    (dc.east) --
+    node[above, font=\tiny] {IFFT}
+    (timeseries.west);
+
+\draw[arrow]
+    (timeseries.east) --
+    (st.west);
+
+% -------- Second row: main MCCF processing --------
+
+\node[process, text width=1.5cm] (mc)
+    at (4.05,-2.0) {Mutual\\Convolution};
+
+\node[process, text width=1.5cm] (mclms)
+    at (1.8,-2.0) {MCLMS Filter};
+
+\node[process, text width=1.6cm] (cps)
+    at (-0.55,-2.0) {Candidate Peak\\Selection};
+
+\node[process, text width=1.6cm] (me)
+    at (-2.8,-2.0) {Moment\\Estimation};
+
+\node[data, text width=1.2cm] (moments)
+    at (-4.9,-2.0)
+    {$M_0,\ M_1,\ M_2$\\Moments};
+
+% Continue from ST window to mutual convolution.
+% The lower row flows from right to left.
+
+\draw[arrow]
+    (st.south) -- ++(0,-0.45)
+    -| (mc.north);
+
+\draw[arrow]
+    (mc.west) -- (mclms.east);
+
+\draw[arrow]
+    (mclms.west) -- (cps.east);
+
+\draw[arrow]
+    (cps.west) -- (me.east);
+
+\draw[arrow]
+    (me.west) -- (moments.east);
+
+% -------- Intermediate data arrays --------
+
+\node[data] (stdata)
+    at (5.3,-1.05) {ST Window\\Array};
+
+\draw[arrow]
+    (st.south east) -- (stdata.north west);
+
+\node[data] (denoised)
+    at (1.8,-3.05) {Denoised\\Spectra};
+
+\draw[arrow]
+    (mclms.south) -- (denoised.north);
+
+\node[data] (peaks)
+    at (-1.3,-3.05) {Peaks\\Array};
+
+\node[data] (cost)
+    at (0.35,-3.05) {Cost\\Array};
+
+\draw[arrow]
+    (cps.south west) --
+    node[pos=0.5, above, font=\tiny, fill=white, inner sep=1pt]
+    {peak}
+    (peaks.north east);
+
+\draw[arrow]
+    (cps.south east) --
+    node[pos=0.5, above, font=\tiny, fill=white, inner sep=1pt]
+    {cost}
+    (cost.north west);
+
+% -------- Feedback to ST window --------
+
+\draw[
+    -{Stealth[length=1.6mm]},
+    dashed,
+    thick
+]
+    (cps.north) -- ++(0,0.28) -| (st.south west);
+
+\node[
+    font=\tiny,
+    fill=white,
+    inner sep=1pt
+] at (1.5,-1.35) {ST-window feedback};
+
+\end{tikzpicture}

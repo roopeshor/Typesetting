@@ -1,0 +1,138 @@
+\begin{tikzpicture}[
+    >=Stealth,
+    process/.style={
+        rectangle,
+        draw=black!70,
+        thick,
+        fill=red!4,
+        align=center,
+        text width=3.65cm,
+        minimum height=0.43cm,
+        inner sep=2pt,
+        font=\scriptsize
+    },
+    decision/.style={
+        diamond,
+        aspect=3.0,
+        draw=black!70,
+        thick,
+        fill=yellow!12,
+        align=center,
+        text width=1.4cm,
+        inner sep=1pt,
+        font=\tiny
+    },
+    note/.style={
+        rectangle,
+        draw=black!60,
+        fill=blue!5,
+        align=center,
+        text width=2.25cm,
+        inner sep=2pt,
+        font=\tiny
+    },
+    arrow/.style={-{Stealth[length=1.5mm]}, thick}
+]
+
+% =================================================
+% LEFT: PEAK IDENTIFICATION AND RANGE-BIN PROCESSING
+% =================================================
+
+\node[
+    trapezium,
+    trapezium left angle=70,
+    trapezium right angle=110,
+    draw=black!70,
+    thick,
+    fill=red!4,
+    align=center,
+    text width=3 cm,
+    inner sep=3pt,
+    font=\scriptsize
+] (raw) at (-2.8,5.1)
+{Doppler Power Spectra};
+
+\node[process, below= 7pt of raw] (pre)
+{Data preprocessing};
+
+\node[process, below= 7pt of pre] (init)
+{First range bin: take largest peak};
+
+\node[process, below= 7pt of init] (window)
+{Next range bin; mean Doppler velocity: $\pm W/2$};
+
+\node[process, below= 17pt of window] (peaks)
+{Identify prospective peaks };
+
+\node[decision, below= 7pt of peaks] (allbins)
+{Are all range bins considered?};
+
+\node[note, below=10pt of allbins] (mean)
+{Mean Doppler velocity = velocity of nearest prospective peak};
+
+\draw[arrow] (raw.south) -- (pre.north);
+\draw[arrow] (pre.south) -- (init.north);
+\draw[arrow] (init.south) -- (window.north);
+\draw[arrow] (window.south) -- (peaks.north);
+\draw[arrow] (peaks.south) -- (allbins.north);
+
+\draw[arrow] (allbins.south) --
+    node[left,font=\tiny] {No}
+    (mean.north);
+\draw[arrow] (mean.west)
+    -- +(-40pt, 0pt)
+    |- (window.west);
+
+% =================================================
+% RIGHT: GROUPING AND TRACE SELECTION
+% =================================================
+
+\node[process, right= 1.5cm of init] (groups)
+{Make groups of range bins and start from lowest group};
+
+\node[process, below= 17pt of groups] (links)
+{Construct all links};
+
+\node[process, below= 8pt of links] (cost)
+{Assign cost to each link};
+
+\node[process, below= 8pt of cost] (trace)
+{Choose trace with maximum total cost};
+
+\node[decision, below= 8pt of trace] (allgroups)
+{Are all groups over?};
+
+\node[process, below= 10pt of allgroups] (save)
+{Save current frame values};
+
+\node[note, right= 17pt of allgroups] (initial)
+{Initial point = velocity of the highest range bin of the last group};
+
+% All range bins? YES: begin grouping
+\draw[arrow] (allbins.east)
+    -- +(.8cm, 0pt) node[pos=0.5, below, font=\tiny] {Yes}
+    |- (groups.west);
+
+% Main grouping and tracing path
+\draw[arrow] (groups.south) -- (links.north);
+\draw[arrow] (links.south) -- (cost.north);
+\draw[arrow] (cost.south) -- (trace.north);
+\draw[arrow] (trace.south) -- (allgroups.north);
+
+% All groups over? YES: save values
+\draw[arrow]
+    (allgroups.south) --
+    node[right,font=\tiny] {Yes}
+    (save.north);
+
+% All groups over? NO: update initial point
+\draw[arrow] (allgroups.east) --
+    node[above,font=\tiny] {No}
+    (initial.west);
+
+% Updated initial point: construct links for next group
+\draw[arrow] (initial.north)
+    |- ([yshift=10pt]links.north)
+    -| (links.north);
+
+\end{tikzpicture}%

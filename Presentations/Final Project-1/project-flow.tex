@@ -1,0 +1,76 @@
+\begin{tikzpicture}[
+    >=Stealth,
+    block/.style={
+        rectangle, rounded corners=3pt,
+        draw=black!65, thick,
+        align=center,
+        text width=5.0cm,
+        minimum height=0.62cm,
+        inner sep=4pt,
+        font=\small
+    },
+    method/.style={
+        rectangle, rounded corners=3pt,
+        draw=black!65, thick,
+        align=center,
+        text width=2.55cm,
+        minimum height=0.75cm,
+        inner sep=4pt,
+        font=\small
+    },
+    arrow/.style={->, thick}
+]
+
+% Main input
+\node[block] (raw) at (0,0)
+{Raw ST Radar Data\\
+\footnotesize 205 MHz Radar at CUSAT};
+
+\node[block] (spectrum) at (0,-1.3)
+{Doppler Spectrum Processing};
+
+% Parallel algorithms
+\node[method] (mccf) at (-3.3,-2.95)
+{\textbf{MCCF}};
+
+\node[method] (ime) at (0,-2.95)
+{\textbf{IME}};
+
+\node[method] (hybrid) at (3.3,-2.95)
+{\textbf{Hybrid Methods}};
+
+% Evaluation and conclusion
+\node[block, text width=6.0cm] (eval) at (0,-4.75)
+{Performance Comparison and Analysis};
+
+\node[block] (conclusion) at (0,-5.85)
+{Conclusion};
+
+% Input arrows
+\draw[arrow] (raw.south) -- (spectrum.north);
+
+% Branch to all three methods
+\coordinate (split) at (0,-1.8);
+
+\draw (spectrum.south) -- (split);
+\draw (split) -- (-3.3,-1.8);
+\draw (split) -- (3.3,-1.8);
+
+\draw[arrow] (-3.3,-1.8) -- (mccf.north);
+\draw[arrow] (0,-1.8) -- (ime.north);
+\draw[arrow] (3.3,-1.8) -- (hybrid.north);
+
+% Merge the outputs below all method boxes
+\coordinate (merge) at (0,-3.85);
+
+\draw (mccf.south) -- (-3.3,-3.85);
+\draw (ime.south) -- (0,-3.85);
+\draw (hybrid.south) -- (3.3,-3.85);
+
+\draw (-3.3,-3.85) -- (3.3,-3.85);
+\draw[arrow] (merge) -- (eval.north);
+
+% Final stage
+\draw[arrow] (eval.south) -- (conclusion.north);
+
+\end{tikzpicture}
