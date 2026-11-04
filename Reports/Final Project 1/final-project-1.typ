@@ -1,4 +1,4 @@
- /*  */#import "settings.typ": *
+#import "settings.typ": *
 #show: settings
 
 #include "cover.typ"

@@ -2,7 +2,7 @@
 
 #set text(size: 13pt)
 #set par(spacing: .9em)
-#set page(margin: 1.4in)
+#set page(margin: 1.31in)
 #place(center + horizon)[
   #addToPDFBookmark("Cover")
   #text(size: 14pt)[*PROJECT PHASE I REPORT*]
@@ -10,7 +10,7 @@
   _On_
 #v(10pt)
 
-  #text(size: 18pt)[*#report-name*]
+  #box(width: 90%)[#text(size: 18pt)[*#report-name*]]
 
   #v(20pt)
   _Submitted by_
