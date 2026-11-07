@@ -1,6 +1,6 @@
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #import "@preview/cetz:0.5.2"
-#import "settings.typ": alt-captions, acf, fit-to-page
+#import "settings.typ": acf, alt-captions, fit-to-page
 #import "images/mccf.typ": *
 
 = Estimation and Evaluation Methods
@@ -15,12 +15,12 @@ MCCF is a peak estimation algorithm proposed by Tang et al. @mccf which uses Mut
 
 The algorithm is illustrated in @fig_mccf_flow. Here, the cylindrical entries are final data as well as intermediate data acquired.
 The intermediate data might be useful for other algorithms to work on in further processing steps.
+
+Individual steps are explained in upcoming subsections. The method applied to a Doppler spectrum is shown in @fig_mccf_ps
 #figure(
   caption: [MCCF Algorithm Flow.],
   fit-to-page[#mccf-flow],
 )<fig_mccf_flow>
-
-Individual steps are explained in upcoming subsections. The method applied to a Doppler spectrum is shown in @fig_mccf_ps
 ==== Preprocessing
 Here the FFT of time series raw data (slow sampled) is computed.
 Then DC masking is applied, in which the values of 5 bins near DC bin is replaced with background noise with random phase.
@@ -45,10 +45,11 @@ Both of these are used in the MCLMS filter.
 ==== MCLMS Adaptive Filtering
 MCLMS (Modified Complex Least Mean Square) filter is an adaptive filter. It learns its weights during slicing of spectra, and after modifying the weight vector, the final filtered spectra is obtained through the optimal and suboptimal spectra. MCLMS can suppress clutter even more by training a model that tries to match the optimal solution with the suboptimal solution. In the end, the spectrum will have some of the clutter suppressed.
 ==== Candidate Peak Selection, Cost Function & Moment Estimation
-Peaks in ST Doppler window which has amplitude $>=40%$ of maximum peak are chosen as candidate peaks. The algorithm assigns a "cost" to each of these peaks based on their velocity difference between each frequency bin $V_(r+1,j)$ given by: $ V_(r+1,j) = 1 - lr(|(M_(r+1,j) - M_r)d_v/(alpha V_d)|) $
+Peaks in ST Doppler window which has amplitude $>=40%$ of maximum peak are chosen as candidate peaks. The algorithm assigns a "cost" to each of these peaks based on their velocity difference between each frequency bin $V_(r+1,j)$ given by:
+$ V_(r+1,j) = 1 - lr(|(M_(r+1,j) - M_r)d_v/(alpha V_d)|) $ <eq-mccf-windshear>
 and magnitude of peak itself $M_(r+1, j)$. Here $d_v$ represents the velocity resolution, $V_d$ represents the
 maximum wind shear, $alpha$ is the window coefficient. The cost of each peak is given by:
-$ F_(r+1,j) = w_1 V_(r+1,j) + w_2 M_(r+1,j) $
+$ F_(r+1,j) = w_1 V_(r+1,j) + w_2 M_(r+1,j) $ <eq-mccf-costfx>
 The peak with the highest cost value is taken as the spectral peak. From this, moments can be estimated based on the Hildreth-Seikh method.
 
 #figure(
@@ -62,15 +63,16 @@ The peak with the highest cost value is taken as the spectral peak. From this, m
     [Power spectrum plots in MCCF],
   ),
   fit-to-page(
-  grid(
-    columns: 3,
-    row-gutter: 6pt,
-    image("images/mccf-raw.svg", height: 7.7cm),
-    image("images/mccf-dspec.svg", height: 7.7cm),
-    image("images/mccf-stw.svg", height: 7.7cm),
+    grid(
+      columns: 3,
+      row-gutter: 6pt,
+      image("images/mccf-raw.pdf", height: 7.4cm),
+      image("images/mccf-dspec.pdf", height: 7.4cm),
+      image("images/mccf-stw.pdf", height: 7.4cm),
 
-    [(a)], [(b)], [(c)],
-  )),
+      [(a)], [(b)], [(c)],
+    ),
+  ),
 )<fig_mccf_ps>
 The peaks estimated from one height bin are used to set the ST window in the next height bin; hence the process is iterative and cannot be done in a single matrix operation step as in computing a spectrum.
 
@@ -94,7 +96,7 @@ Before profile extraction, the Doppler power spectra are processed to suppress u
 
 #figure(
   caption: [Preprocessing chain in IME Method],
-  fit-to-page[
+  scale(90%, reflow: true)[
     #set text(size: 10pt, font: "Fira Sans")
     #diagram(
       node-stroke: 1pt,
@@ -120,17 +122,16 @@ These preprocessing operations help identify weak atmospheric echoes by reducing
 
 ==== Adaptive Doppler Window and Prospective Peak Selection
 
-The IME algorithm starts at the lowest range bin and searches for candidate spectral peaks only within an adaptive Doppler window. 
-For a selected spectral component, the algorithm determines the peak position and the left and right zero-crossing points, from which the radial velocity, spectral width, and SNR are calculated. A peak is retained as a prospective atmospheric component when its SNR is greater than $0$ dB. Up to three prospective peaks are retained for each range bin. The procedure stops earlier when no spectral component with power greater than the estimated noise level remains in the current Doppler window.
+The IME algorithm starts at the lowest range bin and searches for candidate spectral peaks only within an adaptive Doppler window.
+For a selected spectral component, the algorithm determines the peak position and the left and right zero-crossing points, from which the radial velocity, spectral width, and SNR are calculated. Up to three peaks are retained in each range bin as a prospective atmospheric component when each of which having SNR is greater than $0$ dB. No peaks are selected in a range bin if there are no spectral component with power greater than the estimated noise level in the current height.
 
-For the first range bin, no previous information is available. Therefore, the most prominent spectral component is initially selected and its radial velocity is used as the mean Doppler velocity. The Doppler window for the next range bin is then centered around the candidate whose radial velocity is closest to the previous mean Doppler velocity. This process is repeated sequentially with increasing range. 
-
-The adaptive-window procedure is represented in @fig_ime_adaptive
+For the first range bin, no previous information is available. Therefore, the most prominent spectral component is initially selected, and its radial velocity is used as the mean Doppler velocity. The Doppler window for the next range bin is then centred around the candidate whose radial velocity is closest to the previous mean Doppler velocity. This process is repeated sequentially with increasing range.
+This procedure is illustrated in @fig_ime_adaptive
 
 
 #figure(
   caption: [IME Adaptive window procedure],
-  fit-to-page[
+  scale(90%, reflow: true)[
     #set text(size: 10pt, font: "Fira Sans")
     #diagram(
       node-stroke: 1pt,
@@ -154,7 +155,6 @@ The adaptive-window procedure is represented in @fig_ime_adaptive
 
 The wind Doppler signal is generally not expected to change by more than $20\%$ of the total coherent-filter bandwidth, and therefore the Doppler-window width is restricted to less than $20\%$ of the complete Doppler-axis width.
 
-#pagebreak()
 ==== Grouping and Cost-Function-Based Profile Tracing
 In this step, the algorithm constructs possible traces between adjacent range bins.
 A trace represents a possible Doppler velocity profile through height.
@@ -250,27 +250,27 @@ where $alpha_(r,j)$ denotes the SNR of the $j$-th candidate peak in the $r$-th r
 
 $
   C = w_1 T + w_2 P,
-  quad w_1 + w_2 = 1.
+  quad quad quad w_1 + w_2 = 1.
 $
 <ime-cost>
 
-The weights determine the relative importance of wind-profile continuity and spectral strength. Based on experiments, the selected values are,
+The weights determine the relative importance of wind-profile continuity and spectral strength. Based on experiments as described in the research paper @ime, the selected values are,
 
 $
   w_1 = 0.4,
   quad w_2 = 0.6.
-$
+$ <eq-ime-costw>
 
 Thus, the IME algorithm gives greater weight to the normalised SNR while still enforcing continuity between adjacent range bins. The total cost of each possible trace is calculated, and the trace with the highest total cost is selected as the final Doppler velocity profile for the corresponding group. The velocity at the highest range bin in the selected group then becomes the initial value for the next group.
 
-Thus, @fig_ime_res illustrates how IME narrows the peak-search region and identifies a more consistent atmospheric Doppler profile.
+@fig_ime_res illustrates how IME narrows the peak-search region and identifies a more consistent atmospheric Doppler profile.
 #figure(
-   image("images/Screenshot 2026-10-12 222941.png",width:95%),
-   caption: alt-captions[Doppler beam spectra: a) Original, b) after IME processing, c) Adaptive Doppler-window selection.][Power spectrum plots in IME]
+  image("images/Screenshot 2026-10-12 222941.png", width: 95%),
+  caption: alt-captions[Doppler beam spectra: a) Original, b) after IME processing, c) Adaptive Doppler-window selection.][Power spectrum plots in IME],
 )<fig_ime_res>
 
 === Hybrid Methods
-The 2 algorithms discussed have several individual working components -- computing spectrum, denoising, estimating peaks/moments, etc. The mutual convolution process in MCCF appears to suppress noise very effectively. In this light, we tried a method that combines both of these methods. 
+The 2 algorithms discussed have several individual working components -- computing spectrum, denoising, estimating peaks/moments, etc. The mutual convolution process in MCCF appears to suppress noise very effectively. In this light, we tried a method that combines both of these methods.
 
 To make such mixing easier, our main focus was to first create a software architecture in MATLAB that encapsulates each of these components and provides a common interface. Then the individual components can be cascaded easily.
 @fig_hyb1 Shows the method in which Mutual Convolution (MC) from MCCF is first used to determine the spectrum, and then later processing is done by IME itself.
@@ -327,7 +327,7 @@ To evaluate the algorithms, we need a reliable ground truth to compare against t
 A radiosonde is a battery-powered telemetry instrument carried into the atmosphere, usually by a weather balloon, that measures various atmospheric parameters and transmits them by radio to a ground receiver. Modern radiosondes measure or calculate the following variables: altitude, pressure, temperature, relative humidity, wind (both speed and direction), and some are also capable of cosmic ray readings at high altitude.
 #figure(
   caption: [Radiosonde attached to weather balloon],
-  image("images/radiosonde.jpg", height: 7cm),
+  image("images/radiosonde.jpg", height: 6cm),
 )
 
 
@@ -339,30 +339,29 @@ The radiosonde reaches an altitude of 20 km to 30 km; thereafter, due to the low
   image("images/radiosonde-heightplots.png", height: 7cm),
 )<fig-rs-alts>
 
-In order for the data from the radiosonde to be useful for evaluating the algorithm, the balloon must hover over the same geographic area throughout the desired height range. For perspective, the ST radar has a beamwidth of $3degree$, Considering 30km target height, ideally, the ballon should be within $tan(3degree\/2)times 30 "km" approx 1 "km" $ radius within the launch site. But this can be much higher, considering that the atmosphere can be slowly varying in certain seasons. However, the radiosondes often drift too far from their initial destinations. This is illustrated in @fig-rs-traj-feb and @fig-rs-traj-nov. Data collected in the summer season are used for testing the algorithm. However, in those seasons, wind velocities are not turbulent enough to rigorously test the algorithm. 
+In order for the data from the radiosonde to be useful for evaluating the algorithm, the balloon must hover over the same geographic area throughout the desired height range. For perspective, the ST radar has a beamwidth of $3degree$, Considering 30km target height, ideally, the ballon should be within $tan(3degree\/2)times 30 "km" approx 1 "km"$ radius within the launch site. But this can be much higher, considering that the atmosphere can be slowly varying in certain seasons. However, the radiosondes often drift too far from their initial destinations. This is illustrated in @fig-rs-traj-feb and @fig-rs-traj-nov. Data collected in the summer season are used for testing the algorithm. However, in those seasons, wind velocities are not turbulent enough to rigorously test the algorithm.
 
 #figure(
   grid(
     columns: 2,
     column-gutter: 10pt,
-  image("images/rs-7-nov-2023-trajectory.jpg", ),
-  image("images/rs-11-nov-2023-trajectory.jpg", ),
+    image("images/rs-7-nov-2023-trajectory.jpg"), image("images/rs-11-nov-2023-trajectory.jpg"),
   ),
-  caption: [Trajectory of Radiosonde in the month of November 2023]
+  caption: [Trajectory of Radiosonde in the month of November 2023],
 )<fig-rs-traj-nov>
 
+Moreover, radiosondes are rarely launched at intervals of less than 6 hours and so can only be used to provide information about the large-scale weather patterns.
 #figure(
   image("images/rs-feb-2021.jpg", height: 5cm),
-  caption: [Trajectory of Radiosonde in the month of February 2021]
+  caption: [Trajectory of Radiosonde in the month of February 2021],
 )<fig-rs-traj-feb>
-Moreover, radiosondes are rarely launched at intervals of less than 6 hours and so can only be used to provide information about the large-scale weather patterns.
 
 === LIDAR
 #acf("LIDAR") is a method for determining ranges by targeting an object or a surface with a laser and measuring the time for the reflected light to return to the optical receiver. Lidar may operate in a fixed direction (e.g., vertical), or it may scan directions, in a special combination of 3D scanning and laser scanning. In @mccf and @ime, the researchers used a ground-based lidar for measuring the wind velocity of the lower atmosphere (up to 1 km). In @mccf, it is mentioned that the lidar can achieve 99% accuracy in clear atmospheric conditions. Hence, lidar serves as an excellent ground reference for evaluating the algorithm's performance.
 
 #figure(
   image("images/lidar.jpg", height: 6cm),
-  caption: [A Lidar mounted on the rooftop of a building]
+  caption: [A Lidar mounted on the rooftop of a building],
 )
 #import "settings.typ": *
 === Synthetic Data and Validation <chap-synth>
@@ -381,7 +380,7 @@ Currently, we took 8 different processes as shown in @fig-synth-windcomponents.
 Then velocities are projected onto each beam direction; velocities are converted to a Doppler spectrum with spectrum broadening using @Nathanson and Zrnić's method @zrnic.
 Additional clutters like ground and bright bands are added to the final spectrum.
 
-The resulting spectrum is converted to the time domain. 
+The resulting spectrum is converted to the time domain.
 To create a radar raw file, a dummy header file that has a pattern similar to that found in actual radar is created, and this time series data is attached to it.
 The synthesised file is opened again with the same radar processing chain  to test its validity. One sample of synthesised raw data is shown in @fig-synth-raw. The plot also compares the actual wind velocity with the output of the MCCF function. One important detail to note here is that not all components represent the actual physical processes. For eg, the synoptic background profile uses a basic model of wind velocity gradient due to surface friction. We used AI to figure out an initial list of wind components. However, our goal was to get a reasonably continuous, smooth pseudorandom wind profile and not to simulate the atmosphere as realistically as possible.
 
@@ -391,52 +390,14 @@ We created a testbench that generates 500 raw data samples, each containing beam
 
 #figure(
   image("images/synth.pdf", width: 95%),
-  caption: [Various wind types and weather phenomena used in generating UVW array]
+  caption: [Various wind types and weather phenomena used in generating UVW array],
 )<fig-synth-windcomponents>
 
 #figure(
   grid(
     columns: 2,
     column-gutter: 15pt,
-    image("images/synth-raw.png", height: 8cm),
-    image("images/synth-proc.png", height: 8cm),
+    image("images/synth-raw.png", height: 8cm), image("images/synth-proc.png", height: 8cm),
   ),
-  caption: [Synthesised raw data and corresponding velocity estimation using MCCF]
+  caption: [Synthesised raw data and corresponding velocity estimation using MCCF],
 )<fig-synth-raw>
-
-// == Spectrum broadening
-
-// @Nathanson
-
-// $ sigma_v = sqrt(sigma_"shear" ^ 2 + sigma_"beam" ^ 2 + sigma_t ^ 2) $
-
-// Wind shear:
-// $ sigma_"shear" = (d v)/(d z) thin (Delta r) / sqrt(12) $
-
-// Beam Broadening:
-// $  sigma_"beam" = "HPBW" / (4 sqrt(ln 2)) thin abs(v_"cross") $
-
-
-// Where $v_"cross"$ is wind component perpendicular to the beam axis given by:
-// $ v_"cross" = sqrt(U^2 + V^2 + W^2 - v_"radial"^2)  $
-
-// HPBW = $3.3degree$ @titu
-
-
-// Turbulance: $sigma_"t" = 0.6 "m/s"$
-
-// == DC clutter
-// DC spectra is modeled as a gaussian distribution with peak amplitude scaled by $r_"DC"$ times total power of that height range ($P_S = P_"signal" + P_"noise"$) with spectral width $sigma_"DC"$ which is again normally distributed random variable. This spectra is added to signal to finally obtain BeamData
-// $ S_"DC" (f, h) =  r_"DC" P_S  exp[-f^2 / (2 sigma_"DC"^2 (h))](exp[h/N] - 0.7) $ <eq_dc_clut>
-// Where $N$ is number of range bins.
-// #show heading.where(level: 1): it => [
-//   #pagebreak()
-//   #align(center)[
-//     #it.body
-//   ]
-// ]
-
-// == Bright band
-// Similar to DC clutter, bright bands are also modeled by gaussian distribution. A list of height bins are randomly chosen and a gaussian sig
-// $ S_"bb" (f, h) = P_S dot 10 ^ (-3.5) dot  chi_N dot exp(-f^2 / (2 sigma_"bb"^2 (h))) $ <eq_bb>
-// $chi_N$ is a random variable sampled from the range [1, 1.333].  $sigma_"bb"^2 (h)$ is spectral width of bright band. $10 ^ (-3.5)$ is chosen to account for -30 to -40dB reflectivity of bright band

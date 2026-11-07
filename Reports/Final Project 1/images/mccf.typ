@@ -44,4 +44,6 @@
       node((rel: (.8 - 1.2, -1)), [Moment estimation], name: <me_node>),
       edge("->"),
       nodeD((-1, 0), [*Moments\ $M_0$ $M_1$ $M_2$*], <res_blk>, fl: green.lighten(70%)),
-    )}
+    )
+    v(18pt)
+  }

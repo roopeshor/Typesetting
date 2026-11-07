@@ -19,36 +19,36 @@
 }
 
 #let isChap = state("isChap", false);
-#let report-name = "Implementation and Evaluation of Wind Profile Estimation Algorithms"
+#let report-name = "Implementation and Evaluation of Wind Profile Estimation Algorithms for CUSAT ST Radar"
 
 #let settings = doc => {
   set text(font: "MLMRoman10", size: 11pt)
   set par(
     justify: true,
     leading: .8em,
-    first-line-indent: 12pt
+    first-line-indent: 12pt,
   )
 
   set heading(
     numbering: "1.1.1",
-    supplement: [Chapter]
+    supplement: [Chapter],
   )
-  show heading: set par(first-line-indent: 0pt);
+  show heading: set par(first-line-indent: 0pt)
   show heading.where(level: 2): set block(below: 1em)
   show heading.where(level: 3): set block(below: 1em)
   show heading.where(level: 4): set heading(numbering: none)
   show heading: set text(font: "MLMRoman12")
-  
+
   ////// Chapter format
   show heading.where(level: 1): it => [
     #align(center)[
       #if (isChap.get()) {
         pagebreak(weak: true)
-        [Chapter #counter(heading).get().first():\ ]
-        text(size: 1.2em)[#it.body] 
+        [Chapter #counter(heading).get().first()\ ]
+        text(size: 1.2em)[#it.body]
         v(0.5cm)
       } else {
-        text(size: 1.1em)[#it.body] 
+        text(size: 1.1em)[#it.body]
         v(0.5cm)
       }
     ]
@@ -59,12 +59,12 @@
   ]
 
   show heading.where(level: 2): it => [
-   #let c = counter(heading);
+    #let c = counter(heading);
     #counter(heading).display() #it.body \
   ]
-  
+
   show heading.where(level: 3): it => [
-   #let c = counter(heading).get();
+    #let c = counter(heading).get();
     #counter(heading).display() #it.body \
   ]
   show heading.where(level: 4): it => [
@@ -112,10 +112,9 @@
       it
     }
   }
-  
 
   show ref: it => {
-    let el = it.element;
+    let el = it.element
     if el != none and el.func() == heading {
       link(el.location(), text(style: "italic")[#it: #el.body])
     } else {
@@ -134,19 +133,16 @@
   )
   show table.cell.where(y: 0): set text(weight: "bold")
 
-  
-
   init-acronyms((
-    "ACARR": ("Advanced Centre for Atmospheric Radar Research"),
-    "IRHPA": ("Intensification of Research in High Priority Areas"),
-    "LIDAR": ("Light Detection and Ranging"),
-    "DBS": ("Doppler Beam Swing"),
-    "ST Radar": ("Stratosphere–Troposphere radar"),
-    "IQ": ("In-phase and Quadrature"),
-    "NCI": ("Non-Coherent Integration"),
-    "MSE": ("Mean Square Error"),
+    "ACARR": "Advanced Centre for Atmospheric Radar Research",
+    "IRHPA": "Intensification of Research in High Priority Areas",
+    "LIDAR": "Light Detection and Ranging",
+    "DBS": "Doppler Beam Swing",
+    "ST Radar": "Stratosphere–Troposphere radar",
+    "IQ": "In-phase and Quadrature",
+    "NCI": "Non-Coherent Integration",
+    "MSE": "Mean Square Error",
   ))
-
 
   doc
 }

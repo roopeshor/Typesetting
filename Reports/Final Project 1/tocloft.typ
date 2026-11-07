@@ -2,7 +2,7 @@
 #outline(
   title: [List of contents],
   target: heading,
-  depth: 3
+  depth: 3,
 )
 #counter(page).update(1);
 

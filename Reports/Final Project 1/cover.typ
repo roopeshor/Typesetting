@@ -1,8 +1,8 @@
 #import "settings.typ": addToPDFBookmark, report-name
 
 #set text(size: 13pt)
-#set par(spacing: .9em)
-#set page(margin: 1.31in)
+#set par(spacing: .9em, justify: false)
+#set page(margin: 1.2in)
 #place(center + horizon)[
   #addToPDFBookmark("Cover")
   #text(size: 14pt)[*PROJECT PHASE I REPORT*]
